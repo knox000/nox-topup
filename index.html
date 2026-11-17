@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +37,7 @@ input:focus{border-color:var(--cyan)}
 .summary strong{color:var(--cyan);text-align:right}
 .submit{width:100%;border:0;border-radius:12px;padding:17px;margin-top:16px;color:#050510;background:linear-gradient(100deg,var(--cyan),var(--purple));font:800 15px Sora,Arial;cursor:pointer}
 .submit:disabled{opacity:.5;cursor:not-allowed}
-#message{font-size:12px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere}
+#message,#trackingMessage{font-size:12px;line-height:1.7;margin-top:12px;overflow-wrap:anywhere}
 .success{color:#4ade80}
 .error{color:#fb7185}
 .order{border-bottom:1px solid var(--border);padding:12px 0;font-size:12px;line-height:1.8}
@@ -47,9 +46,15 @@ input:focus{border-color:var(--cyan)}
 #screenshotPreview{display:none;width:100%;max-height:250px;object-fit:contain;border-radius:10px;margin-top:12px;background:#090914}
 .upload-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
 footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;padding:20px}
+.track-result{display:none;background:#090914;border:1px solid var(--border);border-radius:12px;padding:15px;margin-top:15px;font-size:12px;line-height:2}
+.track-result strong{color:var(--cyan)}
+.track-result .track-status{font-weight:800;text-transform:uppercase}
+.reference{color:var(--cyan);font-weight:800;overflow-wrap:anywhere}
+@media(max-width:420px){.hero h1{font-size:26px}.section{padding:16px}}
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">NOX <span>TOPUP</span></div>
   <div class="tag">GAMING STORE</div>
@@ -114,6 +119,25 @@ footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;paddi
     <div id="message" role="status"></div>
   </section>
 
+  <!-- NEW ORDER TRACKING SECTION -->
+  <section class="section" id="tracking">
+    <h2>Track your order</h2>
+    <p class="muted" style="font-size:12px;line-height:1.7">
+      Enter your Order Reference and Player ID to check your latest order status.
+    </p>
+
+    <label for="trackReference">Order Reference</label>
+    <input id="trackReference" type="text" placeholder="Example: NOX-123456-ABCD">
+
+    <label for="trackPlayerId" style="margin-top:12px">Player ID</label>
+    <input id="trackPlayerId" type="text" placeholder="Enter your game Player ID">
+
+    <button class="submit" id="trackBtn" type="button">Track my order</button>
+
+    <div id="trackingMessage" role="status"></div>
+    <div id="trackingResult" class="track-result"></div>
+  </section>
+
   <section class="section">
     <h2>Your recent orders</h2>
     <div id="recentOrders" class="muted">No recent orders on this device.</div>
@@ -157,6 +181,11 @@ function showMessage(message,type){
   $("message").className = type || "";
 }
 
+function showTrackingMessage(message,type){
+  $("trackingMessage").textContent = message;
+  $("trackingMessage").className = type || "";
+}
+
 function updateSummary(){
   $("sumGame").textContent = selectedGame ? games[selectedGame].name : "Not selected";
   $("sumPack").textContent = selectedPack && selectedGame
@@ -173,7 +202,7 @@ function chooseGame(id){
     btn.classList.toggle("selected",btn.dataset.game === id);
   });
 
-  $("packs").innerHTML = "";
+  $("packs").replaceChildren();
 
   games[id].packs.forEach(pack => {
     const button = document.createElement("button");
@@ -264,7 +293,6 @@ function showRecentOrders(){
   }
 
   $("recentOrders").className = "";
-
   $("recentOrders").replaceChildren();
 
   orders.forEach(order => {
@@ -280,13 +308,25 @@ function showRecentOrders(){
     const player = document.createElement("div");
     player.textContent = "Player ID: " + order.playerId;
 
+    const reference = document.createElement("div");
+    reference.textContent = "Order Reference: " + (order.orderRef || "Not available");
+    reference.className = "reference";
+
     const status = document.createElement("span");
     status.className = "muted";
-    status.textContent = "Status: Pending";
+    status.textContent = "Status: Check using Track my order";
 
-    div.append(name,details,player,status);
+    div.append(name,details,player,reference,status);
     $("recentOrders").appendChild(div);
   });
+}
+
+function createOrderReference(){
+  const random = window.crypto && crypto.randomUUID
+    ? crypto.randomUUID().replace(/-/g,"").slice(0,6).toUpperCase()
+    : Math.random().toString(36).slice(2,8).toUpperCase();
+
+  return "NOX-" + Date.now() + "-" + random;
 }
 
 async function submitOrder(){
@@ -331,8 +371,6 @@ async function submitOrder(){
   btn.disabled = true;
   btn.textContent = "Uploading screenshot...";
 
-  let uploadedPath = null;
-
   try {
     const extension = file.type === "image/png" ? "png" :
       file.type === "image/webp" ? "webp" : "jpg";
@@ -343,7 +381,7 @@ async function submitOrder(){
         : Math.random().toString(36).slice(2)) +
       "." + extension;
 
-    uploadedPath = uniqueName;
+    const uploadedPath = uniqueName;
 
     const {error:uploadError} = await supabaseClient
       .storage
@@ -358,7 +396,10 @@ async function submitOrder(){
 
     btn.textContent = "Submitting order...";
 
+    const orderReference = createOrderReference();
+
     const orderData = {
+      order_ref:orderReference,
       game:selectedGame,
       player_id:playerId,
       package_amount:selectedPack[0],
@@ -376,18 +417,32 @@ async function submitOrder(){
     if(orderError) throw orderError;
 
     const recentOrder = {
+      orderRef:orderReference,
       game:games[selectedGame].name,
       amount:selectedPack[0] + " " + games[selectedGame].unit,
       price:money(selectedPack[1]),
       playerId:playerId
     };
 
-    let orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
+    let orders = [];
+    try {
+      orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
+    } catch(e) {}
+
     orders.unshift(recentOrder);
     localStorage.setItem("noxOrders",JSON.stringify(orders.slice(0,5)));
 
     showRecentOrders();
-    showMessage("Order submitted successfully! Your screenshot is uploaded. Payment is still pending verification.","success");
+
+    showMessage(
+      "Order submitted successfully! Your Order Reference is " +
+      orderReference +
+      ". Save this reference to track your order. Payment is still pending verification.",
+      "success"
+    );
+
+    $("trackReference").value = orderReference;
+    $("trackPlayerId").value = playerId;
 
     $("playerId").value = "";
     $("paymentScreenshot").value = "";
@@ -409,7 +464,7 @@ async function submitOrder(){
 
     showMessage(
       "Order failed: " + (error.message || "Unknown error") +
-      ". Please check your screenshot and try again.",
+      ". Please check your details and try again.",
       "error"
     );
 
@@ -419,7 +474,93 @@ async function submitOrder(){
   }
 }
 
+/* ORDER TRACKING */
+async function trackOrder(){
+  const btn = $("trackBtn");
+  const reference = $("trackReference").value.trim();
+  const playerId = $("trackPlayerId").value.trim();
+
+  $("trackingResult").style.display = "none";
+  $("trackingResult").replaceChildren();
+  showTrackingMessage("");
+
+  if(!reference || !playerId){
+    showTrackingMessage("Enter both your Order Reference and Player ID.","error");
+    return;
+  }
+
+  if(!supabaseClient){
+    showTrackingMessage("Connection error. Please refresh the website.","error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Checking order...";
+
+  try{
+    const {data,error} = await supabaseClient.rpc("track_order",{
+      p_order_ref:reference,
+      p_player_id:playerId
+    });
+
+    if(error) throw error;
+
+    if(!data){
+      showTrackingMessage(
+        "No matching order found. Check your Order Reference and Player ID.",
+        "error"
+      );
+      return;
+    }
+
+    const result = $("trackingResult");
+
+    function addDetail(label,value){
+      const line = document.createElement("div");
+      const strong = document.createElement("strong");
+      strong.textContent = label + ": ";
+      line.append(strong,document.createTextNode(String(value ?? "-")));
+      result.appendChild(line);
+    }
+
+    addDetail("Order Reference",data.order_ref);
+    addDetail("Game",data.game);
+    addDetail("Package",data.package_amount);
+
+    const orderStatus = document.createElement("div");
+    const orderLabel = document.createElement("strong");
+    orderLabel.textContent = "Order Status: ";
+
+    const orderValue = document.createElement("span");
+    orderValue.className = "track-status";
+    orderValue.textContent = data.order_status || "Pending";
+
+    orderStatus.append(orderLabel,orderValue);
+    result.appendChild(orderStatus);
+
+    addDetail("Payment Status",data.payment_status);
+
+    if(data.created_at){
+      addDetail("Order Date",new Date(data.created_at).toLocaleString());
+    }
+
+    $("trackingResult").style.display = "block";
+    showTrackingMessage("Order found successfully.","success");
+
+  }catch(error){
+    console.error("TRACKING ERROR:",error);
+    showTrackingMessage(
+      "Unable to track order: " + error.message,
+      "error"
+    );
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "Track my order";
+  }
+}
+
 $("submitBtn").addEventListener("click",submitOrder);
+$("trackBtn").addEventListener("click",trackOrder);
 
 function startWebsite(){
   if(!window.supabase){
@@ -448,4 +589,5 @@ updateSummary();
 })();
 </script>
 </body>
-</html>
+  </html>
+  

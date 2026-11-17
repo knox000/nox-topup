@@ -273,6 +273,9 @@ $("pay").addEventListener("click",async()=>{
  try{
    console.log("Supabase session:", await supabaseClient.auth.getSession());
 console.log("Order data:", orderData);
+   console.log("KEY PREFIX:", SUPABASE_KEY.substring(0, 15));
+console.log("PROJECT URL:", SUPABASE_URL);
+console.log("ORDER DATA:", orderData);
   const {data,error}=await supabaseClient
    .from("orders")
    .insert(orderData)

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOX TOPUP Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:#080810;color:#f5f5ff;font-family:Arial,sans-serif}
+main{max-width:850px;margin:30px auto}
+h1 span{color:#22d3ee}
+.card{background:#151522;border:1px solid #303044;border-radius:14px;padding:20px;margin:16px 0}
+input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #343449;background:#090914;color:white}
+button{background:#22d3ee;color:#080810;font-weight:bold;cursor:pointer;border:0}
+.order{background:#090914;border:1px solid #343449;border-radius:10px;padding:14px;margin:12px 0;overflow-wrap:anywhere}
+small{color:#aaa}
+.hidden{display:none}
+#message{font-size:13px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+<h1>NOX <span>TOPUP</span> ADMIN</h1>
+<p><small>Private order management</small></p>
+
+<section class="card" id="loginBox">
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Admin email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
+<p id="message"></p>
+</section>
+
+<section class="card hidden" id="dashboard">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+<h2>Orders</h2>
+<button id="logoutBtn" style="width:auto">Logout</button>
+</div>
+<button id="refreshBtn">Refresh Orders</button>
+<div id="orders">Loading...</div>
+</section>
+</main>
+
+<script>
+(() => {
+"use strict";
+
+const URL = "https://vobhkqrrglripsluidkt.supabase.co";
+const KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+
+const db = window.supabase.createClient(URL,KEY);
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+
+function message(text){
+  $("message").textContent = text;
+}
+
+async function login(){
+  message("Logging in...");
+  $("loginBtn").disabled = true;
+
+  try{
+    const {data,error} = await db.auth.signInWithPassword({
+      email:$("email").value.trim(),
+      password:$("password").value
+    });
+
+    if(error) throw error;
+
+    currentUser = data.user;
+
+    const {data:admin,error:adminError} = await db
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+
+    if(adminError) throw adminError;
+
+    if(!admin){
+      await db.auth.signOut();
+      currentUser = null;
+      throw new Error("This account is not registered as an admin.");
+    }
+
+    $("loginBox").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    await loadOrders();
+
+  }catch(error){
+    message("Login error: "+error.message);
+  }finally{
+    $("loginBtn").disabled = false;
+  }
+}
+
+function addText(parent,text){
+  const el = document.createElement("div");
+  el.textContent = text;
+  parent.appendChild(el);
+  return el;
+}
+
+async function loadOrders(){
+  $("orders").textContent = "Loading orders...";
+
+  try{
+    const {data,error} = await db
+      .from("orders")
+      .select("*")
+      .order("created_at",{ascending:false});
+
+    if(error) throw error;
+
+    $("orders").replaceChildren();
+
+    if(!data.length){
+      $("orders").textContent = "No orders yet.";
+      return;
+    }
+
+    data.forEach(order => {
+      const card = document.createElement("div");
+      card.className = "order";
+
+      addText(card,"Order: "+order.order_ref);
+      addText(card,"Game: "+order.game);
+      addText(card,"Player ID: "+order.player_id);
+      addText(card,"Package: "+order.package_amount);
+      addText(card,"Price: NPR "+order.price_npr);
+      addText(card,"Payment method: "+order.payment_method);
+      addText(card,"Created: "+new Date(order.created_at).toLocaleString());
+
+      const orderLabel = document.createElement("label");
+      orderLabel.textContent = "Order status";
+      card.appendChild(orderLabel);
+
+      const orderStatus = document.createElement("select");
+      ["pending","processing","completed","rejected"].forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        orderStatus.appendChild(option);
+      });
+      orderStatus.value = order.order_status;
+      card.appendChild(orderStatus);
+
+      const paymentLabel = document.createElement("label");
+      paymentLabel.textContent = "Payment status";
+      card.appendChild(paymentLabel);
+
+      const paymentStatus = document.createElement("select");
+      ["pending","paid","failed","refunded"].forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        paymentStatus.appendChild(option);
+      });
+      paymentStatus.value = order.payment_status;
+      card.appendChild(paymentStatus);
+
+      const save = document.createElement("button");
+      save.textContent = "Save changes";
+      save.addEventListener("click",async () => {
+        save.disabled = true;
+        save.textContent = "Saving...";
+
+        try{
+          const {error} = await db
+            .from("orders")
+            .update({
+              order_status:orderStatus.value,
+              payment_status:paymentStatus.value
+            })
+            .eq("id",order.id);
+
+          if(error) throw error;
+
+          save.textContent = "Saved!";
+        }catch(error){
+          save.textContent = "Save failed";
+          alert(error.message);
+        }finally{
+          save.disabled = false;
+        }
+      });
+
+      card.appendChild(save);
+      $("orders").appendChild(card);
+    });
+
+  }catch(error){
+    $("orders").textContent = "Error: "+error.message;
+  }
+}
+
+$("loginBtn").addEventListener("click",login);
+$("refreshBtn").addEventListener("click",loadOrders);
+
+$("logoutBtn").addEventListener("click",async () => {
+  await db.auth.signOut();
+  currentUser = null;
+  $("dashboard").classList.add("hidden");
+  $("loginBox").classList.remove("hidden");
+  message("Logged out.");
+});
+
+})();
+</script>
+</body>
+</html>

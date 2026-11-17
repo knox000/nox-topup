@@ -33,15 +33,9 @@ header{
   justify-content:space-between;
   align-items:center;
 }
-.logo{
-  font-size:23px;
-  font-weight:900;
-}
+.logo{font-size:23px;font-weight:900}
 .logo span{color:var(--cyan)}
-main{
-  width:min(1000px,94%);
-  margin:30px auto;
-}
+main{width:min(1000px,94%);margin:30px auto}
 h1{font-size:25px}
 h2{font-size:17px}
 .muted{color:var(--muted)}
@@ -71,18 +65,9 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-.secondary{
-  background:#29293b;
-  color:white;
-}
-.danger{
-  background:#4b202b;
-  color:#ffb6c1;
-}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#29293b;color:white}
+.danger{background:#4b202b;color:#ffb6c1}
 .hidden{display:none!important}
 #message,.notice{
   font-size:13px;
@@ -104,10 +89,7 @@ button:disabled{
   padding:16px;
   border-radius:12px;
 }
-.stat small{
-  color:var(--muted);
-  display:block;
-}
+.stat small{color:var(--muted);display:block}
 .stat strong{
   display:block;
   font-size:24px;
@@ -159,8 +141,30 @@ button:disabled{
   font-size:11px;
   color:var(--muted);
 }
-.order-controls button{
-  margin-bottom:7px;
+.order-controls button{margin-bottom:7px}
+.payment-proof{
+  margin-top:16px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#141421;
+}
+.payment-proof img{
+  display:block;
+  width:100%;
+  max-width:420px;
+  max-height:500px;
+  object-fit:contain;
+  margin-top:12px;
+  border-radius:8px;
+  background:#080810;
+}
+.proof-link{
+  display:inline-block;
+  margin-top:10px;
+  color:var(--cyan);
+  font-size:13px;
+  overflow-wrap:anywhere;
 }
 @media(max-width:650px){
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -384,9 +388,7 @@ function updateStats(){
 }
 
 async function loadOrders(){
-  if(!currentUser){
-    return;
-  }
+  if(!currentUser) return;
 
   $("orders").textContent = "Loading orders...";
   dashboardMessage("");
@@ -406,6 +408,70 @@ async function loadOrders(){
   }catch(error){
     $("orders").textContent = "Unable to load orders.";
     dashboardMessage(error.message,"error");
+  }
+}
+
+/* PRIVATE PAYMENT SCREENSHOT VIEWER */
+async function addPaymentScreenshot(card,order){
+  const path = order.payment_screenshot;
+
+  const proofBox = makeElement("div","","payment-proof");
+  proofBox.appendChild(
+    makeElement("strong","Customer payment screenshot")
+  );
+
+  if(!path){
+    proofBox.appendChild(
+      makeElement("p","No screenshot uploaded for this order.","muted")
+    );
+    card.appendChild(proofBox);
+    return;
+  }
+
+  proofBox.appendChild(
+    makeElement("p","Loading private screenshot...","muted")
+  );
+  card.appendChild(proofBox);
+
+  try{
+    const {data,error} = await db
+      .storage
+      .from("payment-screenshots")
+      .createSignedUrl(path,300);
+
+    if(error) throw error;
+
+    if(!data || !data.signedUrl){
+      throw new Error("Could not create a private screenshot link.");
+    }
+
+    proofBox.replaceChildren();
+    proofBox.appendChild(
+      makeElement("strong","Customer payment screenshot")
+    );
+
+    const image = document.createElement("img");
+    image.src = data.signedUrl;
+    image.alt = "Customer payment screenshot";
+    image.loading = "lazy";
+
+    const link = document.createElement("a");
+    link.href = data.signedUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.className = "proof-link";
+    link.textContent = "Open screenshot in new tab";
+
+    proofBox.append(image,link);
+
+  }catch(error){
+    proofBox.replaceChildren();
+    proofBox.appendChild(
+      makeElement("strong","Customer payment screenshot")
+    );
+    proofBox.appendChild(
+      makeElement("p","Could not load screenshot: " + error.message,"error")
+    );
   }
 }
 
@@ -472,16 +538,18 @@ function renderOrders(){
 
     details.forEach(([label,value]) => {
       const line = document.createElement("div");
-      const strong = document.createElement("strong");
-
-      strong.textContent = label + ": ";
+      const strong = makeElement("strong",label + ": ");
       line.appendChild(strong);
-      line.appendChild(document.createTextNode(String(value ?? "-")));
-
+      line.appendChild(
+        document.createTextNode(String(value ?? "-"))
+      );
       info.appendChild(line);
     });
 
     card.appendChild(info);
+
+    // Add the private screenshot viewer.
+    addPaymentScreenshot(card,order);
 
     const controls = makeElement("div","","order-controls");
 

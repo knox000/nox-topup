@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NOX TOPUP</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
 :root{--bg:#080810;--card:#12121e;--purple:#8b5cf6;--cyan:#22d3ee;--text:#f5f5ff;--muted:#9696ad;--border:#29293b}
 *{box-sizing:border-box}
@@ -35,8 +34,8 @@ input:focus{border-color:var(--cyan)}
 .pack small{display:block;color:var(--cyan);margin-top:7px}
 .payment{padding:14px}
 .summary{background:#090914;padding:15px;border-radius:10px;margin-top:15px;font-size:12px;line-height:2}
-.summary div{display:flex;justify-content:space-between}
-.summary strong{color:var(--cyan)}
+.summary div{display:flex;justify-content:space-between;gap:10px}
+.summary strong{color:var(--cyan);text-align:right}
 .submit{width:100%;border:0;border-radius:12px;padding:17px;margin-top:16px;color:#050510;background:linear-gradient(100deg,var(--cyan),var(--purple));font:800 15px Sora,Arial;cursor:pointer}
 .submit:disabled{opacity:.5;cursor:not-allowed}
 #message{font-size:12px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere}
@@ -45,10 +44,11 @@ input:focus{border-color:var(--cyan)}
 .order{border-bottom:1px solid var(--border);padding:12px 0;font-size:12px;line-height:1.8}
 .order:last-child{border:0}
 .muted{color:var(--muted)}
+#screenshotPreview{display:none;width:100%;max-height:250px;object-fit:contain;border-radius:10px;margin-top:12px;background:#090914}
+.upload-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
 footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;padding:20px}
 </style>
 </head>
-
 <body>
 <header>
   <div class="logo">NOX <span>TOPUP</span></div>
@@ -92,14 +92,24 @@ footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;paddi
       <button class="payment" data-payment="bank" type="button">Bank Transfer</button>
       <button class="payment" data-payment="voucher" type="button">Voucher</button>
     </div>
+  </section>
 
+  <section class="section">
+    <h2>5. Payment screenshot</h2>
+    <label for="paymentScreenshot">Upload your payment screenshot</label>
+    <input id="paymentScreenshot" type="file" accept="image/jpeg,image/png,image/webp">
+    <p class="upload-note">JPG, PNG or WEBP. Maximum size: 5 MB. Uploading a screenshot does not automatically verify payment.</p>
+    <img id="screenshotPreview" alt="Payment screenshot preview">
+  </section>
+
+  <section class="section">
+    <h2>Order summary</h2>
     <div class="summary">
       <div><span>Game</span><strong id="sumGame">Not selected</strong></div>
       <div><span>Package</span><strong id="sumPack">Not selected</strong></div>
       <div><span>Price</span><strong id="sumPrice">NPR 0</strong></div>
       <div><span>Payment</span><strong id="sumPayment">Not selected</strong></div>
     </div>
-
     <button class="submit" id="submitBtn" type="button">Submit order</button>
     <div id="message" role="status"></div>
   </section>
@@ -111,19 +121,20 @@ footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;paddi
 </main>
 
 <footer>
-  Sample NPR prices only. Submitting an order does not take payment or deliver game credits.
-  Payment and delivery must be verified separately.
+  Sample NPR prices only. Payment and delivery are not automatic.
+  Payments and game credit delivery must be verified separately.
   <br><br>© 2026 NOX TOPUP
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 (() => {
 "use strict";
 
 const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+const BUCKET = "payment-screenshots";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const games = {
   pubg:{name:"PUBG Mobile",unit:"UC",packs:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]]},
@@ -139,6 +150,7 @@ let selectedGame = null;
 let selectedPack = null;
 let selectedPayment = null;
 let supabaseClient = null;
+let previewUrl = null;
 
 function showMessage(message,type){
   $("message").textContent = message;
@@ -167,16 +179,19 @@ function chooseGame(id){
     const button = document.createElement("button");
     button.type = "button";
     button.className = "pack";
-    button.innerHTML =
-      "<strong>" + pack[0].toLocaleString() + " " + games[id].unit + "</strong>" +
-      "<small>" + money(pack[1]) + "</small>";
+
+    const strong = document.createElement("strong");
+    strong.textContent = pack[0].toLocaleString() + " " + games[id].unit;
+
+    const small = document.createElement("small");
+    small.textContent = money(pack[1]);
+
+    button.append(strong,small);
 
     button.addEventListener("click",() => {
       selectedPack = pack;
-
       document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
       button.classList.add("selected");
-
       updateSummary();
     });
 
@@ -194,13 +209,43 @@ document.querySelectorAll(".game").forEach(button => {
 document.querySelectorAll(".payment").forEach(button => {
   button.addEventListener("click",() => {
     selectedPayment = button.dataset.payment;
-
     document.querySelectorAll(".payment").forEach(p => {
       p.classList.toggle("selected",p === button);
     });
-
     updateSummary();
   });
+});
+
+$("paymentScreenshot").addEventListener("change",() => {
+  const file = $("paymentScreenshot").files[0];
+
+  if(previewUrl){
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = null;
+  }
+
+  $("screenshotPreview").style.display = "none";
+
+  if(!file) return;
+
+  const allowedTypes = ["image/jpeg","image/png","image/webp"];
+
+  if(!allowedTypes.includes(file.type)){
+    showMessage("Please select a JPG, PNG or WEBP image.","error");
+    $("paymentScreenshot").value = "";
+    return;
+  }
+
+  if(file.size > MAX_FILE_SIZE){
+    showMessage("Image is too large. Maximum size is 5 MB.","error");
+    $("paymentScreenshot").value = "";
+    return;
+  }
+
+  previewUrl = URL.createObjectURL(file);
+  $("screenshotPreview").src = previewUrl;
+  $("screenshotPreview").style.display = "block";
+  showMessage("Screenshot selected. Check the preview before submitting.","success");
 });
 
 function showRecentOrders(){
@@ -220,19 +265,34 @@ function showRecentOrders(){
 
   $("recentOrders").className = "";
 
-  $("recentOrders").innerHTML = orders.map(order =>
-    '<div class="order">' +
-    '<strong>' + order.game + '</strong><br>' +
-    order.amount + ' · ' + order.price + '<br>' +
-    'Player ID: ' + order.playerId + '<br>' +
-    '<span class="muted">Status: Pending</span>' +
-    '</div>'
-  ).join("");
+  $("recentOrders").replaceChildren();
+
+  orders.forEach(order => {
+    const div = document.createElement("div");
+    div.className = "order";
+
+    const name = document.createElement("strong");
+    name.textContent = order.game;
+
+    const details = document.createElement("div");
+    details.textContent = order.amount + " · " + order.price;
+
+    const player = document.createElement("div");
+    player.textContent = "Player ID: " + order.playerId;
+
+    const status = document.createElement("span");
+    status.className = "muted";
+    status.textContent = "Status: Pending";
+
+    div.append(name,details,player,status);
+    $("recentOrders").appendChild(div);
+  });
 }
 
 async function submitOrder(){
   const btn = $("submitBtn");
   const playerId = $("playerId").value.trim();
+  const file = $("paymentScreenshot").files[0];
 
   showMessage("");
 
@@ -257,38 +317,69 @@ async function submitOrder(){
     return;
   }
 
+  if(!file){
+    showMessage("Please upload your payment screenshot.","error");
+    $("paymentScreenshot").focus();
+    return;
+  }
+
   if(!supabaseClient){
     showMessage("Connection error. Please refresh the website.","error");
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = "Submitting...";
+  btn.textContent = "Uploading screenshot...";
 
-  const game = games[selectedGame];
-
-  const orderData = {
-    game: selectedGame,
-    player_id: playerId,
-    package_amount: selectedPack[0],
-    price_npr: selectedPack[1],
-    payment_method: selectedPayment,
-    payment_status: "pending",
-    order_status: "pending"
-  };
+  let uploadedPath = null;
 
   try {
-    const {error} = await supabaseClient
+    const extension = file.type === "image/png" ? "png" :
+      file.type === "image/webp" ? "webp" : "jpg";
+
+    const uniqueName = Date.now() + "-" +
+      (window.crypto && crypto.randomUUID
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2)) +
+      "." + extension;
+
+    uploadedPath = uniqueName;
+
+    const {error:uploadError} = await supabaseClient
+      .storage
+      .from(BUCKET)
+      .upload(uploadedPath,file,{
+        contentType:file.type,
+        cacheControl:"3600",
+        upsert:false
+      });
+
+    if(uploadError) throw uploadError;
+
+    btn.textContent = "Submitting order...";
+
+    const orderData = {
+      game:selectedGame,
+      player_id:playerId,
+      package_amount:selectedPack[0],
+      price_npr:selectedPack[1],
+      payment_method:selectedPayment,
+      payment_screenshot:uploadedPath,
+      payment_status:"pending",
+      order_status:"pending"
+    };
+
+    const {error:orderError} = await supabaseClient
       .from("orders")
       .insert(orderData);
 
-    if(error) throw error;
+    if(orderError) throw orderError;
 
     const recentOrder = {
-      game: game.name,
-      amount: selectedPack[0] + " " + game.unit,
-      price: money(selectedPack[1]),
-      playerId: playerId
+      game:games[selectedGame].name,
+      amount:selectedPack[0] + " " + games[selectedGame].unit,
+      price:money(selectedPack[1]),
+      playerId:playerId
     };
 
     let orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
@@ -296,25 +387,29 @@ async function submitOrder(){
     localStorage.setItem("noxOrders",JSON.stringify(orders.slice(0,5)));
 
     showRecentOrders();
-    showMessage("Order submitted successfully! Your order is pending verification.","success");
+    showMessage("Order submitted successfully! Your screenshot is uploaded. Payment is still pending verification.","success");
 
     $("playerId").value = "";
+    $("paymentScreenshot").value = "";
+
+    if(previewUrl){
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
+
+    $("screenshotPreview").removeAttribute("src");
+    $("screenshotPreview").style.display = "none";
+
     selectedPack = null;
-
     document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
-
     updateSummary();
 
   } catch(error) {
-    console.error("FULL ORDER ERROR:",error);
+    console.error("ORDER ERROR:",error);
 
     showMessage(
-      "Order failed: " + JSON.stringify({
-        message:error.message,
-        code:error.code,
-        details:error.details,
-        hint:error.hint
-      }),
+      "Order failed: " + (error.message || "Unknown error") +
+      ". Please check your screenshot and try again.",
       "error"
     );
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Knox Topup</title>
+<title>Nox Topup</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#050508;--surface:#0e0e16;--line:#23233a;--text:#f2f2fa;--muted:#9a9ab5;--purple:#9b00ff;--cyan:#00f0ff;--grad:linear-gradient(120deg,#9b00ff,#00f0ff);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
@@ -55,7 +55,7 @@ input[type=text]{width:100%;background:var(--surface);color:var(--text);border:1
 <header><div class="in">
 <svg viewBox="230 190 810 790" aria-hidden="true"><defs><linearGradient id="g" x1="240" y1="400" x2="1020" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9b00ff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs>
 <g fill="url(#g)" fill-rule="evenodd"><path d="M395 370H521L818 614V370H963V710L838 835L659 697L395 908ZM550 530V700L715 612Z"/><path d="M750 222C480 170 241 350 241 560C241 660 290 750 378 818V746C330 670 322 600 323 560C330 380 500 215 750 222Z"/><path d="M1025 651C960 840 800 962 668 962C600 962 530 945 478 909C520 925 560 932 605 931C790 925 960 810 1025 651Z"/></g></svg>
-<span class="brand">Knox Topup</span></div></header>
+<span class="brand">Nox Topup</span></div></header>
 <main>
 <div class="hero"><h1>Top up in seconds.</h1><p>Pick your game, enter your player ID, choose a pack. Credits land in your account right after payment.</p></div>
 
@@ -116,8 +116,8 @@ $("pid").addEventListener("input",()=>{
  update();
 });
 
-function load(){try{return JSON.parse(localStorage.getItem("knox-orders")||"[]")}catch(e){return[]}}
-function save(o){try{localStorage.setItem("knox-orders",JSON.stringify(o.slice(0,20)))}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem("nox-orders")||"[]")}catch(e){return[]}}
+function save(o){try{localStorage.setItem("nox-orders",JSON.stringify(o.slice(0,20)))}catch(e){}}
 let orders=load();
 function renderHist(){
  $("hist").innerHTML=orders.length?orders.slice(0,5).map(o=>`<li><div><b>${o.game}</b><small>${o.amount} · ID ${o.pid}</small></div><div style="text-align:right">${o.price}<small>${o.ref}</small></div></li>`).join(""):`<li style="color:var(--muted)">No orders yet. Your top-ups will show up here.</li>`;
@@ -127,7 +127,7 @@ $("pay").addEventListener("click",()=>{
  const p=S.g.packs[S.p],btn=$("pay");
  btn.disabled=true;btn.textContent="Processing…";
  setTimeout(()=>{
-  const o={ref:"KNX-"+Math.random().toString(36).slice(2,8).toUpperCase(),game:S.g.name,amount:p[0].toLocaleString()+" "+S.g.unit,price:fmt(p[1]),pid:$("pid").value.trim(),method:S.m};
+  const o={ref:"NOX-"+Math.random().toString(36).slice(2,8).toUpperCase(),game:S.g.name,amount:p[0].toLocaleString()+" "+S.g.unit,price:fmt(p[1]),pid:$("pid").value.trim(),method:S.m};
   orders.unshift(o);save(orders);renderHist();
   const d=$("done");d.hidden=false;
   d.innerHTML=`<h2>Top-up complete</h2><p>${o.amount} are on their way to player ${o.pid}.</p><p>Order ${o.ref} · ${o.price} paid by ${S.m}</p>`;

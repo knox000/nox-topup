@@ -283,7 +283,7 @@ const {error}=await supabaseClient
 if(error) throw error;
 
   const order={
-   ref:data.order_ref,
+  ref:"Submitted",
    game:game.name,
    amount:pack[0].toLocaleString()+" "+game.unit,
    price:fmt(pack[1]),

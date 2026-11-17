@@ -36,6 +36,7 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 a{color:inherit;text-decoration:none}
 .container{width:min(1120px,92%);margin:auto}
+
 header{
   position:sticky;top:0;z-index:10;
   background:#080810df;
@@ -55,6 +56,7 @@ header{
   padding:9px 13px;border:1px solid #35d9f555;
   color:var(--cyan);border-radius:30px;font-size:11px;
 }
+
 .hero{
   padding:65px 0 48px;
   text-align:center;position:relative;overflow:hidden;
@@ -73,8 +75,14 @@ header{
   background:linear-gradient(90deg,var(--cyan),#a98aff,var(--purple));
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.hero p{color:var(--muted);font-size:13px;line-height:1.8;max-width:520px;margin:0 auto}
-.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+.hero p{
+  color:var(--muted);font-size:13px;line-height:1.8;
+  max-width:520px;margin:0 auto;
+}
+.hero-actions{
+  display:flex;justify-content:center;gap:12px;
+  flex-wrap:wrap;margin-top:25px;
+}
 .btn{
   border:0;border-radius:11px;padding:14px 20px;
   background:linear-gradient(110deg,var(--cyan),#8b7cff);
@@ -87,11 +95,13 @@ header{
   background:#171729;border:1px solid var(--border);
   color:white;box-shadow:none;
 }
+
 .section{padding:32px 0}
 .section-heading{margin-bottom:20px}
 .section-heading small{color:var(--cyan);font-size:10px;letter-spacing:2px}
 .section-heading h2{font-size:25px;margin:8px 0}
 .section-heading p{color:var(--muted);font-size:12px;line-height:1.7}
+
 .games{
   display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
 }
@@ -112,19 +122,32 @@ header{
   box-shadow:0 12px 35px #9565ff20;
 }
 .game-logo{
-  height:76px;width:76px;margin:0 auto 13px;
-  border-radius:20px;display:grid;place-items:center;
-  font-weight:900;font-size:23px;letter-spacing:-2px;
+  height:100px;width:100px;margin:0 auto 13px;
+  display:grid;place-items:center;
   background:linear-gradient(145deg,#30204f,#111827);
   border:1px solid #ffffff20;
+  border-radius:18px;
+  overflow:hidden;
   box-shadow:inset 0 0 25px #9565ff22;
 }
-.game:nth-child(2) .game-logo{background:linear-gradient(145deg,#492b14,#1c1110)}
-.game:nth-child(3) .game-logo{background:linear-gradient(145deg,#173d53,#101827)}
-.game:nth-child(4) .game-logo{background:linear-gradient(145deg,#123b4c,#111827)}
+.game:nth-child(2) .game-logo{background:#241711}
+.game:nth-child(3) .game-logo{background:#173d53}
+.game:nth-child(4) .game-logo{background:#123b4c}
+.game-logo img{
+  display:block;
+  width:100%;
+  height:100%;
+  padding:8px;
+  object-fit:contain;
+  border-radius:15px;
+}
 .game h3{font-size:12px;margin:0 0 6px}
 .game p{font-size:10px;color:var(--muted);margin:0}
-.game .select-label{font-size:9px;color:var(--cyan);margin-top:12px;display:block}
+.game .select-label{
+  font-size:9px;color:var(--cyan);
+  margin-top:12px;display:block;
+}
+
 .panel{
   background:linear-gradient(145deg,#17172a,#10101a);
   border:1px solid var(--border);
@@ -133,8 +156,10 @@ header{
 }
 .panel h3{font-size:16px;margin:0 0 8px}
 .hint{font-size:11px;color:var(--muted);line-height:1.7}
+
 .packages{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:16px;
 }
 .package{
   text-align:left;background:#0c0c18;
@@ -148,40 +173,68 @@ header{
 .package strong{display:block;font-size:14px}
 .package small{display:block;color:var(--muted);font-size:10px;margin-top:7px}
 .package .price{color:var(--cyan);font-size:12px;font-weight:700}
+
 .field{margin-top:16px}
-.field label{display:block;font-size:11px;margin-bottom:8px;color:#d5d5e8}
+.field label{
+  display:block;font-size:11px;
+  margin-bottom:8px;color:#d5d5e8;
+}
 .field input,.field select{
   width:100%;padding:14px;border-radius:10px;
-  background:#090914;color:white;border:1px solid var(--border);
+  background:#090914;color:white;
+  border:1px solid var(--border);
   outline:none;font-size:12px;
 }
 .field input:focus,.field select:focus{border-color:var(--cyan)}
-.methods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+
+.methods{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;margin-top:10px;
+}
 .method{
-  padding:14px;border-radius:11px;border:1px solid var(--border);
-  background:#0b0b16;color:white;text-align:left;font-size:12px;
+  padding:14px;border-radius:11px;
+  border:1px solid var(--border);
+  background:#0b0b16;color:white;
+  text-align:left;font-size:12px;
 }
 .method.active{border-color:var(--purple);background:#25183b}
 .method strong{display:block;margin-bottom:4px}
 .method small{font-size:10px;color:var(--muted)}
+
 .payment-details{
-  display:none;background:#0b1820;border:1px solid #35d9f544;
+  display:none;background:#0b1820;
+  border:1px solid #35d9f544;
   padding:15px;border-radius:12px;margin-top:12px;
   font-size:12px;line-height:1.8;
 }
 .payment-details.show{display:block}
-.number{font-size:19px;font-weight:800;color:var(--cyan);letter-spacing:1px}
-.copy-btn{padding:8px 11px;border-radius:8px;border:0;background:#263a4b;color:white;font-size:10px;margin-top:8px}
+.number{
+  font-size:19px;font-weight:800;
+  color:var(--cyan);letter-spacing:1px;
+}
+.copy-btn{
+  padding:8px 11px;border-radius:8px;
+  border:0;background:#263a4b;color:white;
+  font-size:10px;margin-top:8px;
+}
+
 .upload{
-  border:1px dashed #66668a;border-radius:12px;padding:18px;
-  background:#0b0b16;text-align:center;
+  border:1px dashed #66668a;border-radius:12px;
+  padding:18px;background:#0b0b16;text-align:center;
 }
 .upload input{font-size:11px;max-width:100%}
-#preview{display:none;max-width:180px;max-height:180px;object-fit:contain;border-radius:10px;margin:12px auto}
+#preview{
+  display:none;max-width:180px;max-height:180px;
+  object-fit:contain;border-radius:10px;margin:12px auto;
+}
 .submit{width:100%;margin-top:18px;padding:16px}
-.message{font-size:12px;line-height:1.7;margin-top:13px;overflow-wrap:anywhere}
+.message{
+  font-size:12px;line-height:1.7;
+  margin-top:13px;overflow-wrap:anywhere;
+}
 .error{color:var(--red)}
 .success{color:var(--green)}
+
 .track-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .track-result{
   background:#0b0b16;border:1px solid var(--border);
@@ -189,27 +242,38 @@ header{
   font-size:12px;line-height:2;
 }
 .track-result strong{color:var(--cyan)}
+
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .step{
-  border:1px solid var(--border);background:#12121f;
-  border-radius:14px;padding:17px;
+  border:1px solid var(--border);
+  background:#12121f;border-radius:14px;padding:17px;
 }
 .step b{font-size:20px;color:var(--purple)}
 .step h4{font-size:12px;margin:12px 0 7px}
 .step p{font-size:10px;color:var(--muted);line-height:1.7;margin:0}
-footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:var(--muted);font-size:10px;text-align:center;line-height:2}
+
+footer{
+  border-top:1px solid var(--border);
+  margin-top:45px;padding:25px 0;
+  color:var(--muted);font-size:10px;
+  text-align:center;line-height:2;
+}
 .toast{
-  position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
+  position:fixed;bottom:20px;left:50%;
+  transform:translate(-50%,20px);
   background:#202039;border:1px solid var(--border);
-  border-radius:10px;padding:12px 17px;font-size:11px;
-  opacity:0;pointer-events:none;transition:.25s;z-index:20;
+  border-radius:10px;padding:12px 17px;
+  font-size:11px;opacity:0;
+  pointer-events:none;transition:.25s;z-index:20;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.game-logo{animation:float 4s ease-in-out infinite}
-.game:nth-child(2) .game-logo{animation-delay:.5s}
-.game:nth-child(3) .game-logo{animation-delay:1s}
-.game:nth-child(4) .game-logo{animation-delay:1.5s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+.game-logo img{animation:float 4s ease-in-out infinite}
+
 @media(max-width:700px){
   .games{grid-template-columns:repeat(2,1fr)}
   .packages{grid-template-columns:repeat(2,1fr)}
@@ -227,6 +291,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
 </head>
 
 <body>
+
 <header>
   <div class="container nav">
     <a class="brand" href="#">NOX <span>TOPUP</span></a>
@@ -250,33 +315,60 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
 </section>
 
 <main class="container">
+
 <section class="section" id="games">
   <div class="section-heading">
     <small>01 / SELECT YOUR GAME</small>
     <h2>Choose your game</h2>
     <p>Select a game to see available top-up packages.</p>
   </div>
+
   <div class="games">
+
     <button class="game" data-game="pubg">
-      <div class="game-logo">PUBG</div>
-      <h3>PUBG MOBILE</h3><p>UC Packages</p>
+      <div class="game-logo">
+        <img src="https://www.pubgmobile.com/images/event/brandassets/down-logo1.png"
+             alt="PUBG Mobile logo"
+             onerror="this.style.display='none';this.parentElement.textContent='PUBG'">
+      </div>
+      <h3>PUBG MOBILE</h3>
+      <p>UC Packages</p>
       <span class="select-label">SELECT GAME ↗</span>
     </button>
+
     <button class="game" data-game="ff">
-      <div class="game-logo">FREE<br>FIRE</div>
-      <h3>FREE FIRE</h3><p>Diamond Packages</p>
+      <div class="game-logo">
+        <img src="https://cdn.wildflamestudio.com/common/web_event/official2.ff.garena.all/img/20228/ebcec94a33d37c7b957e8a795240f732.jpg"
+             alt="Free Fire logo"
+             onerror="this.style.display='none';this.parentElement.textContent='FREE FIRE'">
+      </div>
+      <h3>FREE FIRE</h3>
+      <p>Diamond Packages</p>
       <span class="select-label">SELECT GAME ↗</span>
     </button>
+
     <button class="game" data-game="roblox">
-      <div class="game-logo">ROBLOX</div>
-      <h3>ROBLOX</h3><p>Robux Packages</p>
+      <div class="game-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Roblox_Icon_Transparent.png"
+             alt="Roblox logo"
+             onerror="this.style.display='none';this.parentElement.textContent='ROBLOX'">
+      </div>
+      <h3>ROBLOX</h3>
+      <p>Robux Packages</p>
       <span class="select-label">SELECT GAME ↗</span>
     </button>
+
     <button class="game" data-game="efootball">
-      <div class="game-logo">eF</div>
-      <h3>eFOOTBALL</h3><p>Coin Packages</p>
+      <div class="game-logo">
+        <img src="https://www.fifplay.com/img/public/efootball-2027-logo.jpg"
+             alt="eFootball logo"
+             onerror="this.style.display='none';this.parentElement.textContent='eFOOTBALL'">
+      </div>
+      <h3>eFOOTBALL</h3>
+      <p>Coin Packages</p>
       <span class="select-label">SELECT GAME ↗</span>
     </button>
+
   </div>
 </section>
 
@@ -290,6 +382,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
   <div class="panel">
     <h3 id="selectedGameTitle">Select a game first</h3>
     <p class="hint">Available packages and prices are shown below.</p>
+
     <div id="packages" class="packages">
       <p class="hint">Choose a game above to view packages.</p>
     </div>
@@ -302,11 +395,20 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
     <div class="field">
       <label>Payment method</label>
       <div class="methods">
-        <button class="method" data-method="esewa"><strong>eSewa</strong><small>Pay using eSewa</small></button>
-        <button class="method" data-method="khalti"><strong>Khalti</strong><small>Pay using Khalti</small></button>
-        <button class="method" data-method="bank"><strong>Bank Transfer</strong><small>Contact us for details</small></button>
-        <button class="method" data-method="voucher"><strong>Voucher</strong><small>Contact us for details</small></button>
+        <button class="method" data-method="esewa">
+          <strong>eSewa</strong><small>Pay using eSewa</small>
+        </button>
+        <button class="method" data-method="khalti">
+          <strong>Khalti</strong><small>Pay using Khalti</small>
+        </button>
+        <button class="method" data-method="bank">
+          <strong>Bank Transfer</strong><small>Contact us for details</small>
+        </button>
+        <button class="method" data-method="voucher">
+          <strong>Voucher</strong><small>Contact us for details</small>
+        </button>
       </div>
+
       <div class="payment-details" id="paymentDetails">
         <div id="paymentText"></div>
         <div id="paymentNumber" class="number"></div>
@@ -327,6 +429,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
     <div class="hint" style="margin-top:14px">
       Your order will be reviewed manually. Uploading a screenshot does not automatically confirm payment or deliver game credits.
     </div>
+
     <button class="btn submit" id="submitOrder">SUBMIT ORDER →</button>
     <div class="message" id="orderMessage"></div>
   </div>
@@ -338,6 +441,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
     <h2>Track your order</h2>
     <p>Enter your order reference and Player ID to check your latest order status.</p>
   </div>
+
   <div class="panel">
     <div class="track-grid">
       <div class="field">
@@ -349,6 +453,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
         <input id="trackPlayer" placeholder="Your Player ID">
       </div>
     </div>
+
     <button class="btn" id="trackBtn" style="width:100%;margin-top:14px">TRACK ORDER</button>
     <div id="trackMessage" class="message"></div>
     <div id="trackResult"></div>
@@ -361,11 +466,21 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
     <h2>Simple. Secure. Easy.</h2>
   </div>
   <div class="steps">
-    <div class="step"><b>01</b><h4>Choose package</h4><p>Select your game and preferred top-up package.</p></div>
-    <div class="step"><b>02</b><h4>Make payment</h4><p>Pay using the selected method and upload your receipt.</p></div>
-    <div class="step"><b>03</b><h4>Track order</h4><p>Save your order reference and check your order status.</p></div>
+    <div class="step">
+      <b>01</b><h4>Choose package</h4>
+      <p>Select your game and preferred top-up package.</p>
+    </div>
+    <div class="step">
+      <b>02</b><h4>Make payment</h4>
+      <p>Pay using the selected method and upload your receipt.</p>
+    </div>
+    <div class="step">
+      <b>03</b><h4>Track order</h4>
+      <p>Save your order reference and check your order status.</p>
+    </div>
   </div>
 </section>
+
 </main>
 
 <footer>
@@ -375,6 +490,7 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
   <p>Independent top-up service. Game trademarks belong to their respective owners.</p>
   <a href="admin.html">Admin</a>
 </footer>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -383,23 +499,19 @@ footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:v
 
 const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 const $ = id => document.getElementById(id);
 
 const packages = {
-  pubg:[
-    [60,130],[325,650],[660,1300],[1800,3200],[3850,6500]
-  ],
-  ff:[
-    [100,120],[310,350],[520,580],[1060,1150],[2180,2300]
-  ],
-  roblox:[
-    [400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]
-  ],
-  efootball:[
-    [130,130],[300,300],[550,500],[1050,950],[2050,1800]
-  ]
+  pubg:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]],
+  ff:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]],
+  roblox:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]],
+  efootball:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]
 };
 
 const gameNames = {
@@ -428,9 +540,11 @@ function toast(text){
 function selectGame(game){
   selectedGame = game;
   selectedPackage = null;
+
   document.querySelectorAll(".game").forEach(el=>{
     el.classList.toggle("active",el.dataset.game===game);
   });
+
   $("selectedGameTitle").textContent = gameNames[game] + " Packages";
   renderPackages();
   $("order").scrollIntoView({behavior:"smooth"});
@@ -443,47 +557,71 @@ function renderPackages(){
   packages[selectedGame].forEach(([amount,price])=>{
     const button = document.createElement("button");
     button.className = "package";
-    button.innerHTML =
-      '<strong>'+amount.toLocaleString()+'</strong>' +
-      '<small>'+({pubg:"UC",ff:"Diamonds",roblox:"Robux",efootball:"Coins"}[selectedGame])+'</small>' +
-      '<small class="price">NPR '+price.toLocaleString()+'</small>';
+
+    const title = document.createElement("strong");
+    title.textContent = amount.toLocaleString();
+
+    const unit = document.createElement("small");
+    unit.textContent = {
+      pubg:"UC",
+      ff:"Diamonds",
+      roblox:"Robux",
+      efootball:"Coins"
+    }[selectedGame];
+
+    const priceEl = document.createElement("small");
+    priceEl.className = "price";
+    priceEl.textContent = "NPR " + price.toLocaleString();
+
+    button.append(title,unit,priceEl);
 
     button.addEventListener("click",()=>{
       selectedPackage = {amount,price};
       document.querySelectorAll(".package").forEach(el=>el.classList.remove("active"));
       button.classList.add("active");
     });
+
     container.appendChild(button);
   });
 }
 
 function selectMethod(method){
   selectedMethod = method;
+
   document.querySelectorAll(".method").forEach(el=>{
     el.classList.toggle("active",el.dataset.method===method);
   });
 
-  const details = $("paymentDetails");
-  details.classList.add("show");
+  $("paymentDetails").classList.add("show");
 
   if(method==="esewa" || method==="khalti"){
     $("paymentText").textContent =
-      "Send your payment using " + (method==="esewa"?"eSewa":"Khalti") + " to this number:";
+      "Send your payment using " +
+      (method==="esewa"?"eSewa":"Khalti") +
+      " to this number:";
+
     $("paymentNumber").textContent = "9801695185";
     $("copyNumber").style.display = "inline-block";
+
   }else if(method==="bank"){
-    $("paymentText").textContent = "Please contact NOX TOPUP support for bank transfer details.";
+    $("paymentText").textContent =
+      "Please contact NOX TOPUP support for bank transfer details.";
+
     $("paymentNumber").textContent = "Bank details not configured";
     $("copyNumber").style.display = "none";
+
   }else{
-    $("paymentText").textContent = "Please contact NOX TOPUP support for voucher instructions.";
+    $("paymentText").textContent =
+      "Please contact NOX TOPUP support for voucher instructions.";
+
     $("paymentNumber").textContent = "Voucher details not configured";
     $("copyNumber").style.display = "none";
   }
 }
 
 function createReference(){
-  return "NOX-" + Date.now().toString(36).toUpperCase() +
+  return "NOX-" +
+    Date.now().toString(36).toUpperCase() +
     Math.random().toString(36).substring(2,7).toUpperCase();
 }
 
@@ -493,68 +631,42 @@ async function submitOrder(){
   const playerId = $("playerId").value.trim();
   const file = $("screenshot").files[0];
 
-  if(!selectedGame) return message("orderMessage","Please select a game.","error");
-  if(!selectedPackage) return message("orderMessage","Please select a package.","error");
-  if(!playerId) return message("orderMessage","Enter your Player ID.","error");
-  if(!selectedMethod) return message("orderMessage","Choose a payment method.","error");
-  if(!file) return message("orderMessage","Please upload your payment screenshot.","error");
-  if(!file.type.startsWith("image/")) return message("orderMessage","Please select an image file.","error");
-  if(file.size > 5*1024*1024) return message("orderMessage","Screenshot must be smaller than 5 MB.","error");
+  if(!selectedGame)
+    return message("orderMessage","Please select a game.","error");
+
+  if(!selectedPackage)
+    return message("orderMessage","Please select a package.","error");
+
+  if(!playerId)
+    return message("orderMessage","Enter your Player ID.","error");
+
+  if(!selectedMethod)
+    return message("orderMessage","Choose a payment method.","error");
+
+  if(!file)
+    return message("orderMessage","Please upload your payment screenshot.","error");
+
+  if(!file.type.startsWith("image/"))
+    return message("orderMessage","Please select an image file.","error");
+
+  if(file.size > 5*1024*1024)
+    return message("orderMessage","Screenshot must be smaller than 5 MB.","error");
 
   busy = true;
   $("submitOrder").disabled = true;
   $("submitOrder").textContent = "SUBMITTING...";
   message("orderMessage","Uploading screenshot and submitting order...");
 
-  let uploadedPath = null;
-
   try{
     const orderRef = createReference();
-    const extension = (file.name.split(".").pop() || "jpg").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+
+    const extension =
+      (file.name.split(".").pop() || "jpg")
+      .replace(/[^a-zA-Z0-9]/g,"")
+      .toLowerCase();
+
     const filename = orderRef + "-" + crypto.randomUUID() + "." + extension;
 
     const {data:uploadData,error:uploadError} = await db.storage
       .from("payment-screenshots")
-      .upload(filename,file,{
-        cacheControl:"3600",
-        upsert:false,
-        contentType:file.type
-      });
-
-    if(uploadError) throw uploadError;
-    uploadedPath = uploadData.path;
-
-    const {error:insertError} = await db.from("orders").insert({
-      order_ref:orderRef,
-      game:selectedGame,
-      player_id:playerId,
-      package_amount:String(selectedPackage.amount),
-      price_npr:selectedPackage.price,
-      payment_method:selectedMethod,
-      payment_status:"pending",
-      order_status:"pending",
-      payment_screenshot:uploadedPath
-    });
-
-    if(insertError) throw insertError;
-
-    $("trackRef").value = orderRef;
-    $("trackPlayer").value = playerId;
-    $("playerId").value = "";
-    $("screenshot").value = "";
-    $("preview").style.display = "none";
-
-    message("orderMessage",
-      "Order submitted successfully! Your reference is " + orderRef +
-      ". Save this reference to track your order.",
-      "success"
-    );
-    toast("Order submitted successfully!");
-    $("track").scrollIntoView({behavior:"smooth"});
-
-  }catch(error){
-    console.error(error);
-    message("orderMessage","Order failed: " + error.message,"error");
-
-    // If the order insert failed after upload, the file remains in storage.
-    // It can be removed manually from the private bucket if nec
+      .upload(filename,fi

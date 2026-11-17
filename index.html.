@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOX TOPUP | Gaming Store</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#090910;color:white;font-family:Arial,sans-serif}
+header{padding:22px;background:#11111d;border-bottom:1px solid #29243e}
+.logo{font-size:27px;font-weight:900;color:#a855f7}
+.logo span{color:white}
+nav{margin-top:12px;color:#aaa;font-size:13px}
+.hero{text-align:center;padding:55px 20px 40px}
+.hero h1{font-size:36px;margin-bottom:12px}
+.hero h1 span{color:#a855f7}
+.hero p{color:#aaa;line-height:1.6}
+.tag{color:#c084fc;font-size:12px;letter-spacing:3px}
+.games{padding:20px;max-width:850px;margin:auto}
+.games h2{margin-bottom:20px}
+.game{background:#171522;border:1px solid #302641;border-radius:15px;padding:22px;margin-bottom:15px}
+.game h3{font-size:21px;margin-bottom:8px}
+.game p{color:#aaa;font-size:14px;margin-bottom:18px}
+button{background:#9333ea;color:white;border:0;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:hover{background:#7e22ce}
+.info{text-align:center;padding:30px 20px;color:#aaa;font-size:13px}
+footer{text-align:center;padding:25px;background:#11111d;color:#777;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">NOX <span>TOPUP</span></div>
+<nav>HOME　 |　 GAMES　 |　 SUPPORT</nav>
+</header>
+<section class="hero">
+<div class="tag">YOUR GAMING STORE</div>
+<h1>LEVEL UP WITH <span>NOX</span></h1>
+<p>Your gaming journey starts here.<br>Choose your game and get ready to top up.</p>
+</section>
+<section class="games">
+<h2>Choose Your Game</h2>
+<div class="game">
+<h3>🎮 PUBG MOBILE</h3>
+<p>UC top-up services</p>
+<button onclick="selectGame('PUBG Mobile')">Top Up Now</button>
+</div>
+<div class="game">
+<h3>🔥 FREE FIRE</h3>
+<p>Diamonds top-up services</p>
+<button onclick="selectGame('Free Fire')">Top Up Now</button>
+</div>
+<div class="game">
+<h3>⚔️ MORE GAMES</h3>
+<p>More games coming soon.</p>
+<button onclick="alert('Coming soon!')">Coming Soon</button>
+</div>
+</section>
+<section class="info">
+<h2>Why NOX TOPUP?</h2>
+<p>Simple ordering • Gaming-focused service • Customer support</p>
+</section>
+<footer>© 2026 NOX TOPUP. All rights reserved.</footer>
+<script>
+function selectGame(game){
+alert("You selected "+game+". Top-up packages coming soon!");
+}
+</script>
+</body>
+</html>

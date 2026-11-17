@@ -2,71 +2,99 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NOX TOPUP | Admin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOX TOPUP | Admin 2.0</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080810;--card:#12121e;--card2:#191929;
-  --border:#303044;--text:#f5f5ff;--muted:#9292aa;
-  --cyan:#22d3ee;--purple:#9b5cff;--green:#22c55e;
-  --yellow:#facc15;--red:#fb7185;
+ --bg:#080810;--card:#12121e;--card2:#191929;
+ --border:#303044;--text:#f5f5ff;--muted:#9292aa;
+ --cyan:#22d3ee;--purple:#9b5cff;--green:#22c55e;
+ --yellow:#facc15;--red:#fb7185;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Sora,Arial,sans-serif}
-button,input,select{font:inherit}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.wrap{max-width:1250px;margin:auto;padding:22px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:25px}
-.brand{font-size:23px;font-weight:800;letter-spacing:1px}
+.wrap{max-width:1400px;margin:auto;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:12px}
+.brand{font-size:24px;font-weight:800;letter-spacing:1px}
 .brand span{color:var(--cyan)}
-.sub{color:var(--muted);font-size:12px;margin-top:5px}
-.btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;color:#080810;background:linear-gradient(100deg,var(--cyan),#8b5cf6)}
+.sub,.muted{color:var(--muted);font-size:12px}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;color:#080810;background:linear-gradient(100deg,var(--cyan),#8b5cf6)}
 .btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--border)}
 .btn.danger{background:#451b2a;color:#fecdd3;border:1px solid #713047}
-.panel,.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px}
+.btn.small{padding:8px 10px;font-size:11px}
+.panel,.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px}
 .login{max-width:420px;margin:70px auto}
-h2{font-size:19px;margin:0 0 16px}
-input,select{width:100%;background:#0c0c17;border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;outline:none}
-input:focus,select:focus{border-color:var(--cyan)}
-.field{margin:13px 0}
-label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+h2{font-size:18px;margin:0 0 15px}
+h3{font-size:14px;margin:0 0 12px}
+input,select,textarea{
+ width:100%;background:#0c0c17;border:1px solid var(--border);
+ color:var(--text);padding:11px;border-radius:10px;outline:none
+}
+textarea{min-height:75px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan)}
+.field{margin:12px 0}
+label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
 .message{font-size:13px;color:var(--yellow);margin-top:12px;line-height:1.6}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.stat small{color:var(--muted);font-size:12px}
-.stat strong{display:block;font-size:27px;margin-top:8px}
-.tools{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-bottom:16px}
-.order{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:17px;margin-bottom:13px}
-.order-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.ref{font-weight:800;color:var(--cyan);font-size:14px}
-.muted{color:var(--muted);font-size:12px}
-.details{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:17px 0}
-.detail{background:#0c0c17;border:1px solid #252538;padding:11px;border-radius:10px;min-width:0}
-.detail small{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}
-.detail b{font-size:13px;overflow-wrap:anywhere}
-.controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
-.status{display:inline-block;border-radius:30px;padding:5px 9px;font-size:10px;font-weight:700;background:#29293a;color:#ddd}
-.status.completed,.status.paid{background:#123923;color:#86efac}
-.status.processing{background:#30244b;color:#d8b4fe}
-.status.pending{background:#403719;color:#fde68a}
-.status.rejected,.status.failed,.status.refunded{background:#451b2a;color:#fda4af}
-.screenshot{display:inline-block;color:var(--cyan);font-size:12px;margin:12px 0;text-decoration:none}
-.empty{text-align:center;color:var(--muted);padding:35px}
 .hidden{display:none!important}
-#preview{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat small{color:var(--muted);font-size:11px}
+.stat strong{display:block;font-size:25px;margin-top:8px;overflow-wrap:anywhere}
+.stat .green{color:var(--green)}
+.stat .cyan{color:var(--cyan)}
+.nav{display:flex;gap:8px;overflow-x:auto;padding:3px 0 13px;margin-bottom:12px}
+.nav button{white-space:nowrap}
+.nav button.active{background:linear-gradient(100deg,var(--cyan),#8b5cf6);color:#080810;border:0}
+.tab{display:none}
+.tab.active{display:block}
+.tools{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:9px;margin:15px 0}
+.order{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:16px;margin-bottom:12px}
+.order-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ref{font-weight:800;color:var(--cyan);font-size:13px}
+.details{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:15px 0}
+.detail{background:#0c0c17;border:1px solid #252538;padding:10px;border-radius:10px;min-width:0}
+.detail small{display:block;color:var(--muted);font-size:9px;margin-bottom:6px}
+.detail b{font-size:12px;overflow-wrap:anywhere}
+.controls{display:grid;grid-template-columns:1fr 1fr 1.5fr auto;gap:9px;align-items:end}
+.status{display:inline-block;border-radius:30px;padding:5px 9px;font-size:10px;font-weight:700;background:#29293a;color:#ddd}
+.status.completed,.status.paid,.status.approved{background:#123923;color:#86efac}
+.status.processing{background:#30244b;color:#d8b4fe}
+.status.pending,.status.requested{background:#403719;color:#fde68a}
+.status.rejected,.status.failed,.status.refunded{background:#451b2a;color:#fda4af}
+.screenshot{display:inline-block;color:var(--cyan);font-size:12px;margin:10px 0;text-decoration:none}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:550px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-size:10px}
+.barlist{display:flex;align-items:end;gap:8px;height:150px;margin-top:15px}
+.baritem{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:end}
+.bar{width:100%;max-width:35px;background:linear-gradient(0deg,var(--purple),var(--cyan));border-radius:6px 6px 0 0;min-height:3px}
+.baritem small{font-size:9px;color:var(--muted)}
+.baritem b{font-size:9px}
+.toggle{accent-color:var(--cyan);width:18px;height:18px}
+.badge{color:var(--cyan);font-size:11px}
+#preview{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
 #preview img{max-width:100%;max-height:85vh;border-radius:12px}
 #preview button{position:absolute;top:20px;right:20px}
-@media(max-width:700px){
- .wrap{padding:14px}
+.notice{padding:12px;border:1px solid #544521;background:#282113;border-radius:10px;color:#fde68a;font-size:11px;line-height:1.6;margin-bottom:14px}
+@media(max-width:750px){
+ .wrap{padding:13px}
  .stats{grid-template-columns:repeat(2,1fr)}
  .tools{grid-template-columns:1fr 1fr}
  .tools input{grid-column:1/-1}
  .details{grid-template-columns:1fr 1fr}
  .controls{grid-template-columns:1fr 1fr}
  .controls button{grid-column:1/-1}
- header{align-items:flex-start}
- .brand{font-size:19px}
+ .grid2,.grid3{grid-template-columns:1fr}
+ header .brand{font-size:20px}
 }
 </style>
 </head>
@@ -76,62 +104,212 @@ label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
 <header>
  <div>
   <div class="brand">NOX <span>TOPUP</span></div>
-  <div class="sub">ADMIN CONTROL PANEL</div>
+  <div class="sub">ADMIN CONTROL CENTER 2.0</div>
  </div>
- <button id="logoutBtn" class="btn danger hidden" onclick="logout()">Logout</button>
+ <div class="row" style="flex:0 0 auto">
+  <button class="btn secondary small" onclick="refreshAll()">↻ Refresh</button>
+  <button id="logoutBtn" class="btn danger small hidden" onclick="logout()">Logout</button>
+ </div>
 </header>
 
 <section id="loginPanel" class="panel login">
  <h2>Admin Login</h2>
- <div class="field">
-  <label>Email address</label>
-  <input id="email" type="email" placeholder="Admin email">
- </div>
- <div class="field">
-  <label>Password</label>
-  <input id="password" type="password" placeholder="Password">
- </div>
+ <div class="field"><label>Email</label><input id="email" type="email" placeholder="Admin email"></div>
+ <div class="field"><label>Password</label><input id="password" type="password" placeholder="Password"></div>
  <button class="btn" style="width:100%" onclick="login()">Login to Dashboard</button>
  <div id="loginMessage" class="message"></div>
 </section>
 
 <section id="dashboard" class="hidden">
+
+ <div id="maintenanceNotice" class="notice hidden">
+  WEBSITE MAINTENANCE MODE IS ON. Customers may need to be blocked by the customer website integration.
+ </div>
+
  <div class="stats">
-  <div class="stat"><small>Total Orders</small><strong id="totalCount">0</strong></div>
-  <div class="stat"><small>Pending</small><strong id="pendingCount">0</strong></div>
-  <div class="stat"><small>Processing</small><strong id="processingCount">0</strong></div>
-  <div class="stat"><small>Completed</small><strong id="completedCount">0</strong></div>
+  <div class="stat"><small>TOTAL ORDERS</small><strong id="totalCount">0</strong></div>
+  <div class="stat"><small>PENDING ORDERS</small><strong id="pendingCount">0</strong></div>
+  <div class="stat"><small>COMPLETED ORDERS</small><strong id="completedCount">0</strong></div>
+  <div class="stat"><small>PAID REVENUE</small><strong class="green" id="revenueCount">NPR 0</strong></div>
+  <div class="stat"><small>TODAY'S ORDERS</small><strong id="todayCount">0</strong></div>
+  <div class="stat"><small>TODAY'S SALES</small><strong class="cyan" id="todaySales">NPR 0</strong></div>
+  <div class="stat"><small>PROCESSING</small><strong id="processingCount">0</strong></div>
+  <div class="stat"><small>UNPAID ORDERS</small><strong id="unpaidCount">0</strong></div>
  </div>
 
- <div class="panel">
-  <div class="order-top" style="align-items:center;margin-bottom:15px">
-   <div>
-    <h2 style="margin-bottom:5px">Orders Management</h2>
-    <div class="muted">Review orders and update their status</div>
+ <nav class="nav">
+  <button class="btn small active" onclick="showTab('overview',this)">Overview</button>
+  <button class="btn secondary small" onclick="showTab('orders',this)">Orders</button>
+  <button class="btn secondary small" onclick="showTab('packages',this)">Packages</button>
+  <button class="btn secondary small" onclick="showTab('coupons',this)">Coupons</button>
+  <button class="btn secondary small" onclick="showTab('customers',this)">Customers</button>
+  <button class="btn secondary small" onclick="showTab('refunds',this)">Refunds</button>
+  <button class="btn secondary small" onclick="showTab('settings',this)">Website Settings</button>
+  <button class="btn secondary small" onclick="showTab('activity',this)">Activity</button>
+ </nav>
+
+ <!-- OVERVIEW -->
+ <section id="tab-overview" class="tab active">
+  <div class="grid2">
+   <div class="panel">
+    <h2>Sales Overview</h2>
+    <div class="muted">Paid revenue from the last seven days</div>
+    <div id="salesChart" class="barlist"></div>
    </div>
-   <button class="btn secondary" onclick="loadOrders()">↻ Refresh</button>
+   <div class="panel">
+    <h2>Business Summary</h2>
+    <div class="details">
+     <div class="detail"><small>AVERAGE PAID ORDER</small><b id="averageOrder">NPR 0</b></div>
+     <div class="detail"><small>PAYMENT SUCCESS</small><b id="paidCount">0</b></div>
+     <div class="detail"><small>ACTIVE PACKAGES</small><b id="activePackages">0</b></div>
+     <div class="detail"><small>ACTIVE COUPONS</small><b id="activeCoupons">0</b></div>
+    </div>
+    <button class="btn secondary" onclick="exportCSV()">Export Orders CSV</button>
+   </div>
   </div>
+  <div class="panel" style="margin-top:14px">
+   <h2>Recent Orders</h2>
+   <div id="recentOrders"></div>
+  </div>
+ </section>
 
-  <div class="tools">
-   <input id="search" placeholder="Search Player ID or Order Ref..." oninput="renderOrders()">
-   <select id="orderFilter" onchange="renderOrders()">
-    <option value="all">All order statuses</option>
-    <option value="pending">Pending</option>
-    <option value="processing">Processing</option>
-    <option value="completed">Completed</option>
-    <option value="rejected">Rejected</option>
-   </select>
-   <select id="paymentFilter" onchange="renderOrders()">
-    <option value="all">All payment statuses</option>
-    <option value="pending">Payment Pending</option>
-    <option value="paid">Paid</option>
-    <option value="failed">Failed</option>
-    <option value="refunded">Refunded</option>
-   </select>
-   <button class="btn secondary" onclick="clearFilters()">Clear</button>
+ <!-- ORDERS -->
+ <section id="tab-orders" class="tab">
+  <div class="panel">
+   <h2>Order Management</h2>
+   <div class="muted">Search, review, fulfill and update customer orders.</div>
+   <div class="tools">
+    <input id="search" placeholder="Search Player ID or Order Ref..." oninput="renderOrders()">
+    <select id="orderFilter" onchange="renderOrders()">
+     <option value="all">All order statuses</option>
+     <option value="pending">Pending</option>
+     <option value="processing">Processing</option>
+     <option value="completed">Completed</option>
+     <option value="rejected">Rejected</option>
+    </select>
+    <select id="paymentFilter" onchange="renderOrders()">
+     <option value="all">All payment statuses</option>
+     <option value="pending">Payment Pending</option>
+     <option value="paid">Paid</option>
+     <option value="failed">Failed</option>
+     <option value="refunded">Refunded</option>
+    </select>
+    <button class="btn secondary small" onclick="clearFilters()">Clear</button>
+   </div>
+   <div id="ordersList"><div class="empty">Loading orders...</div></div>
   </div>
-  <div id="ordersList"><div class="empty">Loading orders...</div></div>
- </div>
+ </section>
+
+ <!-- PACKAGES -->
+ <section id="tab-packages" class="tab">
+  <div class="panel">
+   <h2>Package Manager</h2>
+   <div class="notice">Packages saved here are stored in Supabase. The customer website will be connected to this catalog in the next website update. Until then, changing these packages does not automatically change the storefront.</div>
+   <div class="grid2">
+    <div class="field"><label>Game</label>
+     <select id="pkgGame">
+      <option value="pubg">PUBG Mobile</option>
+      <option value="ff">Free Fire</option>
+      <option value="roblox">Roblox</option>
+      <option value="efootball">eFootball</option>
+     </select>
+    </div>
+    <div class="field"><label>Package amount</label><input id="pkgAmount" placeholder="Example: 325 UC"></div>
+    <div class="field"><label>Price NPR</label><input id="pkgPrice" type="number" min="0" placeholder="Example: 650"></div>
+    <div class="field" style="display:flex;align-items:center;gap:10px">
+     <label style="margin:0"><input class="toggle" id="pkgFeatured" type="checkbox"> Featured package</label>
+    </div>
+   </div>
+   <button class="btn" onclick="addPackage()">Add Package</button>
+   <div id="packageMessage" class="message"></div>
+  </div>
+  <div class="panel" style="margin-top:14px">
+   <h2>Saved Packages</h2>
+   <div id="packageList"><div class="empty">Loading packages...</div></div>
+  </div>
+ </section>
+
+ <!-- COUPONS -->
+ <section id="tab-coupons" class="tab">
+  <div class="panel">
+   <h2>Coupon Manager</h2>
+   <div class="notice">Coupons can be created and validated in the database. Customer checkout will be connected to coupon validation in the next storefront update. Do not advertise coupons until checkout integration is complete.</div>
+   <div class="grid2">
+    <div class="field"><label>Coupon code</label><input id="couponCode" placeholder="Example: NOX10"></div>
+    <div class="field"><label>Discount type</label>
+     <select id="couponType"><option value="percentage">Percentage (%)</option><option value="fixed">Fixed NPR</option></select>
+    </div>
+    <div class="field"><label>Discount value</label><input id="couponValue" type="number" min="0" placeholder="10"></div>
+    <div class="field"><label>Minimum order NPR</label><input id="couponMinimum" type="number" min="0" value="0"></div>
+    <div class="field"><label>Maximum uses (blank = unlimited)</label><input id="couponMax" type="number" min="1" placeholder="100"></div>
+    <div class="field"><label>Expiry date (optional)</label><input id="couponExpiry" type="datetime-local"></div>
+   </div>
+   <button class="btn" onclick="addCoupon()">Create Coupon</button>
+   <div id="couponMessage" class="message"></div>
+  </div>
+  <div class="panel" style="margin-top:14px">
+   <h2>Saved Coupons</h2>
+   <div id="couponList"></div>
+  </div>
+ </section>
+
+ <!-- CUSTOMERS -->
+ <section id="tab-customers" class="tab">
+  <div class="panel">
+   <h2>Customer Management</h2>
+   <div class="muted">Customer summaries are generated from order records. Your current order table does not contain customer names or phone numbers.</div>
+   <div class="field"><input id="customerSearch" placeholder="Search Player ID..." oninput="renderCustomers()"></div>
+   <div id="customerList"></div>
+  </div>
+ </section>
+
+ <!-- REFUNDS -->
+ <section id="tab-refunds" class="tab">
+  <div class="panel">
+   <h2>Refund Management</h2>
+   <div class="notice">This records and tracks refund requests. It does not send money automatically. Verify the transaction and process refunds manually through your payment provider.</div>
+   <div class="grid2">
+    <div class="field"><label>Order reference</label><input id="refundRef" placeholder="NOX-..."></div>
+    <div class="field"><label>Refund amount NPR</label><input id="refundAmount" type="number" min="0" placeholder="Amount"></div>
+   </div>
+   <div class="field"><label>Reason</label><textarea id="refundReason" placeholder="Reason for refund"></textarea></div>
+   <button class="btn" onclick="addRefund()">Create Refund Record</button>
+   <div id="refundMessage" class="message"></div>
+  </div>
+  <div class="panel" style="margin-top:14px">
+   <h2>Refund Requests</h2>
+   <div id="refundList"></div>
+  </div>
+ </section>
+
+ <!-- SETTINGS -->
+ <section id="tab-settings" class="tab">
+  <div class="panel">
+   <h2>Website Settings</h2>
+   <div class="notice">Maintenance mode is saved here. It will only block customer orders after the customer website is updated to read this setting.</div>
+   <div class="field"><label>Announcement message</label><input id="settingMessage" placeholder="Welcome to NOX TOPUP"></div>
+   <div class="field"><label>WhatsApp support number (country code, no + sign)</label><input id="settingWhatsapp" placeholder="97798XXXXXXXX"></div>
+   <div class="field">
+    <label><input class="toggle" type="checkbox" id="maintenanceToggle"> Enable maintenance mode</label>
+   </div>
+   <button class="btn" onclick="saveSettings()">Save Website Settings</button>
+   <div id="settingsMessage" class="message"></div>
+  </div>
+  <div class="panel" style="margin-top:14px">
+   <h2>Customer Support</h2>
+   <p class="muted">Open a WhatsApp chat with your support account.</p>
+   <button class="btn secondary" onclick="openSupport()">Open WhatsApp Support</button>
+  </div>
+ </section>
+
+ <!-- ACTIVITY -->
+ <section id="tab-activity" class="tab">
+  <div class="panel">
+   <h2>Admin Activity Log</h2>
+   <div class="muted">Records important changes made through this dashboard.</div>
+   <div id="activityList" style="margin-top:15px"></div>
+  </div>
+ </section>
 </section>
 </div>
 
@@ -141,240 +319,129 @@ label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
 </div>
 
 <script>
-const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
-const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL="https://vobhkqrrglripsluidkt.supabase.co";
+const SUPABASE_KEY="sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let allOrders = [];
+let allOrders=[];
+let packages=[];
+let coupons=[];
+let refunds=[];
+let currentUser=null;
+let settings={};
+let knownOrderIds=new Set();
+let firstOrderLoad=true;
 
-function safe(value){
- return String(value ?? "").replace(/[&<>"']/g, c => ({
+function $(id){return document.getElementById(id)}
+function safe(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
  }[c]));
 }
-
-function nice(value){
- return String(value || "unknown").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+function nice(v){
+ return String(v||"Unknown").replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+}
+function money(v){return "NPR "+Number(v||0).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function message(id,text){$(id).textContent=text}
+function dateText(v){return v?new Date(v).toLocaleString():"—"}
+function isToday(v){
+ if(!v)return false;
+ const d=new Date(v),n=new Date();
+ return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();
+}
+function orderPrice(o){
+ return Number(o.final_price_npr ?? o.price_npr ?? 0);
 }
 
 async function login(){
- const email=document.getElementById("email").value.trim();
- const password=document.getElementById("password").value;
- const msg=document.getElementById("loginMessage");
- msg.textContent="Checking login...";
-
- if(!email || !password){
-  msg.textContent="Enter your email and password.";
-  return;
- }
-
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ message("loginMessage","Checking login...");
+ if(!email||!password){message("loginMessage","Enter email and password.");return}
  const {error}=await db.auth.signInWithPassword({email,password});
- if(error){
-  msg.textContent=error.message;
-  return;
- }
+ if(error){message("loginMessage",error.message);return}
  await checkAdmin();
 }
 
 async function checkAdmin(){
  const {data:{user}}=await db.auth.getUser();
-
- if(!user){
-  showLogin();
-  return;
- }
-
- const {data,error}=await db
-  .from("admin_users")
-  .select("user_id")
-  .eq("user_id",user.id)
-  .maybeSingle();
-
- if(error || !data){
+ if(!user){showLogin();return}
+ const {data,error}=await db.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
+ if(error||!data){
   await db.auth.signOut();
   showLogin();
-  document.getElementById("loginMessage").textContent=
-   "This account is not registered as an admin.";
+  message("loginMessage","This account is not registered as an admin.");
   return;
  }
-
- document.getElementById("loginPanel").classList.add("hidden");
- document.getElementById("dashboard").classList.remove("hidden");
- document.getElementById("logoutBtn").classList.remove("hidden");
- await loadOrders();
+ currentUser=user;
+ $("loginPanel").classList.add("hidden");
+ $("dashboard").classList.remove("hidden");
+ $("logoutBtn").classList.remove("hidden");
+ await refreshAll();
 }
 
 function showLogin(){
- document.getElementById("loginPanel").classList.remove("hidden");
- document.getElementById("dashboard").classList.add("hidden");
- document.getElementById("logoutBtn").classList.add("hidden");
+ $("loginPanel").classList.remove("hidden");
+ $("dashboard").classList.add("hidden");
+ $("logoutBtn").classList.add("hidden");
 }
-
 async function logout(){
  await db.auth.signOut();
- allOrders=[];
+ currentUser=null;allOrders=[];
  showLogin();
- document.getElementById("loginMessage").textContent="You have logged out.";
+ message("loginMessage","You have logged out.");
+}
+
+function showTab(name,button){
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ $("tab-"+name).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>{
+  x.classList.remove("active");
+  x.classList.add("secondary");
+ });
+ button.classList.add("active");
+ button.classList.remove("secondary");
+ if(name==="packages")loadPackages();
+ if(name==="coupons")loadCoupons();
+ if(name==="customers")renderCustomers();
+ if(name==="refunds")loadRefunds();
+ if(name==="settings")loadSettings();
+ if(name==="activity")loadActivity();
+}
+
+async function refreshAll(){
+ await loadOrders();
+ await loadPackages();
+ await loadCoupons();
+ await loadSettings();
+ updateStats();
 }
 
 async function loadOrders(){
- const list=document.getElementById("ordersList");
- list.innerHTML='<div class="empty">Loading orders...</div>';
-
- const {data,error}=await db
-  .from("orders")
-  .select("*")
-  .order("created_at",{ascending:false});
-
+ $("ordersList").innerHTML='<div class="empty">Loading orders...</div>';
+ const {data,error}=await db.from("orders").select("*").order("created_at",{ascending:false});
  if(error){
-  list.innerHTML='<div class="empty">Could not load orders: '+safe(error.message)+'</div>';
+  $("ordersList").innerHTML='<div class="empty">Order loading error: '+safe(error.message)+'</div>';
   return;
  }
-
- allOrders=data || [];
+ allOrders=data||[];
+ const newIds=allOrders.map(o=>String(o.id));
+ if(!firstOrderLoad){
+  const newCount=newIds.filter(id=>!knownOrderIds.has(id)).length;
+  if(newCount>0)alert("NOX TOPUP: "+newCount+" new order(s) received!");
+ }
+ knownOrderIds=new Set(newIds);
+ firstOrderLoad=false;
  updateStats();
  renderOrders();
+ renderRecent();
+ renderCustomers();
 }
 
 function updateStats(){
- document.getElementById("totalCount").textContent=allOrders.length;
- document.getElementById("pendingCount").textContent=
-  allOrders.filter(o=>o.order_status==="pending").length;
- document.getElementById("processingCount").textContent=
-  allOrders.filter(o=>o.order_status==="processing").length;
- document.getElementById("completedCount").textContent=
-  allOrders.filter(o=>o.order_status==="completed").length;
-}
-
-function renderOrders(){
- const search=document.getElementById("search").value.trim().toLowerCase();
- const orderFilter=document.getElementById("orderFilter").value;
- const paymentFilter=document.getElementById("paymentFilter").value;
-
- const filtered=allOrders.filter(o=>{
-  const matchesSearch=
-   String(o.order_ref||"").toLowerCase().includes(search) ||
-   String(o.player_id||"").toLowerCase().includes(search);
-  const matchesOrder=orderFilter==="all" || o.order_status===orderFilter;
-  const matchesPayment=paymentFilter==="all" || o.payment_status===paymentFilter;
-  return matchesSearch && matchesOrder && matchesPayment;
- });
-
- const list=document.getElementById("ordersList");
- if(!filtered.length){
-  list.innerHTML='<div class="empty">No orders found.</div>';
-  return;
- }
-
- list.innerHTML=filtered.map(o=>`
-  <article class="order">
-   <div class="order-top">
-    <div>
-     <div class="ref">${safe(o.order_ref)}</div>
-     <div class="muted">${safe(o.created_at ? new Date(o.created_at).toLocaleString() : "")}</div>
-    </div>
-    <div>
-     <span class="status ${safe(o.order_status)}">${safe(nice(o.order_status))}</span>
-     <span class="status ${safe(o.payment_status)}">${safe(nice(o.payment_status))}</span>
-    </div>
-   </div>
-
-   <div class="details">
-    <div class="detail"><small>GAME</small><b>${safe(nice(o.game))}</b></div>
-    <div class="detail"><small>PLAYER ID</small><b>${safe(o.player_id)}</b></div>
-    <div class="detail"><small>PACKAGE</small><b>${safe(o.package_amount)}</b></div>
-    <div class="detail"><small>PRICE</small><b>NPR ${safe(o.price_npr)}</b></div>
-    <div class="detail"><small>PAYMENT METHOD</small><b>${safe(nice(o.payment_method))}</b></div>
-    <div class="detail"><small>PAYMENT STATUS</small><b>${safe(nice(o.payment_status))}</b></div>
-   </div>
-
-   ${o.payment_screenshot ? `
-    <a class="screenshot" href="#" onclick="viewScreenshot('${safe(o.id)}');return false;">
-     View payment screenshot ↗
-    </a>
-   ` : '<div class="muted">No payment screenshot attached.</div>'}
-
-   <div class="controls">
-    <div>
-     <label>Order status</label>
-     <select id="order-${safe(o.id)}">
-      ${["pending","processing","completed","rejected"].map(s=>
-       `<option value="${s}" ${o.order_status===s?"selected":""}>${nice(s)}</option>`
-      ).join("")}
-     </select>
-    </div>
-    <div>
-     <label>Payment status</label>
-     <select id="payment-${safe(o.id)}">
-      ${["pending","paid","failed","refunded"].map(s=>
-       `<option value="${s}" ${o.payment_status===s?"selected":""}>${nice(s)}</option>`
-      ).join("")}
-     </select>
-    </div>
-    <button class="btn" onclick="saveOrder('${safe(o.id)}')">Save Changes</button>
-   </div>
-  </article>
- `).join("");
-}
-
-async function saveOrder(id){
- const orderStatus=document.getElementById("order-"+id).value;
- const paymentStatus=document.getElementById("payment-"+id).value;
-
- const {error}=await db.from("orders").update({
-  order_status:orderStatus,
-  payment_status:paymentStatus
- }).eq("id",id);
-
- if(error){
-  alert("Update failed: "+error.message);
-  return;
- }
-
- alert("Order updated successfully.");
- await loadOrders();
-}
-
-async function viewScreenshot(id){
- const order=allOrders.find(o=>String(o.id)===String(id));
- if(!order || !order.payment_screenshot){
-  alert("Screenshot not found.");
-  return;
- }
-
- const {data,error}=await db.storage
-  .from("payment-screenshots")
-  .createSignedUrl(order.payment_screenshot,300);
-
- if(error){
-  alert("Could not open screenshot: "+error.message);
-  return;
- }
-
- document.getElementById("previewImage").src=data.signedUrl;
- document.getElementById("preview").style.display="flex";
-}
-
-function closePreview(){
- document.getElementById("preview").style.display="none";
- document.getElementById("previewImage").src="";
-}
-
-function clearFilters(){
- document.getElementById("search").value="";
- document.getElementById("orderFilter").value="all";
- document.getElementById("paymentFilter").value="all";
- renderOrders();
-}
-
-db.auth.onAuthStateChange((event,session)=>{
- if(event==="SIGNED_OUT") showLogin();
-});
-
-(async()=>{
- const {data:{session}}=await db.auth.getSession();
- if(session) await checkAdmin();
-})();
-</script>
-</body>
-</html>
+ const paid=allOrders.filter(o=>o.payment_status==="paid");
+ const revenue=paid.reduce((s,o)=>s+orderPrice(o),0);
+ const today=allOrders.filter(o=>isToday(o.created_at));
+ const todayPaid=today.filter(o=>o.payment_status==="paid");
+ $("totalCount").textContent=allOrders.length;
+ $("pendingCount").textContent=allOrd

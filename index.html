@@ -276,13 +276,11 @@ console.log("Order data:", orderData);
    console.log("KEY PREFIX:", SUPABASE_KEY.substring(0, 15));
 console.log("PROJECT URL:", SUPABASE_URL);
 console.log("ORDER DATA:", orderData);
-  const {data,error}=await supabaseClient
-   .from("orders")
-   .insert(orderData)
-   .select("order_ref,created_at")
-   .single();
-
-  if(error)throw error;
+  
+const {error}=await supabaseClient
+  .from("orders")
+  .insert(orderData);
+if(error) throw error;
 
   const order={
    ref:data.order_ref,

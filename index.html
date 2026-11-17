@@ -253,13 +253,15 @@ $("pay").addEventListener("click",async()=>{
  btn.disabled=true;
  btn.textContent="Submitting...";
 
- const orderData={
-  game:game.id,
-  player_id:playerId,
-  package_amount:pack[0],
-  price_npr:pack[1],
-  payment_method:S.m
- };
+ const orderData = {
+  game: game.id,
+  player_id: playerId,
+  package_amount: pack[0],
+  price_npr: pack[1],
+  payment_method: S.m,
+  payment_status: "pending",
+  order_status: "pending"
+};
 
  try{
   const {data,error}=await supabaseClient

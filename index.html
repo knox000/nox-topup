@@ -2,331 +2,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NOX TOPUP</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#050508;--surface:#0e0e16;--line:#23233a;--text:#f2f2fa;--muted:#9a9ab5;--cyan:#00f0ff;--grad:linear-gradient(120deg,#9b00ff,#00f0ff);color-scheme:dark;box-sizing:border-box}
-*,*::before,*::after{box-sizing:inherit}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Sora,system-ui,sans-serif;line-height:1.5;padding-bottom:120px}
-main,header .in{max-width:720px;margin:auto;padding:0 18px}
-header{border-bottom:1px solid var(--line)}
-header .in{display:flex;align-items:center;gap:12px;padding-top:14px;padding-bottom:14px}
-header svg{width:44px;height:44px}
-.brand{font-weight:800;font-size:1.25rem}
-.hero{padding:34px 0 8px}
-.hero h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1.05;margin:0 0 12px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:var(--muted)}
-section{margin-top:30px}
-h2{font-size:1.05rem;margin:0 0 12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.opt{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:block}
-.opt[aria-pressed=true]{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
-.tile{height:68px;border-radius:9px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.4rem}
-.opt b{display:block;font-size:.95rem}
-.opt span{color:var(--muted);font-size:.8rem}
-.packs .opt{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.price{font-weight:600;color:var(--cyan)}
-input[type=text]{width:100%;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:14px;font:inherit;font-size:1rem}
-.err{color:#ff6b8a;font-size:.85rem;min-height:1.2em}
-.locked{opacity:.4;pointer-events:none}
-.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(5,5,8,.95);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px))}
-.bar .in{max-width:720px;margin:auto;display:flex;align-items:center;gap:14px}
-.sum{flex:1;font-size:.85rem;color:var(--muted)}
-.sum strong{display:block;color:var(--text);font-size:1.1rem}
-.pay{all:unset;cursor:pointer;background:var(--grad);color:#050508;font-weight:800;padding:14px 22px;border-radius:12px}
-.pay:disabled{opacity:.35;cursor:not-allowed}
-.done{background:var(--surface);border:1px solid var(--cyan);border-radius:16px;padding:20px;margin-top:30px}
-.done p{color:var(--muted);overflow-wrap:anywhere}
-.hist{list-style:none;padding:0}
-.hist li{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9rem}
-.hist small{color:var(--muted);display:block}
-.note{color:var(--muted);font-size:.8rem;margin-top:26px}
-[hidden]{display:none!important}
-@media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
+:root{--bg:#080810;--card:#12121e;--purple:#8b5cf6;--cyan:#22d3ee;--text:#f5f5ff;--muted:#9696ad;--border:#29293b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Sora,Arial,sans-serif}
+header{padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:23px;font-weight:800;letter-spacing:1px}
+.logo span{color:var(--cyan)}
+.tag{color:var(--muted);font-size:11px}
+main{width:min(650px,92%);margin:30px auto 60px}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:30px;margin:0 0 10px}
+.hero h1 span{color:var(--cyan)}
+.hero p{color:var(--muted);font-size:13px;line-height:1.7}
+.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px}
+.section h2{font-size:15px;margin:0 0 16px}
+.games,.payments{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.game,.pack,.payment{background:#191927;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:15px 10px;cursor:pointer;font-family:inherit;font-weight:600}
+.game.selected,.pack.selected,.payment.selected{border-color:var(--cyan);background:#14232d;box-shadow:0 0 0 1px var(--cyan)}
+.game small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:9px}
+input{width:100%;padding:15px;border-radius:10px;border:1px solid var(--border);background:#090914;color:white;font:inherit;outline:none}
+input:focus{border-color:var(--cyan)}
+.packs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pack{text-align:left}
+.pack strong{display:block;font-size:16px}
+.pack small{display:block;color:var(--cyan);margin-top:7px}
+.payment{padding:14px}
+.summary{background:#090914;padding:15px;border-radius:10px;margin-top:15px;font-size:12px;line-height:2}
+.summary div{display:flex;justify-content:space-between}
+.summary strong{color:var(--cyan)}
+.submit{width:100%;border:0;border-radius:12px;padding:17px;margin-top:16px;color:#050510;background:linear-gradient(100deg,var(--cyan),var(--purple));font:800 15px Sora,Arial;cursor:pointer}
+.submit:disabled{opacity:.5;cursor:not-allowed}
+#message{font-size:12px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere}
+.success{color:#4ade80}
+.error{color:#fb7185}
+.order{border-bottom:1px solid var(--border);padding:12px 0;font-size:12px;line-height:1.8}
+.order:last-child{border:0}
+.muted{color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;padding:20px}
 </style>
 </head>
-<body>
 
+<body>
 <header>
-<div class="in">
-<svg viewBox="230 190 810 790" aria-hidden="true">
-<defs><linearGradient id="g" x1="240" y1="400" x2="1020" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9b00ff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs>
-<g fill="url(#g)" fill-rule="evenodd">
-<path d="M395 370H521L818 614V370H963V710L838 835L659 697L395 908ZM550 530V700L715 612Z"/>
-<path d="M750 222C480 170 241 350 241 560C241 660 290 750 378 818V746C330 670 322 600 323 560C330 380 500 215 750 222Z"/>
-<path d="M1025 651C960 840 800 962 668 962C600 962 530 945 478 909C520 925 560 932 605 931C790 925 960 810 1025 651Z"/>
-</g></svg>
-<span class="brand">Nox Topup</span>
-</div>
+  <div class="logo">NOX <span>TOPUP</span></div>
+  <div class="tag">GAMING STORE</div>
 </header>
 
 <main>
-<div class="hero">
-<h1>Top up in seconds.</h1>
-<p>Choose your game, enter your player ID, select a package and submit your order.</p>
-</div>
+  <div class="hero">
+    <h1>Top up in <span>seconds.</span></h1>
+    <p>Choose your game, enter your player ID, select a package and submit your order.</p>
+  </div>
 
-<div id="done" class="done" hidden aria-live="polite"></div>
+  <section class="section">
+    <h2>1. Choose a game</h2>
+    <div class="games">
+      <button class="game" data-game="pubg" type="button">PUBG Mobile<small>UC packages</small></button>
+      <button class="game" data-game="ff" type="button">Free Fire<small>Diamond packages</small></button>
+      <button class="game" data-game="roblox" type="button">Roblox<small>Robux packages</small></button>
+      <button class="game" data-game="efootball" type="button">eFootball<small>Coin packages</small></button>
+    </div>
+  </section>
 
-<section>
-<h2>1. Choose a game</h2>
-<div class="grid" id="games"></div>
-</section>
+  <section class="section">
+    <h2>2. Player ID</h2>
+    <label for="playerId">Enter your player ID</label>
+    <input id="playerId" type="text" placeholder="Enter your game player ID" autocomplete="off">
+  </section>
 
-<section id="s2" class="locked">
-<h2>2. Player ID</h2>
-<input type="text" id="pid" autocomplete="off" placeholder="Enter your player ID" aria-label="Player ID">
-<p class="err" id="err"></p>
-</section>
+  <section class="section">
+    <h2>3. Choose a pack</h2>
+    <div class="packs" id="packs">
+      <p class="muted">Choose a game first.</p>
+    </div>
+  </section>
 
-<section id="s3" class="locked">
-<h2>3. Choose a pack</h2>
-<div class="packs" id="packs" style="display:grid;gap:10px"></div>
-</section>
+  <section class="section">
+    <h2>4. Payment method</h2>
+    <div class="payments">
+      <button class="payment" data-payment="esewa" type="button">eSewa</button>
+      <button class="payment" data-payment="khalti" type="button">Khalti</button>
+      <button class="payment" data-payment="bank" type="button">Bank Transfer</button>
+      <button class="payment" data-payment="voucher" type="button">Voucher</button>
+    </div>
 
-<section id="s4" class="locked">
-<h2>4. Payment method</h2>
-<div class="grid" id="methods"></div>
-</section>
+    <div class="summary">
+      <div><span>Game</span><strong id="sumGame">Not selected</strong></div>
+      <div><span>Package</span><strong id="sumPack">Not selected</strong></div>
+      <div><span>Price</span><strong id="sumPrice">NPR 0</strong></div>
+      <div><span>Payment</span><strong id="sumPayment">Not selected</strong></div>
+    </div>
 
-<section>
-<h2>Your recent orders</h2>
-<ul class="hist" id="hist"></ul>
-<p class="note">Sample NPR prices only. Submitting an order does not take payment or deliver game credits. Payment and delivery must be verified separately.</p>
-</section>
+    <button class="submit" id="submitBtn" type="button">Submit order</button>
+    <div id="message" role="status"></div>
+  </section>
+
+  <section class="section">
+    <h2>Your recent orders</h2>
+    <div id="recentOrders" class="muted">No recent orders on this device.</div>
+  </section>
 </main>
 
-<div class="bar">
-<div class="in">
-<div class="sum" id="sum">Select a game to begin</div>
-<button class="pay" id="pay" disabled>Submit order</button>
-</div>
-</div>
+<footer>
+  Sample NPR prices only. Submitting an order does not take payment or deliver game credits.
+  Payment and delivery must be verified separately.
+  <br><br>© 2026 NOX TOPUP
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-/* SUPABASE CONNECTION */
+(() => {
+"use strict";
+
 const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false
-    }
-  }
-);
-
-/* SAMPLE NPR PRICES - EDIT BEFORE LAUNCH */
-const GAMES = [
- {id:"pubg",name:"PUBG Mobile",short:"PM",unit:"UC",hue:"#9b00ff",packs:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]]},
- {id:"ff",name:"Free Fire",short:"FF",unit:"Diamonds",hue:"#6a3bff",packs:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]]},
- {id:"roblox",name:"Roblox",short:"RB",unit:"Robux",hue:"#2f7bff",packs:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]]},
- {id:"efootball",name:"eFootball",short:"eF",unit:"Coins",hue:"#00c8e0",packs:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]}
-];
-
-const METHODS = [
- ["esewa","eSewa","Pay using eSewa"],
- ["khalti","Khalti","Pay using Khalti"],
- ["bank","Bank transfer","Manual bank transfer"],
- ["voucher","Voucher","Gift or recharge voucher"]
-];
-
-const S = {g:null,p:null,m:"esewa"};
-const $ = id => document.getElementById(id);
-const fmt = n => "NPR " + n.toLocaleString("en-IN");
-
-function renderGames(){
- $("games").innerHTML = GAMES.map(g =>
- `<button type="button" class="opt" data-g="${g.id}" aria-pressed="${S.g && S.g.id===g.id}">
- <div class="tile" style="background:linear-gradient(135deg,${g.hue}55,#00f0ff22)">${g.short}</div>
- <b>${g.name}</b><span>${g.unit}</span></button>`
- ).join("");
-}
-
-function renderPacks(){
- if(!S.g)return;
- $("packs").innerHTML = S.g.packs.map((p,i) =>
- `<button type="button" class="opt" data-p="${i}" aria-pressed="${S.p===i}">
- <b>${p[0].toLocaleString()} ${S.g.unit}</b>
- <span class="price">${fmt(p[1])}</span></button>`
- ).join("");
-}
-
-function renderMethods(){
- $("methods").innerHTML = METHODS.map(m =>
- `<button type="button" class="opt" data-m="${m[0]}" aria-pressed="${S.m===m[0]}">
- <b>${m[1]}</b><span>${m[2]}</span></button>`
- ).join("");
-}
-
-function validId(){
- return /^[A-Za-z0-9_-]{5,30}$/.test($("pid").value.trim());
-}
-
-function update(){
- ["s2","s3","s4"].forEach(s =>
-  $(s).classList.toggle("locked",!S.g)
- );
-
- const ok = !!(S.g && S.p!==null && validId());
- $("pay").disabled = !ok;
-
- if(S.g && S.p!==null){
-  const p=S.g.packs[S.p];
-  $("sum").innerHTML =
-   `${p[0].toLocaleString()} ${S.g.unit} · ${S.g.name}<strong>${fmt(p[1])}</strong>`;
- }else if(S.g){
-  $("sum").textContent="Choose a pack to continue";
- }else{
-  $("sum").textContent="Select a game to begin";
- }
-}
-
-document.addEventListener("click",e=>{
- const b=e.target.closest(".opt");
- if(!b)return;
-
- if(b.dataset.g){
-  S.g=GAMES.find(g=>g.id===b.dataset.g);
-  S.p=null;
-  $("s2").scrollIntoView({behavior:"smooth",block:"start"});
- }
-
- if(b.dataset.p!==undefined){
-  S.p=Number(b.dataset.p);
- }
-
- if(b.dataset.m){
-  S.m=b.dataset.m;
- }
-
- renderGames();
- renderPacks();
- renderMethods();
- update();
-});
-
-$("pid").addEventListener("input",()=>{
- const v=$("pid").value.trim();
- $("err").textContent =
-  v&&!validId()?"Use 5 to 30 letters, numbers, - or _.":"";
- update();
-});
-
-/* LOCAL ORDER HISTORY */
-function load(){
- try{
-  return JSON.parse(localStorage.getItem("nox-orders")||"[]");
- }catch(e){
-  return [];
- }
-}
-
-function save(list){
- try{
-  localStorage.setItem("nox-orders",JSON.stringify(list.slice(0,20)));
- }catch(e){}
-}
-
-let orders=load();
-
-function renderHist(){
- $("hist").innerHTML=orders.length
- ? orders.slice(0,5).map(o=>
-  `<li>
-   <div><b>${o.game}</b><small>${o.amount} · ID ${o.pid}</small></div>
-   <div style="text-align:right">${o.price}<small>${o.ref}</small><small>${o.status}</small></div>
-  </li>`
- ).join("")
- : `<li style="color:var(--muted)">No orders yet.</li>`;
-}
-
-/* SUBMIT ORDER TO SUPABASE */
-$("pay").addEventListener("click",async()=>{
- if($("pay").disabled)return;
-
- const game=S.g;
- const pack=game.packs[S.p];
- const playerId=$("pid").value.trim();
- const btn=$("pay");
-
- btn.disabled=true;
- btn.textContent="Submitting...";
-
- const orderData = {
-  game: game.id,
-  player_id: playerId,
-  package_amount: pack[0],
-  price_npr: pack[1],
-  payment_method: S.m,
-  payment_status: "pending",
-  order_status: "pending"
+const games = {
+  pubg:{name:"PUBG Mobile",unit:"UC",packs:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]]},
+  ff:{name:"Free Fire",unit:"Diamonds",packs:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]]},
+  roblox:{name:"Roblox",unit:"Robux",packs:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]]},
+  efootball:{name:"eFootball",unit:"Coins",packs:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]}
 };
 
- console.log("ORDER DATA:", orderData);
-  
-const {error}=await supabaseClient
-  .from("orders")
-  .insert(orderData);
-if(error) throw error;
+const $ = id => document.getElementById(id);
+const money = n => "NPR " + Number(n).toLocaleString("en-IN");
 
-  const order={
-  ref:"Submitted",
-   game:game.name,
-   amount:pack[0].toLocaleString()+" "+game.unit,
-   price:fmt(pack[1]),
-   pid:playerId,
-   method:S.m,
-   status:"Pending"
-  };
+let selectedGame = null;
+let selectedPack = null;
+let selectedPayment = null;
+let supabaseClient = null;
 
-  orders.unshift(order);
-  save(orders);
-  renderHist();
-
-  const done=$("done");
-  done.hidden=false;
-  done.innerHTML=`
-   <h2>Order submitted!</h2>
-   <p>Your order has been saved successfully.</p>
-   <p>Game: ${order.game}</p>
-   <p>Package: ${order.amount}</p>
-   <p>Player ID: ${order.pid}</p>
-   <p>Payment method: ${order.method}</p>
-   <p>Order reference: ${order.ref}</p>
-   <p><strong>Status: Pending payment verification</strong></p>
-  `;
-  done.scrollIntoView({behavior:"smooth",block:"center"});
-
-  S.p=null;
-  renderPacks();
-  update();
-}catch(error){
-  console.error("FULL ORDER ERROR:", error);
-  $("err").textContent =
-    "Error: " + JSON.stringify({
-      message: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint
-    });
-}finally{
-  btn.textContent="Submit order";
-  update();
+function showMessage(message,type){
+  $("message").textContent = message;
+  $("message").className = type || "";
 }
 
+function updateSummary(){
+  $("sumGame").textContent = selectedGame ? games[selectedGame].name : "Not selected";
+  $("sumPack").textContent = selectedPack && selectedGame
+    ? selectedPack[0] + " " + games[selectedGame].unit : "Not selected";
+  $("sumPrice").textContent = selectedPack ? money(selectedPack[1]) : "NPR 0";
+  $("sumPayment").textContent = selectedPayment || "Not selected";
+}
 
-renderGames();
-renderMethods();
-renderHist();
-update();
+function chooseGame(id){
+  selectedGame = id;
+  selectedPack = null;
+
+  document.querySelectorAll(".game").forEach(btn => {
+    btn.classList.toggle("selected",btn.dataset.game === id);
+  });
+
+  $("packs").innerHTML = "";
+
+  games[id].packs.forEach(pack => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "pack";
+    button.innerHTML =
+      "<strong>" + pack[0].toLocaleString() + " " + games[id].unit + "</strong>" +
+      "<small>" + money(pack[1]) + "</small>";
+
+    button.addEventListener("click",() => {
+      selectedPack = pack;
+
+      document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
+      button.classList.add("selected");
+
+      updateSummary();
+    });
+
+    $("packs").appendChild(button);
+  });
+
+  updateSummary();
+  showMessage("");
+}
+
+document.querySelectorAll(".game").forEach(button => {
+  button.addEventListener("click",() => chooseGame(button.dataset.game));
+});
+
+document.querySelectorAll(".payment").forEach(button => {
+  button.addEventListener("click",() => {
+    selectedPayment = button.dataset.payment;
+
+    document.querySelectorAll(".payment").forEach(p => {
+      p.classList.toggle("selected",p === button);
+    });
+
+    updateSummary();
+  });
+});
+
+function showRecentOrders(){
+  let orders = [];
+
+  try {
+    orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
+  } catch(e) {
+    orders = [];
+  }
+
+  if(!orders.length){
+    $("recentOrders").textContent = "No recent orders on this device.";
+    $("recentOrders").className = "muted";
+    return;
+  }
+
+  $("recentOrders").className = "";
+
+  $("recentOrders").innerHTML = orders.map(order =>
+    '<div class="order">' +
+    '<strong>' + order.game + '</strong><br>' +
+    order.amount + ' · ' + order.price + '<br>' +
+    'Player ID: ' + order.playerId + '<br>' +
+    '<span class="muted">Status: Pending</span>' +
+    '</div>'
+  ).join("");
+}
+
+async function submitOrder(){
+  const btn = $("submitBtn");
+  const playerId = $("playerId").value.trim();
+
+  showMessage("");
+
+  if(!selectedGame){
+    showMessage("Please choose a game.","error");
+    return;
+  }
+
+  if(!playerId){
+    showMessage("Please enter your Player ID.","error");
+    $("playerId").focus();
+    return;
+  }
+
+  if(!selectedPack){
+    showMessage("Please choose a package.","error");
+    return;
+  }
+
+  if(!selectedPayment){
+    showMessage("Please choose a payment method.","error");
+    return;
+  }
+
+  if(!supabaseClient){
+    showMessage("Connection error. Please refresh the website.","error");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
+
+  const game = games[selectedGame];
+
+  const orderData = {
+    game: selectedGame,
+    player_id: playerId,
+    package_amount: selectedPack[0],
+    price_npr: selectedPack[1],
+    payment_method: selectedPayment,
+    payment_status: "pending",
+    order_status: "pending"
+  };
+
+  try {
+    const {error} = await supabaseClient
+      .from("orders")
+      .insert(orderData);
+
+    if(error) throw error;
+
+    const recentOrder = {
+      game: game.name,
+      amount: selectedPack[0] + " " + game.unit,
+      price: money(selectedPack[1]),
+      playerId: playerId
+    };
+
+    let orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
+    orders.unshift(recentOrder);
+    localStorage.setItem("noxOrders",JSON.stringify(orders.slice(0,5)));
+
+    showRecentOrders();
+    showMessage("Order submitted successfully! Your order is pending verification.","success");
+
+    $("playerId").value = "";
+    selectedPack = null;
+
+    document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
+
+    updateSummary();
+
+  } catch(error) {
+    console.error("FULL ORDER ERROR:",error);
+
+    showMessage(
+      "Order failed: " + JSON.stringify({
+        message:error.message,
+        code:error.code,
+        details:error.details,
+        hint:error.hint
+      }),
+      "error"
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Submit order";
+  }
+}
+
+$("submitBtn").addEventListener("click",submitOrder);
+
+function startWebsite(){
+  if(!window.supabase){
+    showMessage("Supabase library failed to load. Check your internet connection.","error");
+    return;
+  }
+
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:false,
+        autoRefreshToken:false,
+        detectSessionInUrl:false
+      }
+    }
+  );
+
+  showRecentOrders();
+}
+
+startWebsite();
+updateSummary();
+
+})();
 </script>
 </body>
 </html>

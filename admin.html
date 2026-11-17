@@ -1,111 +1,395 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NOX TOPUP Admin</title>
+<title>NOX TOPUP | Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
+:root{
+  --bg:#080810;
+  --card:#141421;
+  --border:#303044;
+  --cyan:#22d3ee;
+  --purple:#8b5cf6;
+  --text:#f5f5ff;
+  --muted:#9999ad;
+  --green:#4ade80;
+  --red:#fb7185;
+}
 *{box-sizing:border-box}
-body{margin:0;padding:20px;background:#080810;color:#f5f5ff;font-family:Arial,sans-serif}
-main{max-width:850px;margin:30px auto}
-h1 span{color:#22d3ee}
-.card{background:#151522;border:1px solid #303044;border-radius:14px;padding:20px;margin:16px 0}
-input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #343449;background:#090914;color:white}
-button{background:#22d3ee;color:#080810;font-weight:bold;cursor:pointer;border:0}
-.order{background:#090914;border:1px solid #343449;border-radius:10px;padding:14px;margin:12px 0;overflow-wrap:anywhere}
-small{color:#aaa}
-.hidden{display:none}
-#message{font-size:13px;overflow-wrap:anywhere}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:18px 5%;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-size:23px;
+  font-weight:900;
+}
+.logo span{color:var(--cyan)}
+main{
+  width:min(1000px,94%);
+  margin:30px auto;
+}
+h1{font-size:25px}
+h2{font-size:17px}
+.muted{color:var(--muted)}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  margin:15px 0;
+}
+input,select{
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border-radius:9px;
+  border:1px solid var(--border);
+  background:#090914;
+  color:white;
+  font-size:14px;
+}
+button{
+  padding:12px 16px;
+  border:0;
+  border-radius:9px;
+  background:var(--cyan);
+  color:#080810;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.secondary{
+  background:#29293b;
+  color:white;
+}
+.danger{
+  background:#4b202b;
+  color:#ffb6c1;
+}
+.hidden{display:none!important}
+#message,.notice{
+  font-size:13px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+  margin-top:12px;
+}
+.error{color:var(--red)}
+.success{color:var(--green)}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:15px 0;
+}
+.stat{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:12px;
+}
+.stat small{
+  color:var(--muted);
+  display:block;
+}
+.stat strong{
+  display:block;
+  font-size:24px;
+  margin-top:9px;
+  color:var(--cyan);
+}
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:10px;
+}
+.order{
+  background:#0b0b16;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin:13px 0;
+  overflow-wrap:anywhere;
+}
+.order-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.order-info{
+  font-size:13px;
+  line-height:1.9;
+  color:#d5d5e4;
+}
+.order-info strong{color:white}
+.status{
+  display:inline-block;
+  background:#29293b;
+  color:var(--cyan);
+  border-radius:20px;
+  padding:5px 10px;
+  font-size:11px;
+}
+.order-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:9px;
+  align-items:end;
+  margin-top:12px;
+}
+.order-controls label{
+  font-size:11px;
+  color:var(--muted);
+}
+.order-controls button{
+  margin-bottom:7px;
+}
+@media(max-width:650px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .filters{grid-template-columns:1fr}
+  .order-controls{grid-template-columns:1fr}
+  .order-controls button{width:100%}
+}
 </style>
 </head>
+
 <body>
+
+<header>
+  <div class="logo">NOX <span>TOPUP</span></div>
+  <span class="muted">ADMIN PANEL</span>
+</header>
+
 <main>
-<h1>NOX <span>TOPUP</span> ADMIN</h1>
-<p><small>Private order management</small></p>
 
 <section class="card" id="loginBox">
-<h2>Admin Login</h2>
-<input id="email" type="email" placeholder="Admin email">
-<input id="password" type="password" placeholder="Password">
-<button id="loginBtn">Login</button>
-<p id="message"></p>
+  <h1>Admin Login</h1>
+  <p class="muted">Sign in to manage customer orders.</p>
+
+  <input id="email" type="email" placeholder="Admin email" autocomplete="username">
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+
+  <button id="loginBtn">Login</button>
+  <div id="message"></div>
 </section>
 
-<section class="card hidden" id="dashboard">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-<h2>Orders</h2>
-<button id="logoutBtn" style="width:auto">Logout</button>
-</div>
-<button id="refreshBtn">Refresh Orders</button>
-<div id="orders">Loading...</div>
+<section id="dashboard" class="hidden">
+
+  <div class="order-top">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="muted">Manage your NOX TOPUP orders.</p>
+    </div>
+    <button id="logoutBtn" class="danger">Logout</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <small>Total orders</small>
+      <strong id="totalCount">0</strong>
+    </div>
+    <div class="stat">
+      <small>Pending</small>
+      <strong id="pendingCount">0</strong>
+    </div>
+    <div class="stat">
+      <small>Processing</small>
+      <strong id="processingCount">0</strong>
+    </div>
+    <div class="stat">
+      <small>Completed</small>
+      <strong id="completedCount">0</strong>
+    </div>
+  </div>
+
+  <section class="card">
+    <h2>Order management</h2>
+
+    <div class="filters">
+      <input id="search" type="search"
+        placeholder="Search Player ID or order reference...">
+
+      <select id="statusFilter">
+        <option value="all">All order statuses</option>
+        <option value="pending">Pending</option>
+        <option value="processing">Processing</option>
+        <option value="completed">Completed</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+      <select id="paymentFilter">
+        <option value="all">All payment statuses</option>
+        <option value="pending">Payment pending</option>
+        <option value="paid">Paid</option>
+        <option value="failed">Failed</option>
+        <option value="refunded">Refunded</option>
+      </select>
+    </div>
+
+    <button id="refreshBtn" class="secondary">Refresh orders</button>
+    <div id="dashboardMessage" class="notice"></div>
+    <div id="orders" class="muted">Loading orders...</div>
+  </section>
+
 </section>
+
 </main>
 
 <script>
 (() => {
 "use strict";
 
-const URL = "https://vobhkqrrglripsluidkt.supabase.co";
-const KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+const SUPABASE_URL =
+  "https://vobhkqrrglripsluidkt.supabase.co";
 
-const db = window.supabase.createClient(URL,KEY);
+const SUPABASE_KEY =
+  "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
+
 const $ = id => document.getElementById(id);
 
+let allOrders = [];
 let currentUser = null;
 
-function message(text){
+function setMessage(text,type=""){
   $("message").textContent = text;
+  $("message").className = type;
+}
+
+function dashboardMessage(text,type=""){
+  $("dashboardMessage").textContent = text;
+  $("dashboardMessage").className = "notice " + type;
+}
+
+function showDashboard(){
+  $("loginBox").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+}
+
+function showLogin(){
+  $("dashboard").classList.add("hidden");
+  $("loginBox").classList.remove("hidden");
+}
+
+async function checkAdmin(){
+  const {data:{user},error:sessionError} =
+    await db.auth.getUser();
+
+  if(sessionError || !user){
+    currentUser = null;
+    showLogin();
+    return false;
+  }
+
+  const {data,error} = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(error || !data){
+    await db.auth.signOut();
+    currentUser = null;
+    showLogin();
+    setMessage("This account does not have admin access.","error");
+    return false;
+  }
+
+  currentUser = user;
+  showDashboard();
+  return true;
 }
 
 async function login(){
-  message("Logging in...");
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
+  if(!email || !password){
+    setMessage("Enter your email and password.","error");
+    return;
+  }
+
   $("loginBtn").disabled = true;
+  setMessage("Logging in...");
 
   try{
-    const {data,error} = await db.auth.signInWithPassword({
-      email:$("email").value.trim(),
-      password:$("password").value
+    const {error} = await db.auth.signInWithPassword({
+      email,
+      password
     });
 
     if(error) throw error;
 
-    currentUser = data.user;
+    const allowed = await checkAdmin();
 
-    const {data:admin,error:adminError} = await db
-      .from("admin_users")
-      .select("user_id")
-      .eq("user_id",currentUser.id)
-      .maybeSingle();
-
-    if(adminError) throw adminError;
-
-    if(!admin){
-      await db.auth.signOut();
-      currentUser = null;
-      throw new Error("This account is not registered as an admin.");
+    if(allowed){
+      setMessage("");
+      await loadOrders();
     }
 
-    $("loginBox").classList.add("hidden");
-    $("dashboard").classList.remove("hidden");
-    await loadOrders();
-
   }catch(error){
-    message("Login error: "+error.message);
+    setMessage("Login failed: " + error.message,"error");
   }finally{
     $("loginBtn").disabled = false;
   }
 }
 
-function addText(parent,text){
-  const el = document.createElement("div");
+function makeElement(tag,text,className=""){
+  const el = document.createElement(tag);
   el.textContent = text;
-  parent.appendChild(el);
+  if(className) el.className = className;
   return el;
 }
 
+function updateStats(){
+  $("totalCount").textContent = allOrders.length;
+
+  $("pendingCount").textContent =
+    allOrders.filter(o => o.order_status === "pending").length;
+
+  $("processingCount").textContent =
+    allOrders.filter(o => o.order_status === "processing").length;
+
+  $("completedCount").textContent =
+    allOrders.filter(o => o.order_status === "completed").length;
+}
+
 async function loadOrders(){
+  if(!currentUser){
+    return;
+  }
+
   $("orders").textContent = "Loading orders...";
+  dashboardMessage("");
 
   try{
     const {data,error} = await db
@@ -115,98 +399,191 @@ async function loadOrders(){
 
     if(error) throw error;
 
-    $("orders").replaceChildren();
-
-    if(!data.length){
-      $("orders").textContent = "No orders yet.";
-      return;
-    }
-
-    data.forEach(order => {
-      const card = document.createElement("div");
-      card.className = "order";
-
-      addText(card,"Order: "+order.order_ref);
-      addText(card,"Game: "+order.game);
-      addText(card,"Player ID: "+order.player_id);
-      addText(card,"Package: "+order.package_amount);
-      addText(card,"Price: NPR "+order.price_npr);
-      addText(card,"Payment method: "+order.payment_method);
-      addText(card,"Created: "+new Date(order.created_at).toLocaleString());
-
-      const orderLabel = document.createElement("label");
-      orderLabel.textContent = "Order status";
-      card.appendChild(orderLabel);
-
-      const orderStatus = document.createElement("select");
-      ["pending","processing","completed","rejected"].forEach(value => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
-        orderStatus.appendChild(option);
-      });
-      orderStatus.value = order.order_status;
-      card.appendChild(orderStatus);
-
-      const paymentLabel = document.createElement("label");
-      paymentLabel.textContent = "Payment status";
-      card.appendChild(paymentLabel);
-
-      const paymentStatus = document.createElement("select");
-      ["pending","paid","failed","refunded"].forEach(value => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
-        paymentStatus.appendChild(option);
-      });
-      paymentStatus.value = order.payment_status;
-      card.appendChild(paymentStatus);
-
-      const save = document.createElement("button");
-      save.textContent = "Save changes";
-      save.addEventListener("click",async () => {
-        save.disabled = true;
-        save.textContent = "Saving...";
-
-        try{
-          const {error} = await db
-            .from("orders")
-            .update({
-              order_status:orderStatus.value,
-              payment_status:paymentStatus.value
-            })
-            .eq("id",order.id);
-
-          if(error) throw error;
-
-          save.textContent = "Saved!";
-        }catch(error){
-          save.textContent = "Save failed";
-          alert(error.message);
-        }finally{
-          save.disabled = false;
-        }
-      });
-
-      card.appendChild(save);
-      $("orders").appendChild(card);
-    });
+    allOrders = data || [];
+    updateStats();
+    renderOrders();
 
   }catch(error){
-    $("orders").textContent = "Error: "+error.message;
+    $("orders").textContent = "Unable to load orders.";
+    dashboardMessage(error.message,"error");
   }
 }
 
-$("loginBtn").addEventListener("click",login);
-$("refreshBtn").addEventListener("click",loadOrders);
+function renderOrders(){
+  const search = $("search").value.trim().toLowerCase();
+  const status = $("statusFilter").value;
+  const payment = $("paymentFilter").value;
 
-$("logoutBtn").addEventListener("click",async () => {
+  const filtered = allOrders.filter(order => {
+    const player = String(order.player_id || "").toLowerCase();
+    const reference = String(order.order_ref || "").toLowerCase();
+
+    const searchMatch =
+      player.includes(search) || reference.includes(search);
+
+    const statusMatch =
+      status === "all" || order.order_status === status;
+
+    const paymentMatch =
+      payment === "all" || order.payment_status === payment;
+
+    return searchMatch && statusMatch && paymentMatch;
+  });
+
+  $("orders").replaceChildren();
+
+  if(!filtered.length){
+    $("orders").textContent = "No matching orders found.";
+    return;
+  }
+
+  filtered.forEach(order => {
+    const card = makeElement("div","","order");
+
+    const top = makeElement("div","","order-top");
+
+    const heading = makeElement(
+      "strong",
+      "Order: " + (order.order_ref || order.id)
+    );
+
+    const badge = makeElement(
+      "span",
+      order.order_status || "pending",
+      "status"
+    );
+
+    top.append(heading,badge);
+    card.appendChild(top);
+
+    const info = makeElement("div","","order-info");
+
+    const details = [
+      ["Game",order.game],
+      ["Player ID",order.player_id],
+      ["Package",order.package_amount],
+      ["Price","NPR " + order.price_npr],
+      ["Payment method",order.payment_method],
+      ["Payment status",order.payment_status],
+      ["Created",order.created_at
+        ? new Date(order.created_at).toLocaleString()
+        : "Unknown"]
+    ];
+
+    details.forEach(([label,value]) => {
+      const line = document.createElement("div");
+      const strong = document.createElement("strong");
+
+      strong.textContent = label + ": ";
+      line.appendChild(strong);
+      line.appendChild(document.createTextNode(String(value ?? "-")));
+
+      info.appendChild(line);
+    });
+
+    card.appendChild(info);
+
+    const controls = makeElement("div","","order-controls");
+
+    const orderWrap = document.createElement("div");
+    const orderLabel = makeElement("label","Order status");
+    const orderSelect = document.createElement("select");
+
+    ["pending","processing","completed","rejected"].forEach(value => {
+      const option = makeElement("option",value);
+      option.value = value;
+      orderSelect.appendChild(option);
+    });
+
+    orderSelect.value = order.order_status || "pending";
+    orderWrap.append(orderLabel,orderSelect);
+
+    const paymentWrap = document.createElement("div");
+    const paymentLabel = makeElement("label","Payment status");
+    const paymentSelect = document.createElement("select");
+
+    ["pending","paid","failed","refunded"].forEach(value => {
+      const option = makeElement("option",value);
+      option.value = value;
+      paymentSelect.appendChild(option);
+    });
+
+    paymentSelect.value = order.payment_status || "pending";
+    paymentWrap.append(paymentLabel,paymentSelect);
+
+    const saveButton = makeElement("button","Save changes");
+
+    saveButton.addEventListener("click",async () => {
+      saveButton.disabled = true;
+      saveButton.textContent = "Saving...";
+
+      try{
+        const {error} = await db
+          .from("orders")
+          .update({
+            order_status:orderSelect.value,
+            payment_status:paymentSelect.value
+          })
+          .eq("id",order.id);
+
+        if(error) throw error;
+
+        dashboardMessage(
+          "Order " + (order.order_ref || order.id) + " updated.",
+          "success"
+        );
+
+        await loadOrders();
+
+      }catch(error){
+        dashboardMessage("Update failed: " + error.message,"error");
+        saveButton.disabled = false;
+        saveButton.textContent = "Save changes";
+      }
+    });
+
+    controls.append(orderWrap,paymentWrap,saveButton);
+    card.appendChild(controls);
+
+    $("orders").appendChild(card);
+  });
+}
+
+async function logout(){
   await db.auth.signOut();
   currentUser = null;
-  $("dashboard").classList.add("hidden");
-  $("loginBox").classList.remove("hidden");
-  message("Logged out.");
+  allOrders = [];
+  $("password").value = "";
+  showLogin();
+  setMessage("You have logged out.","success");
+}
+
+$("loginBtn").addEventListener("click",login);
+$("logoutBtn").addEventListener("click",logout);
+$("refreshBtn").addEventListener("click",loadOrders);
+
+$("search").addEventListener("input",renderOrders);
+$("statusFilter").addEventListener("change",renderOrders);
+$("paymentFilter").addEventListener("change",renderOrders);
+
+$("password").addEventListener("keydown",event => {
+  if(event.key === "Enter") login();
 });
+
+async function start(){
+  if(!window.supabase){
+    setMessage("Supabase failed to load. Check your internet connection.","error");
+    return;
+  }
+
+  const allowed = await checkAdmin();
+
+  if(allowed){
+    await loadOrders();
+  }
+}
+
+start();
 
 })();
 </script>

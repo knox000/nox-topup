@@ -270,12 +270,7 @@ $("pay").addEventListener("click",async()=>{
   order_status: "pending"
 };
 
- try{
-   console.log("Supabase session:", await supabaseClient.auth.getSession());
-console.log("Order data:", orderData);
-   console.log("KEY PREFIX:", SUPABASE_KEY.substring(0, 15));
-console.log("PROJECT URL:", SUPABASE_URL);
-console.log("ORDER DATA:", orderData);
+ console.log("ORDER DATA:", orderData);
   
 const {error}=await supabaseClient
   .from("orders")
@@ -313,16 +308,20 @@ if(error) throw error;
   S.p=null;
   renderPacks();
   update();
-
- }catch(error){
-  console.error("Order error:",error);
-  $("err").textContent=
-   "Order failed: "+(error.message||"Please try again.");
- }finally{
+}catch(error){
+  console.error("FULL ORDER ERROR:", error);
+  $("err").textContent =
+    "Error: " + JSON.stringify({
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint
+    });
+}finally{
   btn.textContent="Submit order";
   update();
- }
-});
+}
+
 
 renderGames();
 renderMethods();

@@ -1,141 +1,321 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nox Topup</title>
+<title>NOX TOPUP</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#050508;--surface:#0e0e16;--line:#23233a;--text:#f2f2fa;--muted:#9a9ab5;--purple:#9b00ff;--cyan:#00f0ff;--grad:linear-gradient(120deg,#9b00ff,#00f0ff);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:auto}
+:root{--bg:#050508;--surface:#0e0e16;--line:#23233a;--text:#f2f2fa;--muted:#9a9ab5;--cyan:#00f0ff;--grad:linear-gradient(120deg,#9b00ff,#00f0ff);color-scheme:dark;box-sizing:border-box}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}
-main,header .in{max-width:720px;margin:0 auto;padding:0 18px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Sora,system-ui,sans-serif;line-height:1.5;padding-bottom:120px}
+main,header .in{max-width:720px;margin:auto;padding:0 18px}
 header{border-bottom:1px solid var(--line)}
 header .in{display:flex;align-items:center;gap:12px;padding-top:14px;padding-bottom:14px}
 header svg{width:44px;height:44px}
-.brand{font-weight:800;font-size:1.25rem;letter-spacing:.02em}
+.brand{font-weight:800;font-size:1.25rem}
 .hero{padding:34px 0 8px}
 .hero h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1.05;margin:0 0 12px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{margin:0;color:var(--muted);max-width:46ch}
+.hero p{color:var(--muted)}
 section{margin-top:30px}
-h2{font-size:1.05rem;margin:0 0 12px;font-weight:600}
+h2{font-size:1.05rem;margin:0 0 12px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .opt{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:block}
-.opt:focus-visible,input:focus-visible,.pay:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .opt[aria-pressed=true]{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan) inset}
 .tile{height:68px;border-radius:9px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.4rem}
-.opt b{display:block;font-weight:600;font-size:.95rem}
+.opt b{display:block;font-size:.95rem}
 .opt span{color:var(--muted);font-size:.8rem}
 .packs .opt{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.packs .opt b{font-size:1rem}
 .price{font-weight:600;color:var(--cyan)}
 input[type=text]{width:100%;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:14px;font:inherit;font-size:1rem}
-.err{color:#ff6b8a;font-size:.85rem;min-height:1.2em;margin:6px 0 0}
+.err{color:#ff6b8a;font-size:.85rem;min-height:1.2em}
 .locked{opacity:.4;pointer-events:none}
-.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(5,5,8,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px))}
-.bar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px}
-.sum{flex:1;font-size:.85rem;color:var(--muted);min-width:0}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(5,5,8,.95);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar .in{max-width:720px;margin:auto;display:flex;align-items:center;gap:14px}
+.sum{flex:1;font-size:.85rem;color:var(--muted)}
 .sum strong{display:block;color:var(--text);font-size:1.1rem}
-.pay{all:unset;box-sizing:border-box;cursor:pointer;background:var(--grad);color:#050508;font-weight:800;padding:14px 22px;border-radius:12px;text-align:center}
-.pay[disabled]{opacity:.35;cursor:not-allowed}
+.pay{all:unset;cursor:pointer;background:var(--grad);color:#050508;font-weight:800;padding:14px 22px;border-radius:12px}
+.pay:disabled{opacity:.35;cursor:not-allowed}
 .done{background:var(--surface);border:1px solid var(--cyan);border-radius:16px;padding:20px;margin-top:30px}
-.done h2{font-size:1.3rem;margin-bottom:6px}
-.done p{margin:4px 0;color:var(--muted)}
-.hist{list-style:none;padding:0;margin:0}
+.done p{color:var(--muted);overflow-wrap:anywhere}
+.hist{list-style:none;padding:0}
 .hist li{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.9rem}
 .hist small{color:var(--muted);display:block}
 .note{color:var(--muted);font-size:.8rem;margin-top:26px}
 [hidden]{display:none!important}
 @media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header><div class="in">
-<svg viewBox="230 190 810 790" aria-hidden="true"><defs><linearGradient id="g" x1="240" y1="400" x2="1020" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9b00ff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs>
-<g fill="url(#g)" fill-rule="evenodd"><path d="M395 370H521L818 614V370H963V710L838 835L659 697L395 908ZM550 530V700L715 612Z"/><path d="M750 222C480 170 241 350 241 560C241 660 290 750 378 818V746C330 670 322 600 323 560C330 380 500 215 750 222Z"/><path d="M1025 651C960 840 800 962 668 962C600 962 530 945 478 909C520 925 560 932 605 931C790 925 960 810 1025 651Z"/></g></svg>
-<span class="brand">Nox Topup</span></div></header>
+
+<header>
+<div class="in">
+<svg viewBox="230 190 810 790" aria-hidden="true">
+<defs><linearGradient id="g" x1="240" y1="400" x2="1020" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9b00ff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient></defs>
+<g fill="url(#g)" fill-rule="evenodd">
+<path d="M395 370H521L818 614V370H963V710L838 835L659 697L395 908ZM550 530V700L715 612Z"/>
+<path d="M750 222C480 170 241 350 241 560C241 660 290 750 378 818V746C330 670 322 600 323 560C330 380 500 215 750 222Z"/>
+<path d="M1025 651C960 840 800 962 668 962C600 962 530 945 478 909C520 925 560 932 605 931C790 925 960 810 1025 651Z"/>
+</g></svg>
+<span class="brand">Nox Topup</span>
+</div>
+</header>
+
 <main>
-<div class="hero"><h1>Top up in seconds.</h1><p>Pick your game, enter your player ID, choose a pack. Credits land in your account right after payment.</p></div>
+<div class="hero">
+<h1>Top up in seconds.</h1>
+<p>Choose your game, enter your player ID, select a package and submit your order.</p>
+</div>
 
-<div id="done" class="done" hidden></div>
+<div id="done" class="done" hidden aria-live="polite"></div>
 
-<section><h2>1. Choose a game</h2><div class="grid" id="games"></div></section>
-<section id="s2" class="locked"><h2>2. Player ID</h2>
-<input type="text" id="pid" inputmode="text" autocomplete="off" placeholder="Enter your player ID" aria-label="Player ID">
-<p class="err" id="err"></p></section>
-<section id="s3" class="locked"><h2>3. Choose a pack</h2><div class="packs" id="packs" style="display:grid;gap:10px"></div></section>
-<section id="s4" class="locked"><h2>4. Payment method</h2><div class="grid" id="methods"></div></section>
-<section><h2>Your recent orders</h2><ul class="hist" id="hist"></ul><p class="note">Demo checkout: no real payment is taken. Prices are placeholders you can edit in the GAMES list at the top of the script.</p></section>
+<section>
+<h2>1. Choose a game</h2>
+<div class="grid" id="games"></div>
+</section>
+
+<section id="s2" class="locked">
+<h2>2. Player ID</h2>
+<input type="text" id="pid" autocomplete="off" placeholder="Enter your player ID" aria-label="Player ID">
+<p class="err" id="err"></p>
+</section>
+
+<section id="s3" class="locked">
+<h2>3. Choose a pack</h2>
+<div class="packs" id="packs" style="display:grid;gap:10px"></div>
+</section>
+
+<section id="s4" class="locked">
+<h2>4. Payment method</h2>
+<div class="grid" id="methods"></div>
+</section>
+
+<section>
+<h2>Your recent orders</h2>
+<ul class="hist" id="hist"></ul>
+<p class="note">Sample NPR prices only. Submitting an order does not take payment or deliver game credits. Payment and delivery must be verified separately.</p>
+</section>
 </main>
-<div class="bar"><div class="in"><div class="sum" id="sum">Select a game to begin</div><button class="pay" id="pay" disabled>Pay now</button></div></div>
 
+<div class="bar">
+<div class="in">
+<div class="sum" id="sum">Select a game to begin</div>
+<button class="pay" id="pay" disabled>Submit order</button>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const CUR="$";
-const GAMES=[
-{id:"pubg",name:"PUBG Mobile",short:"PM",unit:"UC",hue:"#9b00ff",packs:[[60,0.99],[325,4.99],[660,9.99],[1800,24.99],[3850,49.99]]},
-{id:"ff",name:"Free Fire",short:"FF",unit:"Diamonds",hue:"#6a3bff",packs:[[100,0.99],[310,2.99],[520,4.99],[1060,9.99],[2180,19.99]]},
-{id:"roblox",name:"Roblox",short:"RB",unit:"Robux",hue:"#2f7bff",packs:[[400,4.99],[800,9.99],[1700,19.99],[4500,49.99],[10000,99.99]]},
-{id:"efootball",name:"eFootball",short:"eF",unit:"Coins",hue:"#00c8e0",packs:[[130,0.99],[300,2.99],[550,4.99],[1050,9.99],[2050,19.99]]}
+/* SUPABASE CONNECTION */
+const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+/* SAMPLE NPR PRICES - EDIT BEFORE LAUNCH */
+const GAMES = [
+ {id:"pubg",name:"PUBG Mobile",short:"PM",unit:"UC",hue:"#9b00ff",packs:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]]},
+ {id:"ff",name:"Free Fire",short:"FF",unit:"Diamonds",hue:"#6a3bff",packs:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]]},
+ {id:"roblox",name:"Roblox",short:"RB",unit:"Robux",hue:"#2f7bff",packs:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]]},
+ {id:"efootball",name:"eFootball",short:"eF",unit:"Coins",hue:"#00c8e0",packs:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]}
 ];
-const METHODS=[["card","Card","Visa, Mastercard"],["wallet","Wallet","Mobile wallet"],["bank","Bank","Transfer"],["voucher","Voucher","Gift code"]];
-const S={g:null,p:null,m:"card"};
-const $=id=>document.getElementById(id);
-const fmt=n=>CUR+n.toFixed(2);
+
+const METHODS = [
+ ["esewa","eSewa","Pay using eSewa"],
+ ["khalti","Khalti","Pay using Khalti"],
+ ["bank","Bank transfer","Manual bank transfer"],
+ ["voucher","Voucher","Gift or recharge voucher"]
+];
+
+const S = {g:null,p:null,m:"esewa"};
+const $ = id => document.getElementById(id);
+const fmt = n => "NPR " + n.toLocaleString("en-IN");
 
 function renderGames(){
- $("games").innerHTML=GAMES.map(g=>`<button class="opt" data-g="${g.id}" aria-pressed="${S.g&&S.g.id===g.id}"><div class="tile" style="background:linear-gradient(135deg,${g.hue}55,#00f0ff22)">${g.short}</div><b>${g.name}</b><span>${g.unit}</span></button>`).join("");
+ $("games").innerHTML = GAMES.map(g =>
+ `<button type="button" class="opt" data-g="${g.id}" aria-pressed="${S.g && S.g.id===g.id}">
+ <div class="tile" style="background:linear-gradient(135deg,${g.hue}55,#00f0ff22)">${g.short}</div>
+ <b>${g.name}</b><span>${g.unit}</span></button>`
+ ).join("");
 }
+
 function renderPacks(){
  if(!S.g)return;
- $("packs").innerHTML=S.g.packs.map((p,i)=>`<button class="opt" data-p="${i}" aria-pressed="${S.p===i}"><b>${p[0].toLocaleString()} ${S.g.unit}</b><span class="price">${fmt(p[1])}</span></button>`).join("");
+ $("packs").innerHTML = S.g.packs.map((p,i) =>
+ `<button type="button" class="opt" data-p="${i}" aria-pressed="${S.p===i}">
+ <b>${p[0].toLocaleString()} ${S.g.unit}</b>
+ <span class="price">${fmt(p[1])}</span></button>`
+ ).join("");
 }
+
 function renderMethods(){
- $("methods").innerHTML=METHODS.map(m=>`<button class="opt" data-m="${m[0]}" aria-pressed="${S.m===m[0]}"><b>${m[1]}</b><span>${m[2]}</span></button>`).join("");
+ $("methods").innerHTML = METHODS.map(m =>
+ `<button type="button" class="opt" data-m="${m[0]}" aria-pressed="${S.m===m[0]}">
+ <b>${m[1]}</b><span>${m[2]}</span></button>`
+ ).join("");
 }
-function validId(){return /^[A-Za-z0-9_-]{5,20}$/.test($("pid").value.trim())}
+
+function validId(){
+ return /^[A-Za-z0-9_-]{5,30}$/.test($("pid").value.trim());
+}
+
 function update(){
- ["s2","s3","s4"].forEach(s=>$(s).classList.toggle("locked",!S.g));
- const ok=S.g&&S.p!==null&&validId();
- $("pay").disabled=!ok;
- if(S.g&&S.p!==null){const p=S.g.packs[S.p];$("sum").innerHTML=`${p[0].toLocaleString()} ${S.g.unit} · ${S.g.name}<strong>${fmt(p[1])}</strong>`}
- else if(S.g)$("sum").textContent="Choose a pack to continue";
- else $("sum").textContent="Select a game to begin";
+ ["s2","s3","s4"].forEach(s =>
+  $(s).classList.toggle("locked",!S.g)
+ );
+
+ const ok = !!(S.g && S.p!==null && validId());
+ $("pay").disabled = !ok;
+
+ if(S.g && S.p!==null){
+  const p=S.g.packs[S.p];
+  $("sum").innerHTML =
+   `${p[0].toLocaleString()} ${S.g.unit} · ${S.g.name}<strong>${fmt(p[1])}</strong>`;
+ }else if(S.g){
+  $("sum").textContent="Choose a pack to continue";
+ }else{
+  $("sum").textContent="Select a game to begin";
+ }
 }
+
 document.addEventListener("click",e=>{
- const b=e.target.closest(".opt");if(!b)return;
- if(b.dataset.g){S.g=GAMES.find(g=>g.id===b.dataset.g);S.p=null;renderGames();renderPacks();$("s2").scrollIntoView({behavior:"smooth",block:"start"})}
- if(b.dataset.p){S.p=+b.dataset.p;renderPacks()}
- if(b.dataset.m){S.m=b.dataset.m;renderMethods()}
- update();
-});
-$("pid").addEventListener("input",()=>{
- const v=$("pid").value.trim();
- $("err").textContent=v&&!validId()?"Use 5 to 20 letters, numbers, - or _.":"";
+ const b=e.target.closest(".opt");
+ if(!b)return;
+
+ if(b.dataset.g){
+  S.g=GAMES.find(g=>g.id===b.dataset.g);
+  S.p=null;
+  $("s2").scrollIntoView({behavior:"smooth",block:"start"});
+ }
+
+ if(b.dataset.p!==undefined){
+  S.p=Number(b.dataset.p);
+ }
+
+ if(b.dataset.m){
+  S.m=b.dataset.m;
+ }
+
+ renderGames();
+ renderPacks();
+ renderMethods();
  update();
 });
 
-function load(){try{return JSON.parse(localStorage.getItem("nox-orders")||"[]")}catch(e){return[]}}
-function save(o){try{localStorage.setItem("nox-orders",JSON.stringify(o.slice(0,20)))}catch(e){}}
-let orders=load();
-function renderHist(){
- $("hist").innerHTML=orders.length?orders.slice(0,5).map(o=>`<li><div><b>${o.game}</b><small>${o.amount} · ID ${o.pid}</small></div><div style="text-align:right">${o.price}<small>${o.ref}</small></div></li>`).join(""):`<li style="color:var(--muted)">No orders yet. Your top-ups will show up here.</li>`;
-}
-$("pay").addEventListener("click",()=>{
- if($("pay").disabled)return;
- const p=S.g.packs[S.p],btn=$("pay");
- btn.disabled=true;btn.textContent="Processing…";
- setTimeout(()=>{
-  const o={ref:"NOX-"+Math.random().toString(36).slice(2,8).toUpperCase(),game:S.g.name,amount:p[0].toLocaleString()+" "+S.g.unit,price:fmt(p[1]),pid:$("pid").value.trim(),method:S.m};
-  orders.unshift(o);save(orders);renderHist();
-  const d=$("done");d.hidden=false;
-  d.innerHTML=`<h2>Top-up complete</h2><p>${o.amount} are on their way to player ${o.pid}.</p><p>Order ${o.ref} · ${o.price} paid by ${S.m}</p>`;
-  d.scrollIntoView({behavior:"smooth",block:"center"});
-  S.p=null;renderPacks();btn.textContent="Pay now";update();
- },1200);
+$("pid").addEventListener("input",()=>{
+ const v=$("pid").value.trim();
+ $("err").textContent =
+  v&&!validId()?"Use 5 to 30 letters, numbers, - or _.":"";
+ update();
 });
-renderGames();renderMethods();renderHist();update();
+
+/* LOCAL ORDER HISTORY */
+function load(){
+ try{
+  return JSON.parse(localStorage.getItem("nox-orders")||"[]");
+ }catch(e){
+  return [];
+ }
+}
+
+function save(list){
+ try{
+  localStorage.setItem("nox-orders",JSON.stringify(list.slice(0,20)));
+ }catch(e){}
+}
+
+let orders=load();
+
+function renderHist(){
+ $("hist").innerHTML=orders.length
+ ? orders.slice(0,5).map(o=>
+  `<li>
+   <div><b>${o.game}</b><small>${o.amount} · ID ${o.pid}</small></div>
+   <div style="text-align:right">${o.price}<small>${o.ref}</small><small>${o.status}</small></div>
+  </li>`
+ ).join("")
+ : `<li style="color:var(--muted)">No orders yet.</li>`;
+}
+
+/* SUBMIT ORDER TO SUPABASE */
+$("pay").addEventListener("click",async()=>{
+ if($("pay").disabled)return;
+
+ const game=S.g;
+ const pack=game.packs[S.p];
+ const playerId=$("pid").value.trim();
+ const btn=$("pay");
+
+ btn.disabled=true;
+ btn.textContent="Submitting...";
+
+ const orderData={
+  game:game.id,
+  player_id:playerId,
+  package_amount:pack[0],
+  price_npr:pack[1],
+  payment_method:S.m
+ };
+
+ try{
+  const {data,error}=await supabaseClient
+   .from("orders")
+   .insert(orderData)
+   .select("order_ref,created_at")
+   .single();
+
+  if(error)throw error;
+
+  const order={
+   ref:data.order_ref,
+   game:game.name,
+   amount:pack[0].toLocaleString()+" "+game.unit,
+   price:fmt(pack[1]),
+   pid:playerId,
+   method:S.m,
+   status:"Pending"
+  };
+
+  orders.unshift(order);
+  save(orders);
+  renderHist();
+
+  const done=$("done");
+  done.hidden=false;
+  done.innerHTML=`
+   <h2>Order submitted!</h2>
+   <p>Your order has been saved successfully.</p>
+   <p>Game: ${order.game}</p>
+   <p>Package: ${order.amount}</p>
+   <p>Player ID: ${order.pid}</p>
+   <p>Payment method: ${order.method}</p>
+   <p>Order reference: ${order.ref}</p>
+   <p><strong>Status: Pending payment verification</strong></p>
+  `;
+  done.scrollIntoView({behavior:"smooth",block:"center"});
+
+  S.p=null;
+  renderPacks();
+  update();
+
+ }catch(error){
+  console.error("Order error:",error);
+  $("err").textContent=
+   "Order failed: "+(error.message||"Please try again.");
+ }finally{
+  btn.textContent="Submit order";
+  update();
+ }
+});
+
+renderGames();
+renderMethods();
+renderHist();
+update();
 </script>
 </body>
 </html>

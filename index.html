@@ -3,591 +3,558 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NOX TOPUP</title>
+<title>NOX TOPUP | Gaming Top Up Nepal</title>
+<meta name="theme-color" content="#080810">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#080810;--card:#12121e;--purple:#8b5cf6;--cyan:#22d3ee;--text:#f5f5ff;--muted:#9696ad;--border:#29293b}
+:root{
+  --bg:#080810;
+  --surface:#11111e;
+  --card:#151526;
+  --border:#292943;
+  --purple:#9565ff;
+  --cyan:#35d9f5;
+  --text:#f7f7ff;
+  --muted:#9999b2;
+  --green:#4ade80;
+  --red:#fb7185;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Sora,Arial,sans-serif}
-header{padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:23px;font-weight:800;letter-spacing:1px}
-.logo span{color:var(--cyan)}
-.tag{color:var(--muted);font-size:11px}
-main{width:min(650px,92%);margin:30px auto 60px}
-.hero{text-align:center;margin-bottom:30px}
-.hero h1{font-size:30px;margin:0 0 10px}
-.hero h1 span{color:var(--cyan)}
-.hero p{color:var(--muted);font-size:13px;line-height:1.7}
-.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px}
-.section h2{font-size:15px;margin:0 0 16px}
-.games,.payments{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.game,.pack,.payment{background:#191927;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:15px 10px;cursor:pointer;font-family:inherit;font-weight:600}
-.game.selected,.pack.selected,.payment.selected{border-color:var(--cyan);background:#14232d;box-shadow:0 0 0 1px var(--cyan)}
-.game small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
-label{display:block;color:var(--muted);font-size:12px;margin-bottom:9px}
-input{width:100%;padding:15px;border-radius:10px;border:1px solid var(--border);background:#090914;color:white;font:inherit;outline:none}
-input:focus{border-color:var(--cyan)}
-.packs{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.pack{text-align:left}
-.pack strong{display:block;font-size:16px}
-.pack small{display:block;color:var(--cyan);margin-top:7px}
-.payment{padding:14px}
-.summary{background:#090914;padding:15px;border-radius:10px;margin-top:15px;font-size:12px;line-height:2}
-.summary div{display:flex;justify-content:space-between;gap:10px}
-.summary strong{color:var(--cyan);text-align:right}
-.submit{width:100%;border:0;border-radius:12px;padding:17px;margin-top:16px;color:#050510;background:linear-gradient(100deg,var(--cyan),var(--purple));font:800 15px Sora,Arial;cursor:pointer}
-.submit:disabled{opacity:.5;cursor:not-allowed}
-#message,#trackingMessage{font-size:12px;line-height:1.7;margin-top:12px;overflow-wrap:anywhere}
-.success{color:#4ade80}
-.error{color:#fb7185}
-.order{border-bottom:1px solid var(--border);padding:12px 0;font-size:12px;line-height:1.8}
-.order:last-child{border:0}
-.muted{color:var(--muted)}
-#screenshotPreview{display:none;width:100%;max-height:250px;object-fit:contain;border-radius:10px;margin-top:12px;background:#090914}
-.upload-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
-footer{text-align:center;color:var(--muted);font-size:10px;line-height:1.8;padding:20px}
-.track-result{display:none;background:#090914;border:1px solid var(--border);border-radius:12px;padding:15px;margin-top:15px;font-size:12px;line-height:2}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 15% 0%,#25134b55,transparent 38%),
+    radial-gradient(ellipse at 90% 25%,#073e5540,transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Sora,Arial,sans-serif;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.container{width:min(1120px,92%);margin:auto}
+header{
+  position:sticky;top:0;z-index:10;
+  background:#080810df;
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid #292943;
+}
+.nav{
+  min-height:70px;display:flex;
+  justify-content:space-between;align-items:center;
+  gap:12px;
+}
+.brand{font-size:23px;font-weight:800;letter-spacing:-1px}
+.brand span{color:var(--cyan)}
+.nav-links{display:flex;gap:22px;font-size:12px;color:var(--muted)}
+.nav-links a:hover{color:var(--cyan)}
+.pill{
+  padding:9px 13px;border:1px solid #35d9f555;
+  color:var(--cyan);border-radius:30px;font-size:11px;
+}
+.hero{
+  padding:65px 0 48px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.eyebrow{
+  display:inline-block;padding:8px 13px;border-radius:30px;
+  border:1px solid #9565ff66;background:#9565ff15;
+  color:#c7b1ff;font-size:10px;letter-spacing:2px;
+}
+.hero h1{
+  font-size:clamp(37px,8vw,72px);
+  line-height:1.08;letter-spacing:-3px;
+  margin:22px 0 15px;
+}
+.gradient{
+  background:linear-gradient(90deg,var(--cyan),#a98aff,var(--purple));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{color:var(--muted);font-size:13px;line-height:1.8;max-width:520px;margin:0 auto}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}
+.btn{
+  border:0;border-radius:11px;padding:14px 20px;
+  background:linear-gradient(110deg,var(--cyan),#8b7cff);
+  color:#080810;font-weight:800;font-size:12px;
+  box-shadow:0 8px 30px #35d9f522;
+  transition:.2s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 32px #35d9f544}
+.btn-outline{
+  background:#171729;border:1px solid var(--border);
+  color:white;box-shadow:none;
+}
+.section{padding:32px 0}
+.section-heading{margin-bottom:20px}
+.section-heading small{color:var(--cyan);font-size:10px;letter-spacing:2px}
+.section-heading h2{font-size:25px;margin:8px 0}
+.section-heading p{color:var(--muted);font-size:12px;line-height:1.7}
+.games{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+}
+.game{
+  background:linear-gradient(145deg,#1b1b30,#10101b);
+  border:1px solid var(--border);border-radius:17px;
+  padding:19px 12px;text-align:center;
+  transition:.25s;position:relative;overflow:hidden;
+}
+.game:before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,#9565ff22,transparent 70%);
+  pointer-events:none;
+}
+.game:hover,.game.active{
+  border-color:var(--purple);
+  transform:translateY(-4px);
+  box-shadow:0 12px 35px #9565ff20;
+}
+.game-logo{
+  height:76px;width:76px;margin:0 auto 13px;
+  border-radius:20px;display:grid;place-items:center;
+  font-weight:900;font-size:23px;letter-spacing:-2px;
+  background:linear-gradient(145deg,#30204f,#111827);
+  border:1px solid #ffffff20;
+  box-shadow:inset 0 0 25px #9565ff22;
+}
+.game:nth-child(2) .game-logo{background:linear-gradient(145deg,#492b14,#1c1110)}
+.game:nth-child(3) .game-logo{background:linear-gradient(145deg,#173d53,#101827)}
+.game:nth-child(4) .game-logo{background:linear-gradient(145deg,#123b4c,#111827)}
+.game h3{font-size:12px;margin:0 0 6px}
+.game p{font-size:10px;color:var(--muted);margin:0}
+.game .select-label{font-size:9px;color:var(--cyan);margin-top:12px;display:block}
+.panel{
+  background:linear-gradient(145deg,#17172a,#10101a);
+  border:1px solid var(--border);
+  border-radius:18px;padding:22px;
+  margin-top:14px;
+}
+.panel h3{font-size:16px;margin:0 0 8px}
+.hint{font-size:11px;color:var(--muted);line-height:1.7}
+.packages{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;
+}
+.package{
+  text-align:left;background:#0c0c18;
+  border:1px solid var(--border);border-radius:12px;
+  padding:14px 11px;color:white;transition:.2s;
+}
+.package:hover,.package.active{
+  border-color:var(--cyan);background:#12212b;
+  box-shadow:0 0 20px #35d9f515;
+}
+.package strong{display:block;font-size:14px}
+.package small{display:block;color:var(--muted);font-size:10px;margin-top:7px}
+.package .price{color:var(--cyan);font-size:12px;font-weight:700}
+.field{margin-top:16px}
+.field label{display:block;font-size:11px;margin-bottom:8px;color:#d5d5e8}
+.field input,.field select{
+  width:100%;padding:14px;border-radius:10px;
+  background:#090914;color:white;border:1px solid var(--border);
+  outline:none;font-size:12px;
+}
+.field input:focus,.field select:focus{border-color:var(--cyan)}
+.methods{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.method{
+  padding:14px;border-radius:11px;border:1px solid var(--border);
+  background:#0b0b16;color:white;text-align:left;font-size:12px;
+}
+.method.active{border-color:var(--purple);background:#25183b}
+.method strong{display:block;margin-bottom:4px}
+.method small{font-size:10px;color:var(--muted)}
+.payment-details{
+  display:none;background:#0b1820;border:1px solid #35d9f544;
+  padding:15px;border-radius:12px;margin-top:12px;
+  font-size:12px;line-height:1.8;
+}
+.payment-details.show{display:block}
+.number{font-size:19px;font-weight:800;color:var(--cyan);letter-spacing:1px}
+.copy-btn{padding:8px 11px;border-radius:8px;border:0;background:#263a4b;color:white;font-size:10px;margin-top:8px}
+.upload{
+  border:1px dashed #66668a;border-radius:12px;padding:18px;
+  background:#0b0b16;text-align:center;
+}
+.upload input{font-size:11px;max-width:100%}
+#preview{display:none;max-width:180px;max-height:180px;object-fit:contain;border-radius:10px;margin:12px auto}
+.submit{width:100%;margin-top:18px;padding:16px}
+.message{font-size:12px;line-height:1.7;margin-top:13px;overflow-wrap:anywhere}
+.error{color:var(--red)}
+.success{color:var(--green)}
+.track-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.track-result{
+  background:#0b0b16;border:1px solid var(--border);
+  border-radius:12px;padding:15px;margin-top:14px;
+  font-size:12px;line-height:2;
+}
 .track-result strong{color:var(--cyan)}
-.track-result .track-status{font-weight:800;text-transform:uppercase}
-.reference{color:var(--cyan);font-weight:800;overflow-wrap:anywhere}
-@media(max-width:420px){.hero h1{font-size:26px}.section{padding:16px}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.step{
+  border:1px solid var(--border);background:#12121f;
+  border-radius:14px;padding:17px;
+}
+.step b{font-size:20px;color:var(--purple)}
+.step h4{font-size:12px;margin:12px 0 7px}
+.step p{font-size:10px;color:var(--muted);line-height:1.7;margin:0}
+footer{border-top:1px solid var(--border);margin-top:45px;padding:25px 0;color:var(--muted);font-size:10px;text-align:center;line-height:2}
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
+  background:#202039;border:1px solid var(--border);
+  border-radius:10px;padding:12px 17px;font-size:11px;
+  opacity:0;pointer-events:none;transition:.25s;z-index:20;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.game-logo{animation:float 4s ease-in-out infinite}
+.game:nth-child(2) .game-logo{animation-delay:.5s}
+.game:nth-child(3) .game-logo{animation-delay:1s}
+.game:nth-child(4) .game-logo{animation-delay:1.5s}
+@media(max-width:700px){
+  .games{grid-template-columns:repeat(2,1fr)}
+  .packages{grid-template-columns:repeat(2,1fr)}
+  .nav-links{gap:10px}
+  .nav-links a{font-size:10px}
+  .hero{padding:48px 0 30px}
+  .panel{padding:16px}
+}
+@media(max-width:390px){
+  .nav-links{display:none}
+  .track-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+}
 </style>
 </head>
-<body>
 
+<body>
 <header>
-  <div class="logo">NOX <span>TOPUP</span></div>
-  <div class="tag">GAMING STORE</div>
+  <div class="container nav">
+    <a class="brand" href="#">NOX <span>TOPUP</span></a>
+    <nav class="nav-links">
+      <a href="#games">Games</a>
+      <a href="#order">Order</a>
+      <a href="#track">Track</a>
+    </nav>
+    <a class="pill" href="#order">TOP UP NOW</a>
+  </div>
 </header>
 
-<main>
-  <div class="hero">
-    <h1>Top up in <span>seconds.</span></h1>
-    <p>Choose your game, enter your player ID, select a package and submit your order.</p>
+<section class="hero container">
+  <div class="eyebrow">NEPAL'S GAMING TOP-UP STORE</div>
+  <h1>LEVEL UP<br>YOUR <span class="gradient">GAME.</span></h1>
+  <p>Your gaming journey deserves more. Choose your game, select a package and place your top-up order with NOX TOPUP.</p>
+  <div class="hero-actions">
+    <a href="#games"><button class="btn">Explore Games ↗</button></a>
+    <a href="#track"><button class="btn btn-outline">Track Order</button></a>
+  </div>
+</section>
+
+<main class="container">
+<section class="section" id="games">
+  <div class="section-heading">
+    <small>01 / SELECT YOUR GAME</small>
+    <h2>Choose your game</h2>
+    <p>Select a game to see available top-up packages.</p>
+  </div>
+  <div class="games">
+    <button class="game" data-game="pubg">
+      <div class="game-logo">PUBG</div>
+      <h3>PUBG MOBILE</h3><p>UC Packages</p>
+      <span class="select-label">SELECT GAME ↗</span>
+    </button>
+    <button class="game" data-game="ff">
+      <div class="game-logo">FREE<br>FIRE</div>
+      <h3>FREE FIRE</h3><p>Diamond Packages</p>
+      <span class="select-label">SELECT GAME ↗</span>
+    </button>
+    <button class="game" data-game="roblox">
+      <div class="game-logo">ROBLOX</div>
+      <h3>ROBLOX</h3><p>Robux Packages</p>
+      <span class="select-label">SELECT GAME ↗</span>
+    </button>
+    <button class="game" data-game="efootball">
+      <div class="game-logo">eF</div>
+      <h3>eFOOTBALL</h3><p>Coin Packages</p>
+      <span class="select-label">SELECT GAME ↗</span>
+    </button>
+  </div>
+</section>
+
+<section class="section" id="order">
+  <div class="section-heading">
+    <small>02 / PLACE YOUR ORDER</small>
+    <h2>Build your order</h2>
+    <p>Choose your package and enter your correct Player ID.</p>
   </div>
 
-  <section class="section">
-    <h2>1. Choose a game</h2>
-    <div class="games">
-      <button class="game" data-game="pubg" type="button">PUBG Mobile<small>UC packages</small></button>
-      <button class="game" data-game="ff" type="button">Free Fire<small>Diamond packages</small></button>
-      <button class="game" data-game="roblox" type="button">Roblox<small>Robux packages</small></button>
-      <button class="game" data-game="efootball" type="button">eFootball<small>Coin packages</small></button>
+  <div class="panel">
+    <h3 id="selectedGameTitle">Select a game first</h3>
+    <p class="hint">Available packages and prices are shown below.</p>
+    <div id="packages" class="packages">
+      <p class="hint">Choose a game above to view packages.</p>
     </div>
-  </section>
 
-  <section class="section">
-    <h2>2. Player ID</h2>
-    <label for="playerId">Enter your player ID</label>
-    <input id="playerId" type="text" placeholder="Enter your game player ID" autocomplete="off">
-  </section>
-
-  <section class="section">
-    <h2>3. Choose a pack</h2>
-    <div class="packs" id="packs">
-      <p class="muted">Choose a game first.</p>
+    <div class="field">
+      <label for="playerId">Player ID / User ID</label>
+      <input id="playerId" placeholder="Enter your game Player ID" autocomplete="off">
     </div>
-  </section>
 
-  <section class="section">
-    <h2>4. Payment method</h2>
-    <div class="payments">
-      <button class="payment" data-payment="esewa" type="button">eSewa</button>
-      <button class="payment" data-payment="khalti" type="button">Khalti</button>
-      <button class="payment" data-payment="bank" type="button">Bank Transfer</button>
-      <button class="payment" data-payment="voucher" type="button">Voucher</button>
+    <div class="field">
+      <label>Payment method</label>
+      <div class="methods">
+        <button class="method" data-method="esewa"><strong>eSewa</strong><small>Pay using eSewa</small></button>
+        <button class="method" data-method="khalti"><strong>Khalti</strong><small>Pay using Khalti</small></button>
+        <button class="method" data-method="bank"><strong>Bank Transfer</strong><small>Contact us for details</small></button>
+        <button class="method" data-method="voucher"><strong>Voucher</strong><small>Contact us for details</small></button>
+      </div>
+      <div class="payment-details" id="paymentDetails">
+        <div id="paymentText"></div>
+        <div id="paymentNumber" class="number"></div>
+        <button class="copy-btn" id="copyNumber">COPY NUMBER</button>
+        <p class="hint">Before paying, confirm the recipient name and amount in your payment app. Keep your transaction receipt.</p>
+      </div>
     </div>
-  </section>
 
-  <section class="section">
-    <h2>5. Payment screenshot</h2>
-    <label for="paymentScreenshot">Upload your payment screenshot</label>
-    <input id="paymentScreenshot" type="file" accept="image/jpeg,image/png,image/webp">
-    <p class="upload-note">JPG, PNG or WEBP. Maximum size: 5 MB. Uploading a screenshot does not automatically verify payment.</p>
-    <img id="screenshotPreview" alt="Payment screenshot preview">
-  </section>
-
-  <section class="section">
-    <h2>Order summary</h2>
-    <div class="summary">
-      <div><span>Game</span><strong id="sumGame">Not selected</strong></div>
-      <div><span>Package</span><strong id="sumPack">Not selected</strong></div>
-      <div><span>Price</span><strong id="sumPrice">NPR 0</strong></div>
-      <div><span>Payment</span><strong id="sumPayment">Not selected</strong></div>
+    <div class="field">
+      <label for="screenshot">Payment screenshot</label>
+      <div class="upload">
+        <p class="hint">Upload a clear screenshot of your payment (maximum 5 MB).</p>
+        <input type="file" id="screenshot" accept="image/*">
+        <img id="preview" alt="Payment screenshot preview">
+      </div>
     </div>
-    <button class="submit" id="submitBtn" type="button">Submit order</button>
-    <div id="message" role="status"></div>
-  </section>
 
-  <!-- NEW ORDER TRACKING SECTION -->
-  <section class="section" id="tracking">
+    <div class="hint" style="margin-top:14px">
+      Your order will be reviewed manually. Uploading a screenshot does not automatically confirm payment or deliver game credits.
+    </div>
+    <button class="btn submit" id="submitOrder">SUBMIT ORDER →</button>
+    <div class="message" id="orderMessage"></div>
+  </div>
+</section>
+
+<section class="section" id="track">
+  <div class="section-heading">
+    <small>03 / ORDER TRACKING</small>
     <h2>Track your order</h2>
-    <p class="muted" style="font-size:12px;line-height:1.7">
-      Enter your Order Reference and Player ID to check your latest order status.
-    </p>
+    <p>Enter your order reference and Player ID to check your latest order status.</p>
+  </div>
+  <div class="panel">
+    <div class="track-grid">
+      <div class="field">
+        <label for="trackRef">Order reference</label>
+        <input id="trackRef" placeholder="NOX-XXXXXXXX">
+      </div>
+      <div class="field">
+        <label for="trackPlayer">Player ID</label>
+        <input id="trackPlayer" placeholder="Your Player ID">
+      </div>
+    </div>
+    <button class="btn" id="trackBtn" style="width:100%;margin-top:14px">TRACK ORDER</button>
+    <div id="trackMessage" class="message"></div>
+    <div id="trackResult"></div>
+  </div>
+</section>
 
-    <label for="trackReference">Order Reference</label>
-    <input id="trackReference" type="text" placeholder="Example: NOX-123456-ABCD">
-
-    <label for="trackPlayerId" style="margin-top:12px">Player ID</label>
-    <input id="trackPlayerId" type="text" placeholder="Enter your game Player ID">
-
-    <button class="submit" id="trackBtn" type="button">Track my order</button>
-
-    <div id="trackingMessage" role="status"></div>
-    <div id="trackingResult" class="track-result"></div>
-  </section>
-
-  <section class="section">
-    <h2>Your recent orders</h2>
-    <div id="recentOrders" class="muted">No recent orders on this device.</div>
-  </section>
+<section class="section">
+  <div class="section-heading">
+    <small>HOW IT WORKS</small>
+    <h2>Simple. Secure. Easy.</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><b>01</b><h4>Choose package</h4><p>Select your game and preferred top-up package.</p></div>
+    <div class="step"><b>02</b><h4>Make payment</h4><p>Pay using the selected method and upload your receipt.</p></div>
+    <div class="step"><b>03</b><h4>Track order</h4><p>Save your order reference and check your order status.</p></div>
+  </div>
+</section>
 </main>
 
 <footer>
-  Sample NPR prices only. Payment and delivery are not automatic.
-  Payments and game credit delivery must be verified separately.
-  <br><br>© 2026 NOX TOPUP
+  <div class="brand">NOX <span>TOPUP</span></div>
+  <p>POWER YOUR GAME. OWN YOUR MOMENT.</p>
+  <p>© 2026 NOX TOPUP. All rights reserved.</p>
+  <p>Independent top-up service. Game trademarks belong to their respective owners.</p>
+  <a href="admin.html">Admin</a>
 </footer>
+<div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
 "use strict";
 
 const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
 const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
-const BUCKET = "payment-screenshots";
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-
-const games = {
-  pubg:{name:"PUBG Mobile",unit:"UC",packs:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]]},
-  ff:{name:"Free Fire",unit:"Diamonds",packs:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]]},
-  roblox:{name:"Roblox",unit:"Robux",packs:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]]},
-  efootball:{name:"eFootball",unit:"Coins",packs:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]}
-};
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const $ = id => document.getElementById(id);
-const money = n => "NPR " + Number(n).toLocaleString("en-IN");
 
-let selectedGame = null;
-let selectedPack = null;
-let selectedPayment = null;
-let supabaseClient = null;
-let previewUrl = null;
+const packages = {
+  pubg:[
+    [60,130],[325,650],[660,1300],[1800,3200],[3850,6500]
+  ],
+  ff:[
+    [100,120],[310,350],[520,580],[1060,1150],[2180,2300]
+  ],
+  roblox:[
+    [400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]
+  ],
+  efootball:[
+    [130,130],[300,300],[550,500],[1050,950],[2050,1800]
+  ]
+};
 
-function showMessage(message,type){
-  $("message").textContent = message;
-  $("message").className = type || "";
+const gameNames = {
+  pubg:"PUBG MOBILE",
+  ff:"FREE FIRE",
+  roblox:"ROBLOX",
+  efootball:"eFOOTBALL"
+};
+
+let selectedGame = "";
+let selectedPackage = null;
+let selectedMethod = "";
+let busy = false;
+
+function message(id,text,type=""){
+  $(id).textContent = text;
+  $(id).className = "message " + type;
 }
 
-function showTrackingMessage(message,type){
-  $("trackingMessage").textContent = message;
-  $("trackingMessage").className = type || "";
+function toast(text){
+  $("toast").textContent = text;
+  $("toast").classList.add("show");
+  setTimeout(()=>$("toast").classList.remove("show"),2300);
 }
 
-function updateSummary(){
-  $("sumGame").textContent = selectedGame ? games[selectedGame].name : "Not selected";
-  $("sumPack").textContent = selectedPack && selectedGame
-    ? selectedPack[0] + " " + games[selectedGame].unit : "Not selected";
-  $("sumPrice").textContent = selectedPack ? money(selectedPack[1]) : "NPR 0";
-  $("sumPayment").textContent = selectedPayment || "Not selected";
-}
-
-function chooseGame(id){
-  selectedGame = id;
-  selectedPack = null;
-
-  document.querySelectorAll(".game").forEach(btn => {
-    btn.classList.toggle("selected",btn.dataset.game === id);
+function selectGame(game){
+  selectedGame = game;
+  selectedPackage = null;
+  document.querySelectorAll(".game").forEach(el=>{
+    el.classList.toggle("active",el.dataset.game===game);
   });
+  $("selectedGameTitle").textContent = gameNames[game] + " Packages";
+  renderPackages();
+  $("order").scrollIntoView({behavior:"smooth"});
+}
 
-  $("packs").replaceChildren();
+function renderPackages(){
+  const container = $("packages");
+  container.replaceChildren();
 
-  games[id].packs.forEach(pack => {
+  packages[selectedGame].forEach(([amount,price])=>{
     const button = document.createElement("button");
-    button.type = "button";
-    button.className = "pack";
+    button.className = "package";
+    button.innerHTML =
+      '<strong>'+amount.toLocaleString()+'</strong>' +
+      '<small>'+({pubg:"UC",ff:"Diamonds",roblox:"Robux",efootball:"Coins"}[selectedGame])+'</small>' +
+      '<small class="price">NPR '+price.toLocaleString()+'</small>';
 
-    const strong = document.createElement("strong");
-    strong.textContent = pack[0].toLocaleString() + " " + games[id].unit;
-
-    const small = document.createElement("small");
-    small.textContent = money(pack[1]);
-
-    button.append(strong,small);
-
-    button.addEventListener("click",() => {
-      selectedPack = pack;
-      document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
-      button.classList.add("selected");
-      updateSummary();
+    button.addEventListener("click",()=>{
+      selectedPackage = {amount,price};
+      document.querySelectorAll(".package").forEach(el=>el.classList.remove("active"));
+      button.classList.add("active");
     });
-
-    $("packs").appendChild(button);
-  });
-
-  updateSummary();
-  showMessage("");
-}
-
-document.querySelectorAll(".game").forEach(button => {
-  button.addEventListener("click",() => chooseGame(button.dataset.game));
-});
-
-document.querySelectorAll(".payment").forEach(button => {
-  button.addEventListener("click",() => {
-    selectedPayment = button.dataset.payment;
-    document.querySelectorAll(".payment").forEach(p => {
-      p.classList.toggle("selected",p === button);
-    });
-    updateSummary();
-  });
-});
-
-$("paymentScreenshot").addEventListener("change",() => {
-  const file = $("paymentScreenshot").files[0];
-
-  if(previewUrl){
-    URL.revokeObjectURL(previewUrl);
-    previewUrl = null;
-  }
-
-  $("screenshotPreview").style.display = "none";
-
-  if(!file) return;
-
-  const allowedTypes = ["image/jpeg","image/png","image/webp"];
-
-  if(!allowedTypes.includes(file.type)){
-    showMessage("Please select a JPG, PNG or WEBP image.","error");
-    $("paymentScreenshot").value = "";
-    return;
-  }
-
-  if(file.size > MAX_FILE_SIZE){
-    showMessage("Image is too large. Maximum size is 5 MB.","error");
-    $("paymentScreenshot").value = "";
-    return;
-  }
-
-  previewUrl = URL.createObjectURL(file);
-  $("screenshotPreview").src = previewUrl;
-  $("screenshotPreview").style.display = "block";
-  showMessage("Screenshot selected. Check the preview before submitting.","success");
-});
-
-function showRecentOrders(){
-  let orders = [];
-
-  try {
-    orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
-  } catch(e) {
-    orders = [];
-  }
-
-  if(!orders.length){
-    $("recentOrders").textContent = "No recent orders on this device.";
-    $("recentOrders").className = "muted";
-    return;
-  }
-
-  $("recentOrders").className = "";
-  $("recentOrders").replaceChildren();
-
-  orders.forEach(order => {
-    const div = document.createElement("div");
-    div.className = "order";
-
-    const name = document.createElement("strong");
-    name.textContent = order.game;
-
-    const details = document.createElement("div");
-    details.textContent = order.amount + " · " + order.price;
-
-    const player = document.createElement("div");
-    player.textContent = "Player ID: " + order.playerId;
-
-    const reference = document.createElement("div");
-    reference.textContent = "Order Reference: " + (order.orderRef || "Not available");
-    reference.className = "reference";
-
-    const status = document.createElement("span");
-    status.className = "muted";
-    status.textContent = "Status: Check using Track my order";
-
-    div.append(name,details,player,reference,status);
-    $("recentOrders").appendChild(div);
+    container.appendChild(button);
   });
 }
 
-function createOrderReference(){
-  const random = window.crypto && crypto.randomUUID
-    ? crypto.randomUUID().replace(/-/g,"").slice(0,6).toUpperCase()
-    : Math.random().toString(36).slice(2,8).toUpperCase();
+function selectMethod(method){
+  selectedMethod = method;
+  document.querySelectorAll(".method").forEach(el=>{
+    el.classList.toggle("active",el.dataset.method===method);
+  });
 
-  return "NOX-" + Date.now() + "-" + random;
+  const details = $("paymentDetails");
+  details.classList.add("show");
+
+  if(method==="esewa" || method==="khalti"){
+    $("paymentText").textContent =
+      "Send your payment using " + (method==="esewa"?"eSewa":"Khalti") + " to this number:";
+    $("paymentNumber").textContent = "9801695185";
+    $("copyNumber").style.display = "inline-block";
+  }else if(method==="bank"){
+    $("paymentText").textContent = "Please contact NOX TOPUP support for bank transfer details.";
+    $("paymentNumber").textContent = "Bank details not configured";
+    $("copyNumber").style.display = "none";
+  }else{
+    $("paymentText").textContent = "Please contact NOX TOPUP support for voucher instructions.";
+    $("paymentNumber").textContent = "Voucher details not configured";
+    $("copyNumber").style.display = "none";
+  }
+}
+
+function createReference(){
+  return "NOX-" + Date.now().toString(36).toUpperCase() +
+    Math.random().toString(36).substring(2,7).toUpperCase();
 }
 
 async function submitOrder(){
-  const btn = $("submitBtn");
+  if(busy) return;
+
   const playerId = $("playerId").value.trim();
-  const file = $("paymentScreenshot").files[0];
+  const file = $("screenshot").files[0];
 
-  showMessage("");
+  if(!selectedGame) return message("orderMessage","Please select a game.","error");
+  if(!selectedPackage) return message("orderMessage","Please select a package.","error");
+  if(!playerId) return message("orderMessage","Enter your Player ID.","error");
+  if(!selectedMethod) return message("orderMessage","Choose a payment method.","error");
+  if(!file) return message("orderMessage","Please upload your payment screenshot.","error");
+  if(!file.type.startsWith("image/")) return message("orderMessage","Please select an image file.","error");
+  if(file.size > 5*1024*1024) return message("orderMessage","Screenshot must be smaller than 5 MB.","error");
 
-  if(!selectedGame){
-    showMessage("Please choose a game.","error");
-    return;
-  }
+  busy = true;
+  $("submitOrder").disabled = true;
+  $("submitOrder").textContent = "SUBMITTING...";
+  message("orderMessage","Uploading screenshot and submitting order...");
 
-  if(!playerId){
-    showMessage("Please enter your Player ID.","error");
-    $("playerId").focus();
-    return;
-  }
+  let uploadedPath = null;
 
-  if(!selectedPack){
-    showMessage("Please choose a package.","error");
-    return;
-  }
+  try{
+    const orderRef = createReference();
+    const extension = (file.name.split(".").pop() || "jpg").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+    const filename = orderRef + "-" + crypto.randomUUID() + "." + extension;
 
-  if(!selectedPayment){
-    showMessage("Please choose a payment method.","error");
-    return;
-  }
-
-  if(!file){
-    showMessage("Please upload your payment screenshot.","error");
-    $("paymentScreenshot").focus();
-    return;
-  }
-
-  if(!supabaseClient){
-    showMessage("Connection error. Please refresh the website.","error");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Uploading screenshot...";
-
-  try {
-    const extension = file.type === "image/png" ? "png" :
-      file.type === "image/webp" ? "webp" : "jpg";
-
-    const uniqueName = Date.now() + "-" +
-      (window.crypto && crypto.randomUUID
-        ? crypto.randomUUID()
-        : Math.random().toString(36).slice(2)) +
-      "." + extension;
-
-    const uploadedPath = uniqueName;
-
-    const {error:uploadError} = await supabaseClient
-      .storage
-      .from(BUCKET)
-      .upload(uploadedPath,file,{
-        contentType:file.type,
+    const {data:uploadData,error:uploadError} = await db.storage
+      .from("payment-screenshots")
+      .upload(filename,file,{
         cacheControl:"3600",
-        upsert:false
+        upsert:false,
+        contentType:file.type
       });
 
     if(uploadError) throw uploadError;
+    uploadedPath = uploadData.path;
 
-    btn.textContent = "Submitting order...";
-
-    const orderReference = createOrderReference();
-
-    const orderData = {
-      order_ref:orderReference,
+    const {error:insertError} = await db.from("orders").insert({
+      order_ref:orderRef,
       game:selectedGame,
       player_id:playerId,
-      package_amount:selectedPack[0],
-      price_npr:selectedPack[1],
-      payment_method:selectedPayment,
-      payment_screenshot:uploadedPath,
+      package_amount:String(selectedPackage.amount),
+      price_npr:selectedPackage.price,
+      payment_method:selectedMethod,
       payment_status:"pending",
-      order_status:"pending"
-    };
-
-    const {error:orderError} = await supabaseClient
-      .from("orders")
-      .insert(orderData);
-
-    if(orderError) throw orderError;
-
-    const recentOrder = {
-      orderRef:orderReference,
-      game:games[selectedGame].name,
-      amount:selectedPack[0] + " " + games[selectedGame].unit,
-      price:money(selectedPack[1]),
-      playerId:playerId
-    };
-
-    let orders = [];
-    try {
-      orders = JSON.parse(localStorage.getItem("noxOrders") || "[]");
-    } catch(e) {}
-
-    orders.unshift(recentOrder);
-    localStorage.setItem("noxOrders",JSON.stringify(orders.slice(0,5)));
-
-    showRecentOrders();
-
-    showMessage(
-      "Order submitted successfully! Your Order Reference is " +
-      orderReference +
-      ". Save this reference to track your order. Payment is still pending verification.",
-      "success"
-    );
-
-    $("trackReference").value = orderReference;
-    $("trackPlayerId").value = playerId;
-
-    $("playerId").value = "";
-    $("paymentScreenshot").value = "";
-
-    if(previewUrl){
-      URL.revokeObjectURL(previewUrl);
-      previewUrl = null;
-    }
-
-    $("screenshotPreview").removeAttribute("src");
-    $("screenshotPreview").style.display = "none";
-
-    selectedPack = null;
-    document.querySelectorAll(".pack").forEach(p => p.classList.remove("selected"));
-    updateSummary();
-
-  } catch(error) {
-    console.error("ORDER ERROR:",error);
-
-    showMessage(
-      "Order failed: " + (error.message || "Unknown error") +
-      ". Please check your details and try again.",
-      "error"
-    );
-
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Submit order";
-  }
-}
-
-/* ORDER TRACKING */
-async function trackOrder(){
-  const btn = $("trackBtn");
-  const reference = $("trackReference").value.trim();
-  const playerId = $("trackPlayerId").value.trim();
-
-  $("trackingResult").style.display = "none";
-  $("trackingResult").replaceChildren();
-  showTrackingMessage("");
-
-  if(!reference || !playerId){
-    showTrackingMessage("Enter both your Order Reference and Player ID.","error");
-    return;
-  }
-
-  if(!supabaseClient){
-    showTrackingMessage("Connection error. Please refresh the website.","error");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "Checking order...";
-
-  try{
-    const {data,error} = await supabaseClient.rpc("track_order",{
-      p_order_ref:reference,
-      p_player_id:playerId
+      order_status:"pending",
+      payment_screenshot:uploadedPath
     });
 
-    if(error) throw error;
+    if(insertError) throw insertError;
 
-    if(!data){
-      showTrackingMessage(
-        "No matching order found. Check your Order Reference and Player ID.",
-        "error"
-      );
-      return;
-    }
+    $("trackRef").value = orderRef;
+    $("trackPlayer").value = playerId;
+    $("playerId").value = "";
+    $("screenshot").value = "";
+    $("preview").style.display = "none";
 
-    const result = $("trackingResult");
-
-    function addDetail(label,value){
-      const line = document.createElement("div");
-      const strong = document.createElement("strong");
-      strong.textContent = label + ": ";
-      line.append(strong,document.createTextNode(String(value ?? "-")));
-      result.appendChild(line);
-    }
-
-    addDetail("Order Reference",data.order_ref);
-    addDetail("Game",data.game);
-    addDetail("Package",data.package_amount);
-
-    const orderStatus = document.createElement("div");
-    const orderLabel = document.createElement("strong");
-    orderLabel.textContent = "Order Status: ";
-
-    const orderValue = document.createElement("span");
-    orderValue.className = "track-status";
-    orderValue.textContent = data.order_status || "Pending";
-
-    orderStatus.append(orderLabel,orderValue);
-    result.appendChild(orderStatus);
-
-    addDetail("Payment Status",data.payment_status);
-
-    if(data.created_at){
-      addDetail("Order Date",new Date(data.created_at).toLocaleString());
-    }
-
-    $("trackingResult").style.display = "block";
-    showTrackingMessage("Order found successfully.","success");
+    message("orderMessage",
+      "Order submitted successfully! Your reference is " + orderRef +
+      ". Save this reference to track your order.",
+      "success"
+    );
+    toast("Order submitted successfully!");
+    $("track").scrollIntoView({behavior:"smooth"});
 
   }catch(error){
-    console.error("TRACKING ERROR:",error);
-    showTrackingMessage(
-      "Unable to track order: " + error.message,
-      "error"
-    );
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "Track my order";
-  }
-}
+    console.error(error);
+    message("orderMessage","Order failed: " + error.message,"error");
 
-$("submitBtn").addEventListener("click",submitOrder);
-$("trackBtn").addEventListener("click",trackOrder);
-
-function startWebsite(){
-  if(!window.supabase){
-    showMessage("Supabase library failed to load. Check your internet connection.","error");
-    return;
-  }
-
-  supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        persistSession:false,
-        autoRefreshToken:false,
-        detectSessionInUrl:false
-      }
-    }
-  );
-
-  showRecentOrders();
-}
-
-startWebsite();
-updateSummary();
-
-})();
-</script>
-</body>
-  </html>
-  
+    // If the order insert failed after upload, the file remains in storage.
+    // It can be removed manually from the private bucket if nec

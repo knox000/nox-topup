@@ -1,76 +1,74 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#07070f">
-<meta name="description" content="NOX TOPUP - fast and trusted game top-up in Nepal. PUBG UC, Free Fire Diamonds, Mobile Legends, Roblox and eFootball. Pay with eSewa or Khalti.">
+<meta name="description" content="NOX TOPUP - Fast and trusted game top-up in Nepal.">
 <title>NOX TOPUP | Gaming Top Up Nepal</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2322d3ee'/%3E%3Cpath d='M11 29V11h4l10 12V11h4v18h-4L15 17v12z' fill='%2307070f'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
 <style>
 :root{--bg:#07070f;--card:#101019;--card2:#171724;--line:#262638;--cyan:#22d3ee;--violet:#8b5cf6;--text:#f4f4fb;--muted:#9a9ab0;--ok:#4ade80}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,sans-serif;line-height:1.5}
 button,input{font-family:inherit}
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;background:rgba(7,7,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:10px}
-.brand svg{width:38px;height:38px;display:block}
-.brand b{font-size:19px;font-weight:800;letter-spacing:.5px}
+.brand svg{width:38px;height:38px}
+.brand b{font-size:19px;font-weight:800}
 .brand b i{font-style:normal;color:var(--cyan)}
 .live{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
-.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
+.live:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok)}
 .hero{padding:48px 20px 30px;text-align:center;background:radial-gradient(ellipse 70% 80% at 50% 0,rgba(139,92,246,.28),transparent 70%)}
-.hero h1{margin:0 auto 12px;max-width:640px;font-size:clamp(28px,6.5vw,46px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+.hero h1{margin:0 auto 12px;max-width:640px;font-size:clamp(28px,6.5vw,46px);line-height:1.15;font-weight:800}
 .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{margin:0 auto;max-width:480px;color:var(--muted);font-size:13px}
+.hero p{margin:auto;max-width:480px;color:var(--muted);font-size:13px}
 .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
-.chip{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:11px;color:#cfcfe0}
-.container{max-width:980px;margin:0 auto;padding:6px 16px 20px}
+.chip{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:11px}
+.container{max-width:980px;margin:auto;padding:6px 16px 20px}
 .step{display:flex;align-items:center;gap:11px;margin:26px 0 14px}
 .step span{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#06060c;background:linear-gradient(135deg,var(--cyan),var(--violet))}
-.step h2{margin:0;font-size:17px;font-weight:700}
+.step h2{margin:0;font-size:17px}
 .step small{display:block;color:var(--muted);font-size:11px;font-weight:400}
 .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.game{position:relative;padding:10px;text-align:left;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;overflow:hidden;transition:transform .15s,border-color .15s,box-shadow .15s}
-.game:hover{border-color:#3a3a55}
-.game:active{transform:scale(.97)}
-.game.active{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 8px 28px rgba(34,211,238,.18)}
-.game.active::after{content:"\2713";position:absolute;top:16px;right:16px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#06060c;background:var(--cyan)}
-.cover{aspect-ratio:1/1;border-radius:11px;overflow:hidden;background:#1c1c28;margin-bottom:10px}
+.game{position:relative;padding:10px;text-align:left;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;overflow:hidden}
+.game.active{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan)}
+.game.active:after{content:"✓";position:absolute;top:16px;right:16px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#06060c;background:var(--cyan)}
+.cover{aspect-ratio:1;border-radius:11px;overflow:hidden;background:#1c1c28;margin-bottom:10px}
 .cover img{display:block;width:100%;height:100%;object-fit:cover}
 .cover.fit img{object-fit:contain}
-.game strong{display:block;font-size:13px;font-weight:700}
+.game strong{display:block;font-size:13px}
 .game small{display:block;margin-top:2px;font-size:11px;color:var(--muted)}
 .panel{margin-top:14px;padding:18px;background:var(--card);border:1px solid var(--line);border-radius:18px}
 .sel{margin:0 0 12px;font-size:12px;color:var(--muted)}
 .packages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.package{min-width:0;padding:14px 12px;text-align:left;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:13px;cursor:pointer;transition:.15s}
-.package:hover{border-color:#3a3a55}
-.package.active{border-color:var(--cyan);background:rgba(34,211,238,.09);box-shadow:0 0 0 1px var(--cyan)}
-.package strong{display:block;font-size:15px;font-weight:700}
+.package{min-width:0;padding:14px 12px;text-align:left;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:13px;cursor:pointer}
+.package.active{border-color:var(--cyan);background:rgba(34,211,238,.09)}
+.package strong{display:block;font-size:15px}
 .package small{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
 .package b{display:block;margin-top:10px;font-size:14px;color:var(--cyan)}
 .field{margin-top:14px}
-.field:first-child{margin-top:0}
 label{display:block;margin-bottom:7px;font-size:12px;color:#d2d2e2}
 input[type=text],input:not([type]),input[type=file]{width:100%;padding:13px 14px;font-size:14px;color:var(--text);background:#0a0a12;border:1px solid var(--line);border-radius:11px}
 input::placeholder{color:#5f5f78}
-input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+input:focus{outline:none;border-color:var(--cyan)}
 button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .method{padding:13px;font-size:13px;font-weight:600;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:12px;cursor:pointer}
-.method.active{border-color:var(--cyan);background:rgba(34,211,238,.09);box-shadow:0 0 0 1px var(--cyan)}
+.method.active{border-color:var(--cyan);background:rgba(34,211,238,.09)}
 .pay{margin-top:12px;padding:14px;font-size:12px;line-height:1.7;color:#cfeffa;background:#0c1822;border:1px solid #1f4256;border-radius:12px;overflow-wrap:anywhere}
 .pay .num{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0;padding:10px 12px;font-size:15px;font-weight:700;color:#fff;background:#08111a;border-radius:10px}
-.pay .num button{padding:6px 12px;font-size:11px;font-weight:600;color:var(--cyan);background:transparent;border:1px solid var(--cyan);border-radius:8px;cursor:pointer}
+.pay .num button{padding:6px 12px;font-size:11px;color:var(--cyan);background:transparent;border:1px solid var(--cyan);border-radius:8px}
 .qr{display:block;width:200px;max-width:100%;margin:12px auto 0;border-radius:12px;background:#fff}
 .hint{margin:6px 0 0;font-size:11px;color:var(--muted)}
 .total{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:14px;font-size:12px;background:var(--card2);border:1px dashed #36364f;border-radius:12px}
 .total b{font-size:18px;color:var(--cyan);white-space:nowrap}
-.primary{width:100%;margin-top:14px;padding:16px;font-size:14px;font-weight:800;letter-spacing:.4px;color:#06060c;background:linear-gradient(90deg,var(--cyan),#7cdcf3);border:0;border-radius:13px;cursor:pointer}
+.primary{width:100%;margin-top:14px;padding:16px;font-size:14px;font-weight:800;color:#06060c;background:linear-gradient(90deg,var(--cyan),#7cdcf3);border:0;border-radius:13px;cursor:pointer}
 .primary:disabled,.secondary:disabled{opacity:.55;cursor:not-allowed}
 .secondary{width:100%;margin-top:12px;padding:14px;font-size:13px;font-weight:600;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:12px;cursor:pointer}
 .copy{width:auto;display:inline-block;margin:8px 0 0;padding:8px 14px;font-size:11px}
@@ -78,344 +76,586 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .success{display:block;color:#86efac;background:#0f2a1c;border:1px solid #23643c}
 .error{display:block;color:#fca5a5;background:#2e1515;border:1px solid #6e3030}
 .hidden{display:none!important}
-hr{border:0;border-top:1px solid var(--line);margin:20px 0 0}
 footer{padding:34px 16px 44px;text-align:center;font-size:11px;color:var(--muted)}
 footer .brand{justify-content:center;margin-bottom:8px}
 @media(min-width:680px){.games{grid-template-columns:repeat(5,minmax(0,1fr))}.packages{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
+
 <body>
 
 <header>
-  <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="nx" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#nx)"/><path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/></svg><b>NOX <i>TOPUP</i></b></div>
-  <div class="live">Open now</div>
+<div class="brand">
+<svg viewBox="0 0 40 40" aria-hidden="true">
+<defs><linearGradient id="nx" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+<rect width="40" height="40" rx="11" fill="url(#nx)"/>
+<path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/>
+</svg>
+<b>NOX <i>TOPUP</i></b>
+</div>
+<div class="live">Open now</div>
 </header>
 
 <section class="hero">
-  <h1>Top up your favourite games <em>in minutes</em></h1>
-  <p>Pick a game, choose a package, pay with eSewa or Khalti and send your screenshot. We handle the rest.</p>
-  <div class="chips"><span class="chip">Fast delivery</span><span class="chip">eSewa &amp; Khalti</span><span class="chip">Track your order</span></div>
+<h1>Top up your favourite games <em>in minutes</em></h1>
+<p>Pick a game, choose a package, pay with eSewa or Khalti and send your screenshot. We handle the rest.</p>
+<div class="chips">
+<span class="chip">Fast delivery</span>
+<span class="chip">eSewa &amp; Khalti</span>
+<span class="chip">Track your order</span>
+</div>
 </section>
 
 <main class="container">
 
-  <div class="step"><span>1</span><h2>Choose your game</h2></div>
-  <div class="games">
-    <button type="button" class="game" data-game="pubg"><div class="cover fit" style="background:#1c1c1c"><img src="images/pubg.svg" alt="PUBG Mobile"></div><strong>PUBG Mobile</strong><small>UC top up</small></button>
-    <button type="button" class="game" data-game="ff"><div class="cover"><img src="images/freefire.jpg" alt="Free Fire"></div><strong>Free Fire</strong><small>Diamond top up</small></button>
-    <button type="button" class="game" data-game="ml"><div class="cover"><img src="images/mlbb.webp" alt="Mobile Legends"></div><strong>Mobile Legends</strong><small>Diamond top up</small></button>
-    <button type="button" class="game" data-game="roblox"><div class="cover fit" style="background:#3355ff"><img src="images/roblox.png" alt="Roblox"></div><strong>Roblox</strong><small>Robux top up</small></button>
-    <button type="button" class="game" data-game="efootball"><div class="cover fit" style="background:#000090"><img src="images/efootball.png" alt="eFootball"></div><strong>eFootball</strong><small>Coins top up</small></button>
-  </div>
+<div class="step"><span>1</span><h2>Choose your game</h2></div>
 
-  <div class="step" id="packagePanel"><span>2</span><h2>Select a package</h2></div>
-  <div class="panel">
-    <p class="sel" id="selectedGameTitle">Loading packages...</p>
-    <div class="packages" id="packages"></div>
-  </div>
+<div class="games">
+<button type="button" class="game" data-game="pubg">
+<div class="cover fit" style="background:#1c1c1c"><img src="images/pubg.svg" alt="PUBG Mobile"></div>
+<strong>PUBG Mobile</strong><small>UC top up</small>
+</button>
 
-  <div class="step"><span>3</span><h2>Player details</h2></div>
-  <div class="panel">
-    <div class="field">
-      <label for="playerId">Player ID / UID</label>
-      <input id="playerId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Player ID">
-    </div>
-    <div class="field hidden" id="zoneField">
-      <label for="zoneId">Zone ID / Server ID</label>
-      <input id="zoneId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Zone ID">
-      <p class="hint">Mobile Legends needs both your User ID and Zone ID.</p>
-    </div>
-    <div class="field">
-      <label for="playerName">Player name (optional)</label>
-      <input id="playerName" type="text" maxlength="40" placeholder="Your in-game name">
-    </div>
-  </div>
+<button type="button" class="game" data-game="ff">
+<div class="cover"><img src="images/freefire.jpg" alt="Free Fire"></div>
+<strong>Free Fire</strong><small>Diamond top up</small>
+</button>
 
-  <div class="step"><span>4</span><h2>Pay</h2></div>
-  <div class="panel">
-    <div class="methods">
-      <button type="button" class="method" data-method="esewa">eSewa</button>
-      <button type="button" class="method" data-method="khalti">Khalti</button>
-      <button type="button" class="method" data-method="bank">Bank transfer</button>
-      <button type="button" class="method" data-method="voucher">Voucher</button>
-    </div>
-    <div class="pay" id="paymentInfo">Select a payment method to see how to pay.</div>
+<button type="button" class="game" data-game="ml">
+<div class="cover"><img src="images/mlbb.webp" alt="Mobile Legends"></div>
+<strong>Mobile Legends</strong><small>Diamond top up</small>
+</button>
 
-    <div class="field">
-      <label for="screenshot">Payment screenshot</label>
-      <input id="screenshot" type="file" accept="image/*">
-      <p class="hint">Upload a clear screenshot after paying. Maximum 5 MB.</p>
-    </div>
+<button type="button" class="game" data-game="roblox">
+<div class="cover fit" style="background:#3355ff"><img src="images/roblox.png" alt="Roblox"></div>
+<strong>Roblox</strong><small>Robux top up</small>
+</button>
 
-    <div class="total"><span id="orderSummary">Select a game and package to see your total.</span><b id="orderTotal"></b></div>
-    <button type="button" class="primary" id="submitOrder">PLACE ORDER</button>
-    <div id="submitStatus" class="status" role="status" aria-live="polite"></div>
-  </div>
+<button type="button" class="game" data-game="efootball">
+<div class="cover fit" style="background:#000090"><img src="images/efootball.png" alt="eFootball"></div>
+<strong>eFootball</strong><small>Coins top up</small>
+</button>
+</div>
 
-  <div class="step"><span>5</span><div><h2>Track your order</h2><small>Use the reference you received after ordering</small></div></div>
-  <div class="panel">
-    <div class="field">
-      <label for="trackRef">Order reference</label>
-      <input id="trackRef" placeholder="Example: NOX-AB12CD34" autocapitalize="characters">
-    </div>
-    <div class="field">
-      <label for="trackPlayerId">Player ID</label>
-      <input id="trackPlayerId" placeholder="Enter your Player ID">
-    </div>
-    <div class="field">
-      <label for="trackZoneId">Zone ID (Mobile Legends only)</label>
-      <input id="trackZoneId" placeholder="Leave empty for other games">
-    </div>
-    <button type="button" class="secondary" id="trackBtn">TRACK ORDER</button>
-    <div id="trackStatus" class="status" role="status" aria-live="polite"></div>
-  </div>
+<div class="step" id="packagePanel"><span>2</span><h2>Select a package</h2></div>
+
+<div class="panel">
+<p class="sel" id="selectedGameTitle">Loading packages...</p>
+<div class="packages" id="packages"></div>
+</div>
+
+<div class="step"><span>3</span><h2>Player details</h2></div>
+
+<div class="panel">
+<div class="field">
+<label for="playerId">Player ID / UID</label>
+<input id="playerId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Player ID">
+</div>
+
+<div class="field hidden" id="zoneField">
+<label for="zoneId">Zone ID / Server ID</label>
+<input id="zoneId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Zone ID">
+<p class="hint">Mobile Legends needs both your User ID and Zone ID.</p>
+</div>
+
+<div class="field">
+<label for="playerName">Player name (optional)</label>
+<input id="playerName" type="text" maxlength="40" placeholder="Your in-game name">
+</div>
+</div>
+
+<div class="step"><span>4</span><h2>Pay</h2></div>
+
+<div class="panel">
+<div class="methods">
+<button type="button" class="method" data-method="esewa">eSewa</button>
+<button type="button" class="method" data-method="khalti">Khalti</button>
+<button type="button" class="method" data-method="bank">Bank transfer</button>
+<button type="button" class="method" data-method="voucher">Voucher</button>
+</div>
+
+<div class="pay" id="paymentInfo">Select a payment method to see how to pay.</div>
+
+<div class="field">
+<label for="screenshot">Payment screenshot</label>
+<input id="screenshot" type="file" accept="image/*">
+<p class="hint">Upload a clear screenshot after paying. Maximum 5 MB.</p>
+</div>
+
+<div class="total">
+<span id="orderSummary">Select a game and package to see your total.</span>
+<b id="orderTotal"></b>
+</div>
+
+<button type="button" class="primary" id="submitOrder">PLACE ORDER</button>
+<div id="submitStatus" class="status" role="status" aria-live="polite"></div>
+</div>
+
+<div class="step">
+<span>5</span>
+<div><h2>Track your order</h2><small>Use the reference you received after ordering</small></div>
+</div>
+
+<div class="panel">
+<div class="field">
+<label for="trackRef">Order reference</label>
+<input id="trackRef" placeholder="Example: NOX-AB12CD34" autocapitalize="characters">
+</div>
+
+<div class="field">
+<label for="trackPlayerId">Player ID</label>
+<input id="trackPlayerId" placeholder="Enter your Player ID">
+</div>
+
+<div class="field">
+<label for="trackZoneId">Zone ID (Mobile Legends only)</label>
+<input id="trackZoneId" placeholder="Leave empty for other games">
+</div>
+
+<button type="button" class="secondary" id="trackBtn">TRACK ORDER</button>
+<div id="trackStatus" class="status" role="status" aria-live="polite"></div>
+</div>
 
 </main>
 
 <footer>
-  <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="nx2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#nx2)"/><path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/></svg><b>NOX <i>TOPUP</i></b></div>
-  Gaming top up in Nepal<br>© 2026 NOX TOPUP. All rights reserved.
+<div class="brand">
+<svg viewBox="0 0 40 40" aria-hidden="true">
+<defs><linearGradient id="nx2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+<rect width="40" height="40" rx="11" fill="url(#nx2)"/>
+<path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/>
+</svg>
+<b>NOX <i>TOPUP</i></b>
+</div>
+Gaming top up in Nepal<br>
+© 2026 NOX TOPUP. All rights reserved.
 </footer>
 
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
-  const $ = id => document.getElementById(id);
+const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
+const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
+const $ = id => document.getElementById(id);
 
-  if (!window.supabase) {
-    $("selectedGameTitle").textContent = "Unable to load the page. Please refresh.";
-    return;
-  }
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+if (!window.supabase) {
+$("selectedGameTitle").textContent = "Unable to load the page. Please refresh.";
+return;
+}
 
-  const gameNames = { pubg:"PUBG MOBILE", ff:"FREE FIRE", ml:"MOBILE LEGENDS", roblox:"ROBLOX", efootball:"eFOOTBALL" };
-  const units = { pubg:"UC", ff:"Diamonds", ml:"Diamonds", roblox:"Robux", efootball:"Coins" };
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // [amount, price in NPR]. Verify Mobile Legends prices with your supplier.
-  const packageList = {
-    pubg: [[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]],
-    ff: [[100,120],[310,350],[520,580],[1060,1150],[2180,2300]],
-    ml: [[86,275],[172,539],[257,770],[706,1980]],
-    roblox: [[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]],
-    efootball: [[130,130],[300,300],[550,500],[1050,950],[2050,1800]]
-  };
+const gameNames = {
+pubg:"PUBG MOBILE",
+ff:"FREE FIRE",
+ml:"MOBILE LEGENDS",
+roblox:"ROBLOX",
+efootball:"eFOOTBALL"
+};
 
-  const PAY_NUMBER = "9801695185", PAY_NAME = "Krishna Adhikari";
-  const QR = { esewa: "images/esewa-qr.png", khalti: "images/khalti-qr.png" };
+const units = {
+pubg:"UC",
+ff:"Diamonds",
+ml:"Diamonds",
+roblox:"Robux",
+efootball:"Coins"
+};
 
-  let selectedGame = null, selectedPackage = null, selectedMethod = null;
+// Existing package prices preserved.
+const packageList = {
+pubg:[[60,130],[325,650],[660,1300],[1800,3200],[3850,6500]],
+ff:[[100,120],[310,350],[520,580],[1060,1150],[2180,2300]],
+ml:[[86,275],[172,539],[257,770],[706,1980]],
+roblox:[[400,650],[800,1250],[1700,2500],[4500,6500],[10000,14000]],
+efootball:[[130,130],[300,300],[550,500],[1050,950],[2050,1800]]
+};
 
-  function showStatus(id, message, type) { const el = $(id); el.textContent = message; el.className = "status " + type; }
-  function clearStatus(id) { $(id).textContent = ""; $(id).className = "status"; }
+const PAY_NUMBER = "9801695185";
+const PAY_NAME = "Krishna Adhikari";
 
-  // Same format when saving and tracking, so both always match.
-  function buildPlayerId(game, uid, zone) { return game === "ml" ? uid + " (Zone: " + zone + ")" : uid; }
+// Keep your original QR image filenames.
+const QR = {
+esewa:"images/esewa-qr.png",
+khalti:"images/khalti-qr.png"
+};
 
-  function generateOrderRef() {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    const bytes = new Uint8Array(8);
-    crypto.getRandomValues(bytes);
-    return "NOX-" + Array.from(bytes, b => chars[b % chars.length]).join("");
-  }
+let selectedGame = null;
+let selectedPackage = null;
+let selectedMethod = null;
 
-  function selectGame(game, scroll = true) {
-    if (!packageList[game]) return;
-    selectedGame = game; selectedPackage = null;
-    document.querySelectorAll(".game").forEach(b => b.classList.toggle("active", b.dataset.game === game));
-    $("zoneField").classList.toggle("hidden", game !== "ml");
-    $("selectedGameTitle").textContent = gameNames[game] + " packages";
-    renderPackages(); updateSummary();
-    if (scroll) $("packagePanel").scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+function showStatus(id,message,type) {
+const el = $(id);
+el.textContent = message;
+el.className = "status " + type;
+}
 
-  function renderPackages() {
-    const container = $("packages");
-    container.innerHTML = "";
-    packageList[selectedGame].forEach(([amount, price]) => {
-      const button = document.createElement("button");
-      button.type = "button"; button.className = "package";
-      const a = document.createElement("strong"); a.textContent = amount.toLocaleString() + " " + units[selectedGame];
-      const g = document.createElement("small"); g.textContent = gameNames[selectedGame];
-      const p = document.createElement("b"); p.textContent = "NPR " + price.toLocaleString();
-      button.append(a, g, p);
-      button.addEventListener("click", () => {
-        selectedPackage = { amount, price };
-        document.querySelectorAll(".package").forEach(x => x.classList.remove("active"));
-        button.classList.add("active");
-        updateSummary();
-      });
-      container.appendChild(button);
-    });
-  }
+function clearStatus(id) {
+$(id).textContent = "";
+$(id).className = "status";
+}
 
-  function updateSummary() {
-    if (!selectedGame || !selectedPackage) {
-      $("orderSummary").textContent = "Select a game and package to see your total.";
-      $("orderTotal").textContent = "";
-      return;
-    }
-    $("orderSummary").textContent = gameNames[selectedGame] + " · " + selectedPackage.amount.toLocaleString() + " " + units[selectedGame];
-    $("orderTotal").textContent = "NPR " + selectedPackage.price.toLocaleString();
-  }
+function buildPlayerId(game,uid,zone) {
+return game === "ml" ? uid + " (Zone: " + zone + ")" : uid;
+}
 
-  function selectMethod(method) {
-    selectedMethod = method;
-    document.querySelectorAll(".method").forEach(b => b.classList.toggle("active", b.dataset.method === method));
-    const box = $("paymentInfo");
-    if (method === "esewa" || method === "khalti") {
-      const label = method === "esewa" ? "eSewa" : "Khalti";
-      box.innerHTML = "Pay with " + label + " and upload your screenshot below." +
-        '<div class="num"><span>' + PAY_NUMBER + '</span><button type="button" id="copyNum">Copy</button></div>' +
-        "Account name: <strong>" + PAY_NAME + "</strong><br>Send the exact total shown below, or scan the QR code." +
-        '<img class="qr" src="' + QR[method] + '" alt="' + label + ' QR code">';
-      $("copyNum").addEventListener("click", async e => {
-        try { await navigator.clipboard.writeText(PAY_NUMBER); e.target.textContent = "Copied"; }
-        catch (err) { e.target.textContent = PAY_NUMBER; }
-      });
-    } else {
-      box.textContent = (method === "bank" ? "Bank transfer" : "Voucher payment") + " is not available yet. Please choose eSewa or Khalti.";
-    }
-  }
+function generateOrderRef() {
+const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const bytes = new Uint8Array(8);
+crypto.getRandomValues(bytes);
+return "NOX-" + Array.from(bytes,b => chars[b % chars.length]).join("");
+}
 
-  async function insertOrder(orderData, playerName) {
-    // Saves the player name too. If the table has no player_name column,
-    // retry without it so the order still goes through.
-    if (playerName) {
-      const first = await db.from("orders").insert({ ...orderData, player_name: playerName });
-      if (!first.error) return null;
-      if (!/player_name/i.test(first.error.message || "")) return first.error;
-    }
-    const { error } = await db.from("orders").insert(orderData);
-    return error;
-  }
+function selectGame(game,scroll=true) {
+if (!packageList[game]) return;
 
-  async function submitOrder() {
-    clearStatus("submitStatus");
-    const playerId = $("playerId").value.trim();
-    const zoneId = $("zoneId").value.trim();
-    const playerName = $("playerName").value.trim();
-    const file = $("screenshot").files[0];
-    const fail = msg => showStatus("submitStatus", msg, "error");
+selectedGame = game;
+selectedPackage = null;
 
-    if (!selectedGame) return fail("Please select a game.");
-    if (!selectedPackage) return fail("Please select a package.");
-    if (!playerId) return fail("Please enter your Player ID.");
-    if (selectedGame === "ml" && !zoneId) return fail("Please enter your Mobile Legends Zone ID.");
-    if (!selectedMethod) return fail("Please select a payment method.");
-    if (selectedMethod === "bank" || selectedMethod === "voucher") return fail("This payment method is not available. Please choose eSewa or Khalti.");
-    if (!file) return fail("Please upload your payment screenshot.");
-    if (!file.type.startsWith("image/")) return fail("Please upload a valid image.");
-    if (file.size > 5 * 1024 * 1024) return fail("Image must be smaller than 5 MB.");
+document.querySelectorAll(".game").forEach(b => {
+b.classList.toggle("active",b.dataset.game === game);
+});
 
-    const submitButton = $("submitOrder");
-    submitButton.disabled = true; submitButton.textContent = "SUBMITTING...";
-    let uploadedPath = null;
+$("zoneField").classList.toggle("hidden",game !== "ml");
+$("selectedGameTitle").textContent = gameNames[game] + " packages";
 
-    try {
-      const orderRef = generateOrderRef();
-      const extension = (file.name.split(".").pop() || "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 5) || "jpg";
-      const filename = orderRef + "-" + Math.random().toString(36).slice(2) + "." + extension;
-      const savedPlayerId = buildPlayerId(selectedGame, playerId, zoneId);
+renderPackages();
+updateSummary();
 
-      const { data: uploadData, error: uploadError } = await db.storage
-        .from("payment-screenshots")
-        .upload(filename, file, { cacheControl: "3600", upsert: false, contentType: file.type });
-      if (uploadError) throw uploadError;
-      uploadedPath = uploadData.path;
+if (scroll) {
+$("packagePanel").scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+}
+}
 
-      const orderError = await insertOrder({
-        order_ref: orderRef,
-        game: gameNames[selectedGame],
-        player_id: savedPlayerId,
-        package_amount: String(selectedPackage.amount),
-        price_npr: selectedPackage.price,
-        payment_method: selectedMethod,
-        payment_status: "pending",
-        order_status: "pending",
-        payment_screenshot: uploadedPath
-      }, playerName);
-      if (orderError) throw orderError;
+function renderPackages() {
+const container = $("packages");
+container.innerHTML = "";
 
-      const box = $("submitStatus");
-      box.className = "status success";
-      box.textContent = "Order submitted! Your order reference is " + orderRef + ". Save it to track your order.";
-      box.appendChild(document.createElement("br"));
-      const copyBtn = document.createElement("button");
-      copyBtn.type = "button"; copyBtn.className = "secondary copy"; copyBtn.textContent = "Copy reference";
-      copyBtn.addEventListener("click", async () => {
-        try { await navigator.clipboard.writeText(orderRef); copyBtn.textContent = "Copied"; }
-        catch (e) { copyBtn.textContent = orderRef; }
-      });
-      box.appendChild(copyBtn);
+packageList[selectedGame].forEach(([amount,price]) => {
+const button = document.createElement("button");
+button.type = "button";
+button.className = "package";
 
-      $("trackRef").value = orderRef;
-      $("trackPlayerId").value = playerId;
-      $("trackZoneId").value = selectedGame === "ml" ? zoneId : "";
-      $("playerName").value = ""; $("playerId").value = ""; $("zoneId").value = ""; $("screenshot").value = "";
-    } catch (error) {
-      console.error("Order error:", error);
-      if (uploadedPath) {
-        const { error: cleanupError } = await db.storage.from("payment-screenshots").remove([uploadedPath]);
-        if (cleanupError) console.error("Screenshot cleanup error:", cleanupError);
-      }
-      fail("Order failed: " + (error.message || "Please try again."));
-    } finally {
-      submitButton.disabled = false; submitButton.textContent = "PLACE ORDER";
-    }
-  }
+const a = document.createElement("strong");
+a.textContent = amount.toLocaleString() + " " + units[selectedGame];
 
-  async function trackOrder() {
-    clearStatus("trackStatus");
-    const orderRef = $("trackRef").value.trim().toUpperCase();
-    const uid = $("trackPlayerId").value.trim();
-    const zone = $("trackZoneId").value.trim();
-    if (!orderRef || !uid) { showStatus("trackStatus", "Please enter both Order Reference and Player ID.", "error"); return; }
+const g = document.createElement("small");
+g.textContent = gameNames[selectedGame];
 
-    // A Zone ID means it is a Mobile Legends order.
-    const playerId = zone ? buildPlayerId("ml", uid, zone) : uid;
-    const button = $("trackBtn");
-    button.disabled = true; button.textContent = "CHECKING...";
+const p = document.createElement("b");
+p.textContent = "NPR " + price.toLocaleString();
 
-    try {
-      const { data, error } = await db.rpc("track_order", { p_order_ref: orderRef, p_player_id: playerId });
-      if (error) throw error;
-      const order = Array.isArray(data) ? data[0] : data;
-      if (!order) {
-        showStatus("trackStatus", "Order not found. Check your reference and Player ID. For Mobile Legends, also enter the Zone ID.", "error");
-        return;
-      }
-      const box = $("trackStatus");
-      box.innerHTML = "";
-      const heading = document.createElement("strong"); heading.textContent = "Order found"; box.appendChild(heading);
-      [["Reference", order.order_ref], ["Game", order.game], ["Package", order.package_amount],
-       ["Order status", order.order_status], ["Payment status", order.payment_status]].forEach(([label, value]) => {
-        const line = document.createElement("div");
-        line.textContent = label + ": " + String(value ?? "");
-        box.appendChild(line);
-      });
-      box.className = "status success";
-    } catch (error) {
-      console.error("Tracking error:", error);
-      showStatus("trackStatus", "Unable to track order: " + (error.message || "Please try again."), "error");
-    } finally {
-      button.disabled = false; button.textContent = "TRACK ORDER";
-    }
-  }
+button.append(a,g,p);
 
-  document.querySelector(".games").addEventListener("click", e => {
-    const button = e.target.closest(".game");
-    if (button) selectGame(button.dataset.game);
-  });
-  document.querySelectorAll(".method").forEach(b => b.addEventListener("click", () => selectMethod(b.dataset.method)));
-  $("submitOrder").addEventListener("click", submitOrder);
-  $("trackBtn").addEventListener("click", trackOrder);
+button.addEventListener("click",() => {
+selectedPackage = {amount,price};
 
-  selectGame("pubg", false);
+document.querySelectorAll(".package").forEach(x => {
+x.classList.remove("active");
+});
+
+button.classList.add("active");
+updateSummary();
+});
+
+container.appendChild(button);
+});
+}
+
+function updateSummary() {
+if (!selectedGame || !selectedPackage) {
+$("orderSummary").textContent = "Select a game and package to see your total.";
+$("orderTotal").textContent = "";
+return;
+}
+
+$("orderSummary").textContent =
+gameNames[selectedGame] + " · " +
+selectedPackage.amount.toLocaleString() + " " +
+units[selectedGame];
+
+$("orderTotal").textContent =
+"NPR " + selectedPackage.price.toLocaleString();
+}
+
+function selectMethod(method) {
+selectedMethod = method;
+
+document.querySelectorAll(".method").forEach(b => {
+b.classList.toggle("active",b.dataset.method === method);
+});
+
+const box = $("paymentInfo");
+
+if (method === "esewa" || method === "khalti") {
+const label = method === "esewa" ? "eSewa" : "Khalti";
+
+box.innerHTML =
+"Pay with " + label + " and upload your screenshot below." +
+'<div class="num"><span>' + PAY_NUMBER +
+'</span><button type="button" id="copyNum">Copy</button></div>' +
+"Account name: <strong>" + PAY_NAME +
+"</strong><br>Send the exact total shown below, or scan the QR code." +
+'<img class="qr" src="' + QR[method] +
+'" alt="' + label + ' QR code">';
+
+$("copyNum").addEventListener("click",async e => {
+try {
+await navigator.clipboard.writeText(PAY_NUMBER);
+e.target.textContent = "Copied";
+} catch(err) {
+e.target.textContent = PAY_NUMBER;
+}
+});
+
+} else {
+box.textContent =
+(method === "bank" ? "Bank transfer" : "Voucher payment") +
+" is not available yet. Please choose eSewa or Khalti.";
+}
+}
+
+async function insertOrder(orderData,playerName) {
+if (playerName) {
+const first = await db.from("orders").insert({
+...orderData,
+player_name:playerName
+});
+
+if (!first.error) return null;
+
+if (!/player_name/i.test(first.error.message || "")) {
+return first.error;
+}
+}
+
+const {error} = await db.from("orders").insert(orderData);
+return error;
+}
+
+async function submitOrder() {
+clearStatus("submitStatus");
+
+const playerId = $("playerId").value.trim();
+const zoneId = $("zoneId").value.trim();
+const playerName = $("playerName").value.trim();
+const file = $("screenshot").files[0];
+
+const fail = msg => showStatus("submitStatus",msg,"error");
+
+if (!selectedGame) return fail("Please select a game.");
+if (!selectedPackage) return fail("Please select a package.");
+if (!playerId) return fail("Please enter your Player ID.");
+
+if (selectedGame === "ml" && !zoneId) {
+return fail("Please enter your Mobile Legends Zone ID.");
+}
+
+if (!selectedMethod) return fail("Please select a payment method.");
+
+if (selectedMethod === "bank" || selectedMethod === "voucher") {
+return fail("This payment method is not available. Please choose eSewa or Khalti.");
+}
+
+if (!file) return fail("Please upload your payment screenshot.");
+if (!file.type.startsWith("image/")) return fail("Please upload a valid image.");
+if (file.size > 5 * 1024 * 1024) return fail("Image must be smaller than 5 MB.");
+
+const submitButton = $("submitOrder");
+submitButton.disabled = true;
+submitButton.textContent = "SUBMITTING...";
+
+let uploadedPath = null;
+
+try {
+const orderRef = generateOrderRef();
+
+const extension =
+(file.name.split(".").pop() || "")
+.replace(/[^a-zA-Z0-9]/g,"")
+.slice(0,5) || "jpg";
+
+const filename =
+orderRef + "-" +
+Math.random().toString(36).slice(2) +
+"." + extension;
+
+const savedPlayerId =
+buildPlayerId(selectedGame,playerId,zoneId);
+
+const {data:uploadData,error:uploadError} = await db.storage
+.from("payment-screenshots")
+.upload(filename,file,{
+cacheControl:"3600",
+upsert:false,
+contentType:file.type
+});
+
+if (uploadError) throw uploadError;
+
+uploadedPath = uploadData.path;
+
+const orderError = await insertOrder({
+order_ref:orderRef,
+game:gameNames[selectedGame],
+player_id:savedPlayerId,
+package_amount:String(selectedPackage.amount),
+price_npr:selectedPackage.price,
+payment_method:selectedMethod,
+payment_status:"pending",
+order_status:"pending",
+payment_screenshot:uploadedPath
+},playerName);
+
+if (orderError) throw orderError;
+
+const box = $("submitStatus");
+box.className = "status success";
+box.textContent =
+"Order submitted! Your order reference is " +
+orderRef + ". Save it to track your order.";
+
+box.appendChild(document.createElement("br"));
+
+const copyBtn = document.createElement("button");
+copyBtn.type = "button";
+copyBtn.className = "secondary copy";
+copyBtn.textContent = "Copy reference";
+
+copyBtn.addEventListener("click",async () => {
+try {
+await navigator.clipboard.writeText(orderRef);
+copyBtn.textContent = "Copied";
+} catch(e) {
+copyBtn.textContent = orderRef;
+}
+});
+
+box.appendChild(copyBtn);
+
+$("trackRef").value = orderRef;
+$("trackPlayerId").value = playerId;
+$("trackZoneId").value = selectedGame === "ml" ? zoneId : "";
+
+$("playerName").value = "";
+$("playerId").value = "";
+$("zoneId").value = "";
+$("screenshot").value = "";
+
+} catch(error) {
+console.error("Order error:",error);
+
+if (uploadedPath) {
+const {error:cleanupError} = await db.storage
+.from("payment-screenshots")
+.remove([uploadedPath]);
+
+if (cleanupError) {
+console.error("Screenshot cleanup error:",cleanupError);
+}
+}
+
+fail("Order failed: " + (error.message || "Please try again."));
+
+} finally {
+submitButton.disabled = false;
+submitButton.textContent = "PLACE ORDER";
+}
+}
+
+async function trackOrder() {
+clearStatus("trackStatus");
+
+const orderRef = $("trackRef").value.trim().toUpperCase();
+const uid = $("trackPlayerId").value.trim();
+const zone = $("trackZoneId").value.trim();
+
+if (!orderRef || !uid) {
+showStatus("trackStatus","Please enter both Order Reference and Player ID.","error");
+return;
+}
+
+const playerId = zone ? buildPlayerId("ml",uid,zone) : uid;
+
+const button = $("trackBtn");
+button.disabled = true;
+button.textContent = "CHECKING...";
+
+try {
+const {data,error} = await db.rpc("track_order",{
+p_order_ref:orderRef,
+p_player_id:playerId
+});
+
+if (error) throw error;
+
+const order = Array.isArray(data) ? data[0] : data;
+
+if (!order) {
+showStatus(
+"trackStatus",
+"Order not found. Check your reference and Player ID. For Mobile Legends, also enter the Zone ID.",
+"error"
+);
+return;
+}
+
+const box = $("trackStatus");
+box.innerHTML = "";
+
+const heading = document.createElement("strong");
+heading.textContent = "Order found";
+box.appendChild(heading);
+
+[
+["Reference",order.order_ref],
+["Game",order.game],
+["Package",order.package_amount],
+["Order status",order.order_status],
+["Payment status",order.payment_status]
+].forEach(([label,value]) => {
+const line = document.createElement("div");
+line.textContent = label + ": " + String(value ?? "");
+box.appendChild(line);
+});
+
+box.className = "status success";
+
+} catch(error) {
+console.error("Tracking error:",error);
+
+showStatus(
+"trackStatus",
+"Unable to track order: " + (error.message || "Please try again."),
+"error"
+);
+
+} finally {
+button.disabled = false;
+button.textContent = "TRACK ORDER";
+}
+}
+
+document.querySelector(".games").addEventListener("click",e => {
+const button = e.target.closest(".game");
+if (button) selectGame(button.dataset.game);
+});
+
+document.querySelectorAll(".method").forEach(b => {
+b.addEventListener("click",() => selectMethod(b.dataset.method));
+});
+
+$("submitOrder").addEventListener("click",submitOrder);
+$("trackBtn").addEventListener("click",trackOrder);
+
+selectGame("pubg",false);
+
 })();
 </script>
+
 </body>
 </html>

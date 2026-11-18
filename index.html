@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NOX TOPUP | Gaming Top Up Nepal</title>
 <meta name="theme-color" content="#080810">
+<title>NOX TOPUP | Gaming Top Up Nepal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -30,7 +29,7 @@ body{
   font-family:'Sora',sans-serif;
 }
 header{
-  padding:17px 5%;
+  padding:18px 5%;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -59,6 +58,7 @@ header{
 .container{max-width:1000px;margin:auto;padding:20px}
 .section-title{font-size:19px;margin:25px 0 15px}
 .section-sub{color:var(--muted);font-size:12px;margin-top:-8px;margin-bottom:17px}
+
 .games{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -84,16 +84,19 @@ header{
   box-shadow:0 0 18px #22d3ee22;
 }
 .game-icon{
-  height:100px;
+  height:95px;
   width:100%;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-bottom:11px;
+  margin-bottom:12px;
   overflow:hidden;
   background:#fff;
   border-radius:11px;
   padding:10px;
+  color:#222;
+  font-size:12px;
+  font-weight:700;
 }
 .game-icon img{
   display:block;
@@ -130,10 +133,12 @@ header{
   cursor:pointer;
   font-family:inherit;
   min-width:0;
+  transition:.2s;
 }
 .package.active{
   border:1px solid var(--cyan);
   background:#153040;
+  box-shadow:0 0 12px #22d3ee20;
 }
 .package strong{font-size:14px;display:block}
 .package small{
@@ -167,6 +172,7 @@ input,select{
   font-size:13px;
 }
 input:focus,select:focus{border-color:var(--cyan)}
+input[type=file]{padding:11px}
 .methods{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -282,7 +288,8 @@ footer{
     <button type="button" class="game" data-game="pubg">
       <span class="game-icon">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/PUBG_Mobile_simple_logo_black.svg"
-             alt="PUBG Mobile logo" loading="lazy">
+             alt="PUBG Mobile"
+             onerror="this.style.display='none';this.parentElement.textContent='PUBG MOBILE';">
       </span>
       <strong>PUBG MOBILE</strong>
       <small>UC Top Up</small>
@@ -291,7 +298,8 @@ footer{
     <button type="button" class="game" data-game="ff">
       <span class="game-icon">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Freefirelogo.png"
-             alt="Free Fire logo" loading="lazy">
+             alt="Free Fire"
+             onerror="this.style.display='none';this.parentElement.textContent='FREE FIRE';">
       </span>
       <strong>FREE FIRE</strong>
       <small>Diamond Top Up</small>
@@ -300,7 +308,8 @@ footer{
     <button type="button" class="game" data-game="ml">
       <span class="game-icon">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mobile_Legends_Logo.webp"
-             alt="Mobile Legends logo" loading="lazy">
+             alt="Mobile Legends"
+             onerror="this.style.display='none';this.parentElement.textContent='MOBILE LEGENDS';">
       </span>
       <strong>MOBILE LEGENDS</strong>
       <small>Diamond Top Up</small>
@@ -309,7 +318,8 @@ footer{
     <button type="button" class="game" data-game="roblox">
       <span class="game-icon">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Roblox_Logo_2025.png"
-             alt="Roblox logo" loading="lazy">
+             alt="Roblox"
+             onerror="this.style.display='none';this.parentElement.textContent='ROBLOX';">
       </span>
       <strong>ROBLOX</strong>
       <small>Robux Top Up</small>
@@ -318,7 +328,8 @@ footer{
     <button type="button" class="game" data-game="efootball">
       <span class="game-icon">
         <img src="https://commons.wikimedia.org/wiki/Special:FilePath/EFootball_colored_logo.svg"
-             alt="eFootball logo" loading="lazy">
+             alt="eFootball"
+             onerror="this.style.display='none';this.parentElement.textContent='eFOOTBALL';">
       </span>
       <strong>eFOOTBALL</strong>
       <small>Coins Top Up</small>
@@ -328,11 +339,11 @@ footer{
 
   <section class="panel" id="packagePanel">
     <h2 class="section-title" style="margin-top:0">02. Select Package</h2>
-    <p class="muted" id="selectedGameTitle">Choose a game above to view packages.</p>
+    <p class="muted" id="selectedGameTitle">Loading packages...</p>
     <div class="packages" id="packages"></div>
   </section>
 
-  <section class="panel" id="orderPanel">
+  <section class="panel">
     <h2 class="section-title" style="margin-top:0">03. Player Details</h2>
 
     <div class="field">
@@ -343,7 +354,7 @@ footer{
     <div class="field hidden" id="zoneField">
       <label for="zoneId">Zone ID / Server ID (Mobile Legends)</label>
       <input id="zoneId" type="text" placeholder="Enter your Zone ID">
-      <p class="muted">For Mobile Legends, both User ID and Zone ID are required.</p>
+      <p class="muted">Enter both your Mobile Legends User ID and Zone ID.</p>
     </div>
 
     <div class="field">
@@ -385,12 +396,13 @@ footer{
 
     <div class="field">
       <label for="trackRef">Order Reference</label>
-      <input id="trackRef" placeholder="Example: NOX-123456">
+      <input id="trackRef" placeholder="Example: NOX-12345678">
     </div>
 
     <div class="field">
       <label for="trackPlayerId">Player ID</label>
-      <input id="trackPlayerId" placeholder="For MLBB, enter UID (Zone: 1234)">
+      <input id="trackPlayerId" placeholder="Enter your Player ID">
+      <p class="muted">For Mobile Legends, enter the same UID and Zone ID combination shown after ordering.</p>
     </div>
 
     <button type="button" class="secondary" id="trackBtn">TRACK ORDER</button>
@@ -414,7 +426,8 @@ footer{
   const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
 
   if (!window.supabase) {
-    alert("Supabase could not load. Please refresh the page.");
+    document.getElementById("selectedGameTitle").textContent =
+      "Unable to load Supabase. Please refresh the page.";
     return;
   }
 
@@ -423,7 +436,7 @@ footer{
     SUPABASE_KEY
   );
 
-  // GAME INFORMATION
+  // GAME NAMES
   const gameNames = {
     pubg: "PUBG MOBILE",
     ff: "FREE FIRE",
@@ -432,6 +445,7 @@ footer{
     efootball: "eFOOTBALL"
   };
 
+  // PACKAGE UNITS
   const units = {
     pubg: "UC",
     ff: "Diamonds",
@@ -440,9 +454,10 @@ footer{
     efootball: "Coins"
   };
 
-  // PACKAGE AMOUNTS AND PRICES IN NPR
-  // Existing prices are preserved for the four original games.
-  // ML prices: Nepalstore supplier prices + 10% markup.
+  // PACKAGE PRICES IN NPR
+  // Original four-game prices retained from your live website.
+  // MLBB prices are the previously proposed prices; verify supplier
+  // rates before accepting customer payments.
   const packageList = {
     pubg: [
       [60,130],
@@ -502,7 +517,7 @@ footer{
   }
 
   // SELECT GAME
-  function selectGame(game, shouldScroll = true) {
+  function selectGame(game, scroll = true) {
     if (!packageList[game]) return;
 
     selectedGame = game;
@@ -515,7 +530,6 @@ footer{
       );
     });
 
-    // Show Zone ID only for Mobile Legends.
     $("zoneField").classList.toggle("hidden", game !== "ml");
 
     $("selectedGameTitle").textContent =
@@ -524,7 +538,7 @@ footer{
     renderPackages();
     updateSummary();
 
-    if (shouldScroll) {
+    if (scroll) {
       $("packagePanel").scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -532,7 +546,7 @@ footer{
     }
   }
 
-  // DISPLAY PACKAGES
+  // RENDER PACKAGES
   function renderPackages() {
     const container = $("packages");
     container.innerHTML = "";
@@ -542,7 +556,14 @@ footer{
       return;
     }
 
-    packageList[selectedGame].forEach(item => {
+    const packages = packageList[selectedGame];
+
+    if (!packages.length) {
+      container.textContent = "No packages are currently available.";
+      return;
+    }
+
+    packages.forEach(item => {
       const amount = item[0];
       const price = item[1];
 
@@ -550,20 +571,23 @@ footer{
       button.type = "button";
       button.className = "package";
 
-      button.innerHTML = `
-        <strong>${amount.toLocaleString()} ${units[selectedGame]}</strong>
-        <small>${gameNames[selectedGame]}</small>
-        <b>NPR ${price.toLocaleString()}</b>
-      `;
+      const amountText = document.createElement("strong");
+      amountText.textContent =
+        amount.toLocaleString() + " " + units[selectedGame];
+
+      const gameText = document.createElement("small");
+      gameText.textContent = gameNames[selectedGame];
+
+      const priceText = document.createElement("b");
+      priceText.textContent = "NPR " + price.toLocaleString();
+
+      button.append(amountText, gameText, priceText);
 
       button.addEventListener("click", () => {
-        selectedPackage = {
-          amount: amount,
-          price: price
-        };
+        selectedPackage = { amount, price };
 
-        document.querySelectorAll(".package").forEach(p => {
-          p.classList.remove("active");
+        document.querySelectorAll(".package").forEach(packageButton => {
+          packageButton.classList.remove("active");
         });
 
         button.classList.add("active");
@@ -608,16 +632,16 @@ footer{
         "Pay using Khalti.<br><strong>Khalti Number: 9801695185</strong><br>Account Name: NOX TOPUP<br>After payment, upload your screenshot below.",
 
       bank:
-        "Bank transfer is not configured yet. Please contact NOX TOPUP before choosing this method.",
+        "Bank Transfer is not configured yet. Please contact NOX TOPUP before using this method.",
 
       voucher:
-        "Voucher payment is not configured yet. Please contact NOX TOPUP before choosing this method."
+        "Voucher payment is not configured yet. Please contact NOX TOPUP before using this method."
     };
 
     $("paymentInfo").innerHTML = instructions[method];
   }
 
-  // GENERATE ORDER REFERENCE
+  // ORDER REFERENCE
   function generateOrderRef() {
     return "NOX-" + Date.now().toString().slice(-8);
   }
@@ -658,7 +682,7 @@ footer{
     if (selectedMethod === "bank" || selectedMethod === "voucher") {
       showStatus(
         "submitStatus",
-        "This payment method is not configured yet. Please choose eSewa or Khalti.",
+        "This payment method is not configured. Please choose eSewa or Khalti.",
         "error"
       );
       return;
@@ -670,7 +694,7 @@ footer{
     }
 
     if (!file.type.startsWith("image/")) {
-      showStatus("submitStatus", "Please upload an image file.", "error");
+      showStatus("submitStatus", "Please upload a valid image.", "error");
       return;
     }
 
@@ -683,6 +707,8 @@ footer{
     submitButton.disabled = true;
     submitButton.textContent = "SUBMITTING...";
 
+    let uploadedPath = null;
+
     try {
       const orderRef = generateOrderRef();
 
@@ -692,7 +718,7 @@ footer{
       const filename =
         orderRef + "-" + Math.random().toString(36).slice(2) + "." + extension;
 
-      // Save MLBB UID and Zone ID together in the existing player_id column.
+      // Keep MLBB UID and Zone ID together in the existing player_id field.
       const savedPlayerId = selectedGame === "ml"
         ? playerId + " (Zone: " + zoneId + ")"
         : playerId;
@@ -709,7 +735,9 @@ footer{
 
       if (uploadError) throw uploadError;
 
-      // SAVE ORDER
+      uploadedPath = uploadData.path;
+
+      // SAVE ORDER USING THE EXISTING DATABASE COLUMNS
       const orderData = {
         order_ref: orderRef,
         game: gameNames[selectedGame],
@@ -719,20 +747,14 @@ footer{
         payment_method: selectedMethod,
         payment_status: "pending",
         order_status: "pending",
-        payment_screenshot: uploadData.path
+        payment_screenshot: uploadedPath
       };
 
       const { error: orderError } = await db
         .from("orders")
         .insert(orderData);
 
-      if (orderError) {
-        await db.storage
-          .from("payment-screenshots")
-          .remove([uploadData.path]);
-
-        throw orderError;
-      }
+      if (orderError) throw orderError;
 
       showStatus(
         "submitStatus",
@@ -742,6 +764,7 @@ footer{
         "success"
       );
 
+      // AUTOMATICALLY FILL TRACKING DETAILS
       $("trackRef").value = orderRef;
       $("trackPlayerId").value = savedPlayerId;
 
@@ -753,47 +776,4 @@ footer{
     } catch (error) {
       console.error("Order error:", error);
 
-      showStatus(
-        "submitStatus",
-        "Order failed: " + (error.message || "Please try again."),
-        "error"
-      );
-
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "PLACE ORDER";
-    }
-  }
-
-  // TRACK ORDER
-  async function trackOrder() {
-    clearStatus("trackStatus");
-
-    const orderRef = $("trackRef").value.trim();
-    const playerId = $("trackPlayerId").value.trim();
-
-    if (!orderRef || !playerId) {
-      showStatus(
-        "trackStatus",
-        "Please enter both Order Reference and Player ID. For MLBB, enter UID (Zone: your Zone ID).",
-        "error"
-      );
-      return;
-    }
-
-    const button = $("trackBtn");
-    button.disabled = true;
-    button.textContent = "CHECKING...";
-
-    try {
-      const { data, error } = await db.rpc("track_order", {
-        p_order_ref: orderRef,
-        p_player_id: playerId
-      });
-
-      if (error) throw error;
-
-      const order = Array.isArray(data) ? data[0] : data;
-
-      if (!order) {
- 
+      // Remove uploade

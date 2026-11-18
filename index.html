@@ -3,162 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080810">
+<meta name="theme-color" content="#07070f">
+<meta name="description" content="NOX TOPUP - fast and trusted game top-up in Nepal. PUBG UC, Free Fire Diamonds, Mobile Legends, Roblox and eFootball. Pay with eSewa or Khalti.">
 <title>NOX TOPUP | Gaming Top Up Nepal</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2322d3ee'/%3E%3Cpath d='M11 29V11h4l10 12V11h4v18h-4L15 17v12z' fill='%2307070f'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#080810;--card:#12121e;--card2:#19192a;--border:#303044;--cyan:#22d3ee;--text:#f5f5ff;--muted:#9999ad}
-*{box-sizing:border-box}
+:root{--bg:#07070f;--card:#101019;--card2:#171724;--line:#262638;--cyan:#22d3ee;--violet:#8b5cf6;--text:#f4f4fb;--muted:#9a9ab0;--ok:#4ade80}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,sans-serif}
-header{padding:18px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;background:#080810ed;backdrop-filter:blur(15px)}
-.logo{font-size:23px;font-weight:800;letter-spacing:1px}
-.logo span{color:var(--cyan)}
-.header-tag{font-size:10px;color:var(--muted)}
-.hero{padding:55px 20px 35px;text-align:center;background:radial-gradient(ellipse at top,#28204c 0%,transparent 65%)}
-.hero h1{font-size:clamp(30px,7vw,52px);margin:0 0 12px;font-weight:800}
-.hero h1 span{color:var(--cyan)}
-.hero p{color:var(--muted);font-size:13px;line-height:1.8}
-.container{max-width:1000px;margin:auto;padding:20px}
-.section-title{font-size:19px;margin:25px 0 15px}
-.section-sub{color:var(--muted);font-size:12px;margin-top:-8px;margin-bottom:17px}
-.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.game{background:linear-gradient(145deg,#1b1b2d,#11111c);border:1px solid var(--border);border-radius:16px;padding:12px;color:var(--text);cursor:pointer;text-align:left;transition:.2s;font-family:inherit;overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+button,input{font-family:inherit}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;background:rgba(7,7,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:38px;height:38px;display:block}
+.brand b{font-size:19px;font-weight:800;letter-spacing:.5px}
+.brand b i{font-style:normal;color:var(--cyan)}
+.live{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
+.hero{padding:48px 20px 30px;text-align:center;background:radial-gradient(ellipse 70% 80% at 50% 0,rgba(139,92,246,.28),transparent 70%)}
+.hero h1{margin:0 auto 12px;max-width:640px;font-size:clamp(28px,6.5vw,46px);line-height:1.15;font-weight:800;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0 auto;max-width:480px;color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+.chip{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:11px;color:#cfcfe0}
+.container{max-width:980px;margin:0 auto;padding:6px 16px 20px}
+.step{display:flex;align-items:center;gap:11px;margin:26px 0 14px}
+.step span{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#06060c;background:linear-gradient(135deg,var(--cyan),var(--violet))}
+.step h2{margin:0;font-size:17px;font-weight:700}
+.step small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.game{position:relative;padding:10px;text-align:left;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;overflow:hidden;transition:transform .15s,border-color .15s,box-shadow .15s}
+.game:hover{border-color:#3a3a55}
 .game:active{transform:scale(.97)}
-.game.active{border:1px solid var(--cyan);background:linear-gradient(145deg,#172d3c,#17172b);box-shadow:0 0 18px #22d3ee22}
-.game-icon{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;background:#fff;border-radius:11px;padding:0;color:#222;font-size:12px;font-weight:700;text-align:center}
-.game-icon img{display:block;width:100%;height:100%;object-fit:cover}
-.game-icon.fit img{object-fit:contain}
-.game strong{font-size:12px}
-.game small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
-.panel{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:19px;margin-top:17px}
+.game.active{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 8px 28px rgba(34,211,238,.18)}
+.game.active::after{content:"\2713";position:absolute;top:16px;right:16px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#06060c;background:var(--cyan)}
+.cover{aspect-ratio:1/1;border-radius:11px;overflow:hidden;background:#1c1c28;margin-bottom:10px}
+.cover img{display:block;width:100%;height:100%;object-fit:cover}
+.cover.fit img{object-fit:contain}
+.game strong{display:block;font-size:13px;font-weight:700}
+.game small{display:block;margin-top:2px;font-size:11px;color:var(--muted)}
+.panel{margin-top:14px;padding:18px;background:var(--card);border:1px solid var(--line);border-radius:18px}
+.sel{margin:0 0 12px;font-size:12px;color:var(--muted)}
 .packages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.package{border:1px solid var(--border);border-radius:12px;padding:15px 10px;background:var(--card2);color:#fff;text-align:left;cursor:pointer;font-family:inherit;min-width:0;transition:.2s}
-.package.active{border:1px solid var(--cyan);background:#153040;box-shadow:0 0 12px #22d3ee20}
-.package strong{font-size:14px;display:block}
-.package small{color:var(--muted);font-size:10px;display:block;margin-top:5px}
-.package b{color:var(--cyan);font-size:13px;display:block;margin-top:10px}
-.field{margin-top:16px}
-label{font-size:12px;display:block;margin-bottom:8px;color:#d4d4e3}
-input{width:100%;padding:14px;background:#090912;border:1px solid var(--border);color:#fff;border-radius:10px;outline:none;font-family:inherit;font-size:13px}
-input:focus,button:focus-visible{border-color:var(--cyan);outline:2px solid var(--cyan);outline-offset:2px}
-input:focus{outline:none}
-input[type=file]{padding:11px}
+.package{min-width:0;padding:14px 12px;text-align:left;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:13px;cursor:pointer;transition:.15s}
+.package:hover{border-color:#3a3a55}
+.package.active{border-color:var(--cyan);background:rgba(34,211,238,.09);box-shadow:0 0 0 1px var(--cyan)}
+.package strong{display:block;font-size:15px;font-weight:700}
+.package small{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
+.package b{display:block;margin-top:10px;font-size:14px;color:var(--cyan)}
+.field{margin-top:14px}
+.field:first-child{margin-top:0}
+label{display:block;margin-bottom:7px;font-size:12px;color:#d2d2e2}
+input[type=text],input:not([type]),input[type=file]{width:100%;padding:13px 14px;font-size:14px;color:var(--text);background:#0a0a12;border:1px solid var(--line);border-radius:11px}
+input::placeholder{color:#5f5f78}
+input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.method{padding:14px;background:var(--card2);border:1px solid var(--border);color:#fff;border-radius:10px;cursor:pointer;font-family:inherit;font-size:12px}
-.method.active{border-color:var(--cyan);background:#153040}
-.info{background:#101d2b;border:1px solid #24475b;padding:14px;border-radius:10px;font-size:12px;line-height:1.8;margin-top:13px;color:#c8efff;overflow-wrap:anywhere}
-.primary{width:100%;padding:16px;margin-top:20px;border:0;border-radius:11px;color:#050510;background:linear-gradient(90deg,var(--cyan),#7cddf5);font-family:inherit;font-weight:800;cursor:pointer;font-size:14px}
-.primary:disabled,.secondary:disabled{opacity:.5;cursor:not-allowed}
-.secondary{width:100%;padding:13px;margin-top:10px;border:1px solid var(--border);border-radius:10px;color:#fff;background:var(--card2);font-family:inherit;cursor:pointer}
-.qr{display:block;width:210px;max-width:100%;margin:12px auto 0;border-radius:10px;background:#fff}
-.copy{width:auto;padding:8px 14px;margin:0 0 0 8px;font-size:11px;display:inline-block}
-.status{display:none;padding:13px;border-radius:10px;margin-top:14px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
-.success{display:block;background:#10291d;color:#86efac;border:1px solid #22633b}
-.error{display:block;background:#301616;color:#fca5a5;border:1px solid #713333}
-.muted{color:var(--muted);font-size:11px;line-height:1.7}
+.method{padding:13px;font-size:13px;font-weight:600;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.method.active{border-color:var(--cyan);background:rgba(34,211,238,.09);box-shadow:0 0 0 1px var(--cyan)}
+.pay{margin-top:12px;padding:14px;font-size:12px;line-height:1.7;color:#cfeffa;background:#0c1822;border:1px solid #1f4256;border-radius:12px;overflow-wrap:anywhere}
+.pay .num{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0;padding:10px 12px;font-size:15px;font-weight:700;color:#fff;background:#08111a;border-radius:10px}
+.pay .num button{padding:6px 12px;font-size:11px;font-weight:600;color:var(--cyan);background:transparent;border:1px solid var(--cyan);border-radius:8px;cursor:pointer}
+.qr{display:block;width:200px;max-width:100%;margin:12px auto 0;border-radius:12px;background:#fff}
+.hint{margin:6px 0 0;font-size:11px;color:var(--muted)}
+.total{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:14px;font-size:12px;background:var(--card2);border:1px dashed #36364f;border-radius:12px}
+.total b{font-size:18px;color:var(--cyan);white-space:nowrap}
+.primary{width:100%;margin-top:14px;padding:16px;font-size:14px;font-weight:800;letter-spacing:.4px;color:#06060c;background:linear-gradient(90deg,var(--cyan),#7cdcf3);border:0;border-radius:13px;cursor:pointer}
+.primary:disabled,.secondary:disabled{opacity:.55;cursor:not-allowed}
+.secondary{width:100%;margin-top:12px;padding:14px;font-size:13px;font-weight:600;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.copy{width:auto;display:inline-block;margin:8px 0 0;padding:8px 14px;font-size:11px}
+.status{display:none;margin-top:14px;padding:13px;font-size:12px;line-height:1.7;border-radius:11px;overflow-wrap:anywhere}
+.success{display:block;color:#86efac;background:#0f2a1c;border:1px solid #23643c}
+.error{display:block;color:#fca5a5;background:#2e1515;border:1px solid #6e3030}
 .hidden{display:none!important}
-hr{border:0;border-top:1px solid var(--border);margin:20px 0}
-footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
-@media(min-width:650px){.games{grid-template-columns:repeat(5,minmax(0,1fr))}.packages{grid-template-columns:repeat(3,minmax(0,1fr))}}
+hr{border:0;border-top:1px solid var(--line);margin:20px 0 0}
+footer{padding:34px 16px 44px;text-align:center;font-size:11px;color:var(--muted)}
+footer .brand{justify-content:center;margin-bottom:8px}
+@media(min-width:680px){.games{grid-template-columns:repeat(5,minmax(0,1fr))}.packages{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">NOX <span>TOPUP</span></div>
-  <div class="header-tag">GAMING TOP UP NEPAL</div>
+  <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="nx" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#nx)"/><path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/></svg><b>NOX <i>TOPUP</i></b></div>
+  <div class="live">Open now</div>
 </header>
 
 <section class="hero">
-  <h1>LEVEL UP YOUR <span>GAME.</span></h1>
-  <p>Fast and easy game top-ups in Nepal.<br>Choose your game, select a package and place your order.</p>
+  <h1>Top up your favourite games <em>in minutes</em></h1>
+  <p>Pick a game, choose a package, pay with eSewa or Khalti and send your screenshot. We handle the rest.</p>
+  <div class="chips"><span class="chip">Fast delivery</span><span class="chip">eSewa &amp; Khalti</span><span class="chip">Track your order</span></div>
 </section>
 
 <main class="container">
-  <h2 class="section-title">01. Select Your Game</h2>
-  <p class="section-sub">Choose a game to see available packages.</p>
 
+  <div class="step"><span>1</span><h2>Choose your game</h2></div>
   <div class="games">
-    <button type="button" class="game" data-game="pubg">
-      <span class="game-icon fit" style="background:#1c1c1c"><img src="images/pubg.svg" alt="PUBG Mobile" onerror="this.remove()"><span class="fb">PUBG MOBILE</span></span>
-      <strong>PUBG MOBILE</strong><small>UC Top Up</small>
-    </button>
-    <button type="button" class="game" data-game="ff">
-      <span class="game-icon"><img src="images/freefire.jpg" alt="Free Fire" onerror="this.remove()"><span class="fb">FREE FIRE</span></span>
-      <strong>FREE FIRE</strong><small>Diamond Top Up</small>
-    </button>
-    <button type="button" class="game" data-game="ml">
-      <span class="game-icon"><img src="images/mlbb.webp" alt="Mobile Legends" onerror="this.remove()"><span class="fb">MOBILE LEGENDS</span></span>
-      <strong>MOBILE LEGENDS</strong><small>Diamond Top Up</small>
-    </button>
-    <button type="button" class="game" data-game="roblox">
-      <span class="game-icon fit" style="background:#3355ff"><img src="images/roblox.png" alt="Roblox" onerror="this.remove()"><span class="fb">ROBLOX</span></span>
-      <strong>ROBLOX</strong><small>Robux Top Up</small>
-    </button>
-    <button type="button" class="game" data-game="efootball">
-      <span class="game-icon fit" style="background:#000090"><img src="images/efootball.png" alt="eFootball" onerror="this.remove()"><span class="fb">eFOOTBALL</span></span>
-      <strong>eFOOTBALL</strong><small>Coins Top Up</small>
-    </button>
+    <button type="button" class="game" data-game="pubg"><div class="cover fit" style="background:#1c1c1c"><img src="images/pubg.svg" alt="PUBG Mobile"></div><strong>PUBG Mobile</strong><small>UC top up</small></button>
+    <button type="button" class="game" data-game="ff"><div class="cover"><img src="images/freefire.jpg" alt="Free Fire"></div><strong>Free Fire</strong><small>Diamond top up</small></button>
+    <button type="button" class="game" data-game="ml"><div class="cover"><img src="images/mlbb.webp" alt="Mobile Legends"></div><strong>Mobile Legends</strong><small>Diamond top up</small></button>
+    <button type="button" class="game" data-game="roblox"><div class="cover fit" style="background:#3355ff"><img src="images/roblox.png" alt="Roblox"></div><strong>Roblox</strong><small>Robux top up</small></button>
+    <button type="button" class="game" data-game="efootball"><div class="cover fit" style="background:#000090"><img src="images/efootball.png" alt="eFootball"></div><strong>eFootball</strong><small>Coins top up</small></button>
   </div>
 
-  <section class="panel" id="packagePanel">
-    <h2 class="section-title" style="margin-top:0">02. Select Package</h2>
-    <p class="muted" id="selectedGameTitle">Loading packages...</p>
+  <div class="step" id="packagePanel"><span>2</span><h2>Select a package</h2></div>
+  <div class="panel">
+    <p class="sel" id="selectedGameTitle">Loading packages...</p>
     <div class="packages" id="packages"></div>
-  </section>
+  </div>
 
-  <section class="panel">
-    <h2 class="section-title" style="margin-top:0">03. Player Details</h2>
-
+  <div class="step"><span>3</span><h2>Player details</h2></div>
+  <div class="panel">
     <div class="field">
       <label for="playerId">Player ID / UID</label>
       <input id="playerId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Player ID">
     </div>
-
     <div class="field hidden" id="zoneField">
-      <label for="zoneId">Zone ID / Server ID (Mobile Legends)</label>
+      <label for="zoneId">Zone ID / Server ID</label>
       <input id="zoneId" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter your Zone ID">
-      <p class="muted">Enter both your Mobile Legends User ID and Zone ID.</p>
+      <p class="hint">Mobile Legends needs both your User ID and Zone ID.</p>
     </div>
-
     <div class="field">
-      <label for="playerName">Player Name (optional)</label>
-      <input id="playerName" type="text" maxlength="40" placeholder="Enter your in-game name">
+      <label for="playerName">Player name (optional)</label>
+      <input id="playerName" type="text" maxlength="40" placeholder="Your in-game name">
     </div>
+  </div>
 
-    <hr>
-
-    <h2 class="section-title">04. Payment Method</h2>
+  <div class="step"><span>4</span><h2>Pay</h2></div>
+  <div class="panel">
     <div class="methods">
       <button type="button" class="method" data-method="esewa">eSewa</button>
       <button type="button" class="method" data-method="khalti">Khalti</button>
-      <button type="button" class="method" data-method="bank">Bank Transfer</button>
+      <button type="button" class="method" data-method="bank">Bank transfer</button>
       <button type="button" class="method" data-method="voucher">Voucher</button>
     </div>
-
-    <div class="info" id="paymentInfo">Select a payment method to see payment instructions.</div>
+    <div class="pay" id="paymentInfo">Select a payment method to see how to pay.</div>
 
     <div class="field">
-      <label for="screenshot">Payment Screenshot</label>
+      <label for="screenshot">Payment screenshot</label>
       <input id="screenshot" type="file" accept="image/*">
-      <p class="muted">Upload your payment screenshot. Maximum size: 5 MB.</p>
+      <p class="hint">Upload a clear screenshot after paying. Maximum 5 MB.</p>
     </div>
 
-    <div class="info" id="orderSummary">Select a game and package to see your order summary.</div>
-
+    <div class="total"><span id="orderSummary">Select a game and package to see your total.</span><b id="orderTotal"></b></div>
     <button type="button" class="primary" id="submitOrder">PLACE ORDER</button>
     <div id="submitStatus" class="status" role="status" aria-live="polite"></div>
-  </section>
+  </div>
 
-  <section class="panel">
-    <h2 class="section-title" style="margin-top:0">05. Track Your Order</h2>
-    <p class="muted">Enter your order reference and Player ID to check your order status.</p>
-
+  <div class="step"><span>5</span><div><h2>Track your order</h2><small>Use the reference you received after ordering</small></div></div>
+  <div class="panel">
     <div class="field">
-      <label for="trackRef">Order Reference</label>
+      <label for="trackRef">Order reference</label>
       <input id="trackRef" placeholder="Example: NOX-AB12CD34" autocapitalize="characters">
     </div>
     <div class="field">
@@ -169,15 +167,15 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
       <label for="trackZoneId">Zone ID (Mobile Legends only)</label>
       <input id="trackZoneId" placeholder="Leave empty for other games">
     </div>
-
     <button type="button" class="secondary" id="trackBtn">TRACK ORDER</button>
     <div id="trackStatus" class="status" role="status" aria-live="polite"></div>
-  </section>
+  </div>
+
 </main>
 
 <footer>
-  <strong>NOX TOPUP</strong><br>Gaming Top Up Nepal
-  <p>© 2026 NOX TOPUP. All rights reserved.</p>
+  <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="nx2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#nx2)"/><path d="M11 29V11h4l10 12V11h4v18h-4L15 17v12z" fill="#07070f"/></svg><b>NOX <i>TOPUP</i></b></div>
+  Gaming top up in Nepal<br>© 2026 NOX TOPUP. All rights reserved.
 </footer>
 
 <script>
@@ -186,14 +184,12 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
   const SUPABASE_URL = "https://vobhkqrrglripsluidkt.supabase.co";
   const SUPABASE_KEY = "sb_publishable_v_G34s7leGxzbNmlgKOwqA_NDhMvvxV";
-
   const $ = id => document.getElementById(id);
 
   if (!window.supabase) {
     $("selectedGameTitle").textContent = "Unable to load the page. Please refresh.";
     return;
   }
-
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const gameNames = { pubg:"PUBG MOBILE", ff:"FREE FIRE", ml:"MOBILE LEGENDS", roblox:"ROBLOX", efootball:"eFOOTBALL" };
@@ -208,26 +204,16 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
     efootball: [[130,130],[300,300],[550,500],[1050,950],[2050,1800]]
   };
 
-  const paymentInfo = {
-    esewa: "Pay using eSewa.<br><strong>eSewa Number: 9801695185</strong><br>Account Name: Krishna Adhikari<br>Scan the QR or send to the number above, then upload your screenshot below.<img class=\"qr\" src=\"images/esewa-qr.png\" alt=\"eSewa QR code\">",
-    khalti: "Pay using Khalti.<br><strong>Khalti Number: 9801695185</strong><br>Account Name: Krishna Adhikari<br>Scan the QR or send to the number above, then upload your screenshot below.<img class=\"qr\" src=\"images/khalti-qr.png\" alt=\"Khalti QR code\">",
-    bank: "Bank Transfer is not available yet. Please choose eSewa or Khalti.",
-    voucher: "Voucher payment is not available yet. Please choose eSewa or Khalti."
-  };
+  const PAY_NUMBER = "9801695185", PAY_NAME = "Krishna Adhikari";
+  const QR = { esewa: "images/esewa-qr.png", khalti: "images/khalti-qr.png" };
 
   let selectedGame = null, selectedPackage = null, selectedMethod = null;
 
-  function showStatus(id, message, type) {
-    const el = $(id);
-    el.textContent = message;
-    el.className = "status " + type;
-  }
+  function showStatus(id, message, type) { const el = $(id); el.textContent = message; el.className = "status " + type; }
   function clearStatus(id) { $(id).textContent = ""; $(id).className = "status"; }
 
-  // Same format is used when saving and when tracking, so both always match.
-  function buildPlayerId(game, uid, zone) {
-    return game === "ml" ? uid + " (Zone: " + zone + ")" : uid;
-  }
+  // Same format when saving and tracking, so both always match.
+  function buildPlayerId(game, uid, zone) { return game === "ml" ? uid + " (Zone: " + zone + ")" : uid; }
 
   function generateOrderRef() {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -238,13 +224,11 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
   function selectGame(game, scroll = true) {
     if (!packageList[game]) return;
-    selectedGame = game;
-    selectedPackage = null;
+    selectedGame = game; selectedPackage = null;
     document.querySelectorAll(".game").forEach(b => b.classList.toggle("active", b.dataset.game === game));
     $("zoneField").classList.toggle("hidden", game !== "ml");
-    $("selectedGameTitle").textContent = gameNames[game] + " — Available Packages";
-    renderPackages();
-    updateSummary();
+    $("selectedGameTitle").textContent = gameNames[game] + " packages";
+    renderPackages(); updateSummary();
     if (scroll) $("packagePanel").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -253,17 +237,11 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
     container.innerHTML = "";
     packageList[selectedGame].forEach(([amount, price]) => {
       const button = document.createElement("button");
-      button.type = "button";
-      button.className = "package";
-
-      const a = document.createElement("strong");
-      a.textContent = amount.toLocaleString() + " " + units[selectedGame];
-      const g = document.createElement("small");
-      g.textContent = gameNames[selectedGame];
-      const p = document.createElement("b");
-      p.textContent = "NPR " + price.toLocaleString();
+      button.type = "button"; button.className = "package";
+      const a = document.createElement("strong"); a.textContent = amount.toLocaleString() + " " + units[selectedGame];
+      const g = document.createElement("small"); g.textContent = gameNames[selectedGame];
+      const p = document.createElement("b"); p.textContent = "NPR " + price.toLocaleString();
       button.append(a, g, p);
-
       button.addEventListener("click", () => {
         selectedPackage = { amount, price };
         document.querySelectorAll(".package").forEach(x => x.classList.remove("active"));
@@ -275,21 +253,37 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
   }
 
   function updateSummary() {
-    $("orderSummary").textContent = (!selectedGame || !selectedPackage)
-      ? "Select a game and package to see your order summary."
-      : "Game: " + gameNames[selectedGame] + " | Package: " + selectedPackage.amount.toLocaleString() + " " +
-        units[selectedGame] + " | Total: NPR " + selectedPackage.price.toLocaleString();
+    if (!selectedGame || !selectedPackage) {
+      $("orderSummary").textContent = "Select a game and package to see your total.";
+      $("orderTotal").textContent = "";
+      return;
+    }
+    $("orderSummary").textContent = gameNames[selectedGame] + " · " + selectedPackage.amount.toLocaleString() + " " + units[selectedGame];
+    $("orderTotal").textContent = "NPR " + selectedPackage.price.toLocaleString();
   }
 
   function selectMethod(method) {
     selectedMethod = method;
     document.querySelectorAll(".method").forEach(b => b.classList.toggle("active", b.dataset.method === method));
-    $("paymentInfo").innerHTML = paymentInfo[method];
+    const box = $("paymentInfo");
+    if (method === "esewa" || method === "khalti") {
+      const label = method === "esewa" ? "eSewa" : "Khalti";
+      box.innerHTML = "Pay with " + label + " and upload your screenshot below." +
+        '<div class="num"><span>' + PAY_NUMBER + '</span><button type="button" id="copyNum">Copy</button></div>' +
+        "Account name: <strong>" + PAY_NAME + "</strong><br>Send the exact total shown below, or scan the QR code." +
+        '<img class="qr" src="' + QR[method] + '" alt="' + label + ' QR code">';
+      $("copyNum").addEventListener("click", async e => {
+        try { await navigator.clipboard.writeText(PAY_NUMBER); e.target.textContent = "Copied"; }
+        catch (err) { e.target.textContent = PAY_NUMBER; }
+      });
+    } else {
+      box.textContent = (method === "bank" ? "Bank transfer" : "Voucher payment") + " is not available yet. Please choose eSewa or Khalti.";
+    }
   }
 
   async function insertOrder(orderData, playerName) {
-    // Try saving the player name too. If the orders table has no
-    // player_name column yet, retry without it so the order still goes through.
+    // Saves the player name too. If the table has no player_name column,
+    // retry without it so the order still goes through.
     if (playerName) {
       const first = await db.from("orders").insert({ ...orderData, player_name: playerName });
       if (!first.error) return null;
@@ -301,12 +295,10 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
   async function submitOrder() {
     clearStatus("submitStatus");
-
     const playerId = $("playerId").value.trim();
     const zoneId = $("zoneId").value.trim();
     const playerName = $("playerName").value.trim();
     const file = $("screenshot").files[0];
-
     const fail = msg => showStatus("submitStatus", msg, "error");
 
     if (!selectedGame) return fail("Please select a game.");
@@ -320,9 +312,7 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
     if (file.size > 5 * 1024 * 1024) return fail("Image must be smaller than 5 MB.");
 
     const submitButton = $("submitOrder");
-    submitButton.disabled = true;
-    submitButton.textContent = "SUBMITTING...";
-
+    submitButton.disabled = true; submitButton.textContent = "SUBMITTING...";
     let uploadedPath = null;
 
     try {
@@ -352,11 +342,10 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
       const box = $("submitStatus");
       box.className = "status success";
-      box.textContent = "Order submitted! Your Order Reference is " + orderRef + ". Save it to track your order. ";
+      box.textContent = "Order submitted! Your order reference is " + orderRef + ". Save it to track your order.";
+      box.appendChild(document.createElement("br"));
       const copyBtn = document.createElement("button");
-      copyBtn.type = "button";
-      copyBtn.className = "secondary copy";
-      copyBtn.textContent = "Copy reference";
+      copyBtn.type = "button"; copyBtn.className = "secondary copy"; copyBtn.textContent = "Copy reference";
       copyBtn.addEventListener("click", async () => {
         try { await navigator.clipboard.writeText(orderRef); copyBtn.textContent = "Copied"; }
         catch (e) { copyBtn.textContent = orderRef; }
@@ -366,11 +355,7 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
       $("trackRef").value = orderRef;
       $("trackPlayerId").value = playerId;
       $("trackZoneId").value = selectedGame === "ml" ? zoneId : "";
-
-      $("playerName").value = "";
-      $("playerId").value = "";
-      $("zoneId").value = "";
-      $("screenshot").value = "";
+      $("playerName").value = ""; $("playerId").value = ""; $("zoneId").value = ""; $("screenshot").value = "";
     } catch (error) {
       console.error("Order error:", error);
       if (uploadedPath) {
@@ -379,30 +364,58 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
       }
       fail("Order failed: " + (error.message || "Please try again."));
     } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "PLACE ORDER";
+      submitButton.disabled = false; submitButton.textContent = "PLACE ORDER";
     }
   }
 
   async function trackOrder() {
     clearStatus("trackStatus");
-
     const orderRef = $("trackRef").value.trim().toUpperCase();
     const uid = $("trackPlayerId").value.trim();
     const zone = $("trackZoneId").value.trim();
+    if (!orderRef || !uid) { showStatus("trackStatus", "Please enter both Order Reference and Player ID.", "error"); return; }
 
-    if (!orderRef || !uid) {
-      showStatus("trackStatus", "Please enter both Order Reference and Player ID.", "error");
-      return;
-    }
-
-    // If a Zone ID is entered, it is a Mobile Legends order.
+    // A Zone ID means it is a Mobile Legends order.
     const playerId = zone ? buildPlayerId("ml", uid, zone) : uid;
-
     const button = $("trackBtn");
-    button.disabled = true;
-    button.textContent = "CHECKING...";
+    button.disabled = true; button.textContent = "CHECKING...";
 
     try {
       const { data, error } = await db.rpc("track_order", { p_order_ref: orderRef, p_player_id: playerId });
-      if (error
+      if (error) throw error;
+      const order = Array.isArray(data) ? data[0] : data;
+      if (!order) {
+        showStatus("trackStatus", "Order not found. Check your reference and Player ID. For Mobile Legends, also enter the Zone ID.", "error");
+        return;
+      }
+      const box = $("trackStatus");
+      box.innerHTML = "";
+      const heading = document.createElement("strong"); heading.textContent = "Order found"; box.appendChild(heading);
+      [["Reference", order.order_ref], ["Game", order.game], ["Package", order.package_amount],
+       ["Order status", order.order_status], ["Payment status", order.payment_status]].forEach(([label, value]) => {
+        const line = document.createElement("div");
+        line.textContent = label + ": " + String(value ?? "");
+        box.appendChild(line);
+      });
+      box.className = "status success";
+    } catch (error) {
+      console.error("Tracking error:", error);
+      showStatus("trackStatus", "Unable to track order: " + (error.message || "Please try again."), "error");
+    } finally {
+      button.disabled = false; button.textContent = "TRACK ORDER";
+    }
+  }
+
+  document.querySelector(".games").addEventListener("click", e => {
+    const button = e.target.closest(".game");
+    if (button) selectGame(button.dataset.game);
+  });
+  document.querySelectorAll(".method").forEach(b => b.addEventListener("click", () => selectMethod(b.dataset.method)));
+  $("submitOrder").addEventListener("click", submitOrder);
+  $("trackBtn").addEventListener("click", trackOrder);
+
+  selectGame("pubg", false);
+})();
+</script>
+</body>
+</html>

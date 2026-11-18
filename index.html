@@ -324,4 +324,128 @@ footer .brand{justify-content:center;margin-bottom:8px}
     const playerId = $("playerId").value.trim();
     const zoneId = $("zoneId").value.trim();
     const playerName = $("playerName").value.trim();
-    const file = $("scr
+    const file = $("screenshot").files[0];
+    const fail = msg => showStatus("submitStatus", msg, "error");
+
+    if (!selectedGame) return fail("Please select a game.");
+    if (!selectedPackage) return fail("Please select a package.");
+    if (!playerId) return fail("Please enter your Player ID.");
+    if (selectedGame === "ml" && !zoneId) return fail("Please enter your Mobile Legends Zone ID.");
+    if (!selectedMethod) return fail("Please select a payment method.");
+    if (selectedMethod === "bank" || selectedMethod === "voucher") return fail("This payment method is not available. Please choose eSewa or Khalti.");
+    if (!file) return fail("Please upload your payment screenshot.");
+    if (!file.type.startsWith("image/")) return fail("Please upload a valid image.");
+    if (file.size > 5 * 1024 * 1024) return fail("Image must be smaller than 5 MB.");
+
+    const submitButton = $("submitOrder");
+    submitButton.disabled = true; submitButton.textContent = "SUBMITTING...";
+    let uploadedPath = null;
+
+    try {
+      const db = await getDb();
+      const orderRef = generateOrderRef();
+      const extension = (file.name.split(".").pop() || "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 5) || "jpg";
+      const filename = orderRef + "-" + Math.random().toString(36).slice(2) + "." + extension;
+      const savedPlayerId = buildPlayerId(selectedGame, playerId, zoneId);
+
+      const { data: uploadData, error: uploadError } = await db.storage
+        .from("payment-screenshots")
+        .upload(filename, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+      if (uploadError) throw uploadError;
+      uploadedPath = uploadData.path;
+
+      const orderError = await insertOrder(db, {
+        order_ref: orderRef,
+        game: gameNames[selectedGame],
+        player_id: savedPlayerId,
+        package_amount: String(selectedPackage.amount),
+        price_npr: selectedPackage.price,
+        payment_method: selectedMethod,
+        payment_status: "pending",
+        order_status: "pending",
+        payment_screenshot: uploadedPath
+      }, playerName);
+      if (orderError) throw orderError;
+
+      const box = $("submitStatus");
+      box.className = "status success";
+      box.textContent = "Order submitted! Your order reference is " + orderRef + ". Save it to track your order.";
+      box.appendChild(document.createElement("br"));
+      const copyBtn = document.createElement("button");
+      copyBtn.type = "button"; copyBtn.className = "secondary copy"; copyBtn.textContent = "Copy reference";
+      copyBtn.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(orderRef); copyBtn.textContent = "Copied"; }
+        catch (e) { copyBtn.textContent = orderRef; }
+      });
+      box.appendChild(copyBtn);
+
+      $("trackRef").value = orderRef;
+      $("trackPlayerId").value = playerId;
+      $("trackZoneId").value = selectedGame === "ml" ? zoneId : "";
+      $("playerName").value = ""; $("playerId").value = ""; $("zoneId").value = ""; $("screenshot").value = "";
+    } catch (error) {
+      console.error("Order error:", error);
+      if (uploadedPath) {
+        const client = await getDb();
+        const { error: cleanupError } = await client.storage.from("payment-screenshots").remove([uploadedPath]);
+        if (cleanupError) console.error("Screenshot cleanup error:", cleanupError);
+      }
+      fail("Order failed: " + (error.message || "Please try again."));
+    } finally {
+      submitButton.disabled = false; submitButton.textContent = "PLACE ORDER";
+    }
+  }
+
+  async function trackOrder() {
+    clearStatus("trackStatus");
+    const orderRef = $("trackRef").value.trim().toUpperCase();
+    const uid = $("trackPlayerId").value.trim();
+    const zone = $("trackZoneId").value.trim();
+    if (!orderRef || !uid) { showStatus("trackStatus", "Please enter both Order Reference and Player ID.", "error"); return; }
+
+    // A Zone ID means it is a Mobile Legends order.
+    const playerId = zone ? buildPlayerId("ml", uid, zone) : uid;
+    const button = $("trackBtn");
+    button.disabled = true; button.textContent = "CHECKING...";
+
+    try {
+      const db = await getDb();
+      const { data, error } = await db.rpc("track_order", { p_order_ref: orderRef, p_player_id: playerId });
+      if (error) throw error;
+      const order = Array.isArray(data) ? data[0] : data;
+      if (!order) {
+        showStatus("trackStatus", "Order not found. Check your reference and Player ID. For Mobile Legends, also enter the Zone ID.", "error");
+        return;
+      }
+      const box = $("trackStatus");
+      box.innerHTML = "";
+      const heading = document.createElement("strong"); heading.textContent = "Order found"; box.appendChild(heading);
+      [["Reference", order.order_ref], ["Game", order.game], ["Package", order.package_amount],
+       ["Order status", order.order_status], ["Payment status", order.payment_status]].forEach(([label, value]) => {
+        const line = document.createElement("div");
+        line.textContent = label + ": " + String(value ?? "");
+        box.appendChild(line);
+      });
+      box.className = "status success";
+    } catch (error) {
+      console.error("Tracking error:", error);
+      showStatus("trackStatus", "Unable to track order: " + (error.message || "Please try again."), "error");
+    } finally {
+      button.disabled = false; button.textContent = "TRACK ORDER";
+    }
+  }
+
+  document.querySelector(".games").addEventListener("click", e => {
+    const button = e.target.closest(".game");
+    if (button) selectGame(button.dataset.game);
+  });
+  document.querySelectorAll(".method").forEach(b => b.addEventListener("click", () => selectMethod(b.dataset.method)));
+  $("submitOrder").addEventListener("click", submitOrder);
+  $("trackBtn").addEventListener("click", trackOrder);
+
+  selectGame("pubg", false);
+  getDb().catch(() => {});
+})();
+</script>
+</body>
+</html>

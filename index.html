@@ -24,11 +24,12 @@ header{padding:18px 5%;display:flex;justify-content:space-between;align-items:ce
 .section-title{font-size:19px;margin:25px 0 15px}
 .section-sub{color:var(--muted);font-size:12px;margin-top:-8px;margin-bottom:17px}
 .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.game{background:linear-gradient(145deg,#1b1b2d,#11111c);border:1px solid var(--border);border-radius:16px;padding:12px;color:var(--text);cursor:pointer;text-align:left;transition:.2s;min-height:155px;font-family:inherit;overflow:hidden}
+.game{background:linear-gradient(145deg,#1b1b2d,#11111c);border:1px solid var(--border);border-radius:16px;padding:12px;color:var(--text);cursor:pointer;text-align:left;transition:.2s;font-family:inherit;overflow:hidden}
 .game:active{transform:scale(.97)}
 .game.active{border:1px solid var(--cyan);background:linear-gradient(145deg,#172d3c,#17172b);box-shadow:0 0 18px #22d3ee22}
-.game-icon{height:95px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;background:#fff;border-radius:11px;padding:10px;color:#222;font-size:12px;font-weight:700;text-align:center}
-.game-icon img{display:block;width:100%;height:100%;object-fit:contain}
+.game-icon{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;background:#fff;border-radius:11px;padding:0;color:#222;font-size:12px;font-weight:700;text-align:center}
+.game-icon img{display:block;width:100%;height:100%;object-fit:cover}
+.game-icon.fit img{object-fit:contain}
 .game strong{font-size:12px}
 .game small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
 .panel{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:19px;margin-top:17px}
@@ -82,23 +83,23 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
   <div class="games">
     <button type="button" class="game" data-game="pubg">
-      <span class="game-icon"><img src="images/pubg.png" alt="PUBG Mobile" onerror="this.remove()"><span class="fb">PUBG MOBILE</span></span>
+      <span class="game-icon fit" style="background:#1c1c1c"><img src="images/pubg.svg" alt="PUBG Mobile" onerror="this.remove()"><span class="fb">PUBG MOBILE</span></span>
       <strong>PUBG MOBILE</strong><small>UC Top Up</small>
     </button>
     <button type="button" class="game" data-game="ff">
-      <span class="game-icon"><img src="images/freefire.png" alt="Free Fire" onerror="this.remove()"><span class="fb">FREE FIRE</span></span>
+      <span class="game-icon"><img src="images/freefire.jpg" alt="Free Fire" onerror="this.remove()"><span class="fb">FREE FIRE</span></span>
       <strong>FREE FIRE</strong><small>Diamond Top Up</small>
     </button>
     <button type="button" class="game" data-game="ml">
-      <span class="game-icon"><img src="images/mlbb.png" alt="Mobile Legends" onerror="this.remove()"><span class="fb">MOBILE LEGENDS</span></span>
+      <span class="game-icon"><img src="images/mlbb.webp" alt="Mobile Legends" onerror="this.remove()"><span class="fb">MOBILE LEGENDS</span></span>
       <strong>MOBILE LEGENDS</strong><small>Diamond Top Up</small>
     </button>
     <button type="button" class="game" data-game="roblox">
-      <span class="game-icon"><img src="images/roblox.png" alt="Roblox" onerror="this.remove()"><span class="fb">ROBLOX</span></span>
+      <span class="game-icon fit" style="background:#3355ff"><img src="images/roblox.png" alt="Roblox" onerror="this.remove()"><span class="fb">ROBLOX</span></span>
       <strong>ROBLOX</strong><small>Robux Top Up</small>
     </button>
     <button type="button" class="game" data-game="efootball">
-      <span class="game-icon"><img src="images/efootball.png" alt="eFootball" onerror="this.remove()"><span class="fb">eFOOTBALL</span></span>
+      <span class="game-icon fit" style="background:#000090"><img src="images/efootball.png" alt="eFootball" onerror="this.remove()"><span class="fb">eFOOTBALL</span></span>
       <strong>eFOOTBALL</strong><small>Coins Top Up</small>
     </button>
   </div>
@@ -404,47 +405,4 @@ footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
 
     try {
       const { data, error } = await db.rpc("track_order", { p_order_ref: orderRef, p_player_id: playerId });
-      if (error) throw error;
-
-      const order = Array.isArray(data) ? data[0] : data;
-      if (!order) {
-        showStatus("trackStatus", "Order not found. Check your reference and Player ID. For Mobile Legends, also enter the Zone ID.", "error");
-        return;
-      }
-
-      const box = $("trackStatus");
-      box.innerHTML = "";
-      const heading = document.createElement("strong");
-      heading.textContent = "Order Found";
-      box.appendChild(heading);
-
-      [["Reference", order.order_ref], ["Game", order.game], ["Package", order.package_amount],
-       ["Order Status", order.order_status], ["Payment Status", order.payment_status]]
-        .forEach(([label, value]) => {
-          const line = document.createElement("div");
-          line.textContent = label + ": " + String(value ?? "");
-          box.appendChild(line);
-        });
-      box.className = "status success";
-    } catch (error) {
-      console.error("Tracking error:", error);
-      showStatus("trackStatus", "Unable to track order: " + (error.message || "Please try again."), "error");
-    } finally {
-      button.disabled = false;
-      button.textContent = "TRACK ORDER";
-    }
-  }
-
-  document.querySelector(".games").addEventListener("click", e => {
-    const button = e.target.closest(".game");
-    if (button) selectGame(button.dataset.game);
-  });
-  document.querySelectorAll(".method").forEach(b => b.addEventListener("click", () => selectMethod(b.dataset.method)));
-  $("submitOrder").addEventListener("click", submitOrder);
-  $("trackBtn").addEventListener("click", trackOrder);
-
-  selectGame("pubg", false);
-})();
-</script>
-</body>
-</html>
+      if (error
